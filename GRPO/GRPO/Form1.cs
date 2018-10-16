@@ -20,8 +20,7 @@ namespace GRPO
         private int _count;
         public MainForm()
         {
-            InitializeComponent();
-            
+            InitializeComponent();                      
         }
 
         private void Draw(MouseEventArgs e)
