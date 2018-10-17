@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+//throw new ArgumentException("Ширина фигуры не может быть меньше нуля");
 namespace GRPO
 {
     public partial class MainForm : System.Windows.Forms.Form
@@ -20,7 +20,29 @@ namespace GRPO
         private int _count;
         public MainForm()
         {
-            InitializeComponent();                      
+            InitializeComponent();
+            FigureLine line1 = new FigureLine(new Point(100, 100), new Point(200, 200));
+            FigureLine line2 = new FigureLine(new Point(100, 100), new Point(200, 0));
+            FigureLine line3 = new FigureLine(new Point(100, 100), new Point(0, 200));
+            FigureLine line4 = new FigureLine(new Point(100, 100), new Point(0, 0));
+
+            FigurePolyline poly1 = new FigurePolyline(new Point(100, 100), new Point(200, 200), false);
+            FigurePolyline poly2 = new FigurePolyline(new Point(100, 100), new Point(200, 0), false);
+            FigurePolyline poly3 = new FigurePolyline(new Point(100, 100), new Point(0, 200), false);
+            FigurePolyline poly4 = new FigurePolyline(new Point(100, 100), new Point(0, 0), false);
+
+            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 90);
+
+            Bitmap btm = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+            Graphics g = Graphics.FromImage(btm);
+            Pen pen = new Pen(Color.Red);
+            for (int i = 1; i < polygon1.Points.Count; i++)
+            {
+                g.DrawLine(pen, polygon1.Points[i-1].X, polygon1.Points[i-1].Y, polygon1.Points[i].X, polygon1.Points[i].Y);
+            }
+            g.DrawLine(pen, polygon1.Points[polygon1.Points.Count - 1].X, polygon1.Points[polygon1.Points.Count - 1].Y, 
+                polygon1.Points[0].X, polygon1.Points[0].Y);
+            mainPictureBox.Image = btm;
         }
 
         private void Draw(MouseEventArgs e)

@@ -35,6 +35,20 @@ namespace GRPO
             Height = 0;
         }
         /// <summary>
+        /// Класс фигуры
+        /// </summary>
+        /// <param name="x">Позиция фигуры по координате X</param>
+        /// <param name="y">Позиция фигуры по координате Y</param>
+        /// <param name="width">Ширина фигуры</param>
+        /// <param name="height">Высота фигуры</param>
+        public Figure(int x, int y, int width, int height)
+        {
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+        }
+        /// <summary>
         /// Позиция фигуры по координате X
         /// </summary>
         public int X
@@ -73,14 +87,7 @@ namespace GRPO
             }
             set
             {
-                if (value >= 0)
-                {
-                    _width = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Ширина фигуры не может быть меньше нуля");
-                }
+                _width = value;
             }
         }
         /// <summary>
@@ -94,14 +101,7 @@ namespace GRPO
             }
             set
             {
-                if (value >= 0)
-                {
-                    _height = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Высота фигуры не может быть меньше нуля");
-                }
+                _height = value;
             }
         }
     }
