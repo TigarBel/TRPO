@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="ExtendedFigure.cs" />
     <Compile Include="Figure.cs" />
+    <Compile Include="FigureCircle.cs" />
+    <Compile Include="FigureEllipse.cs" />
     <Compile Include="FigureLine.cs" />
     <Compile Include="FigurePolygon.cs" />
     <Compile Include="FigurePolyline.cs" />
