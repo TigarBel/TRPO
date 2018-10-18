@@ -31,7 +31,7 @@ namespace GRPO
             FigurePolyline poly3 = new FigurePolyline(new Point(100, 100), new Point(0, 200), false);
             FigurePolyline poly4 = new FigurePolyline(new Point(100, 100), new Point(0, 0), false);
 
-            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 8);
+            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 8, 30);
 
             Bitmap btm = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
             Graphics g = Graphics.FromImage(btm);

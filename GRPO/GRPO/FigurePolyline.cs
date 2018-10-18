@@ -18,6 +18,16 @@ namespace GRPO
         /// </summary>
         private bool _circular;
         /// <summary>
+        /// Обновить значения для класса Фигура
+        /// </summary>
+        private void RefreshValues()
+        {
+            X = Points.Min(point => point.X);
+            Y = Points.Min(point => point.Y);
+            Width = Points.Max(point => point.X) - Points.Min(point => point.X);
+            Height = Points.Max(point => point.Y) - Points.Min(point => point.Y);
+        }
+        /// <summary>
         /// Пустой класс фигуры Плилиния
         /// </summary>
         public FigurePolyline()
@@ -69,16 +79,6 @@ namespace GRPO
             {
                 _circular = value;
             }
-        }
-        /// <summary>
-        /// Обновить значения для класса Фигура
-        /// </summary>
-        private void RefreshValues()
-        {
-            X = Points.Min(point => point.X);
-            Y = Points.Min(point => point.Y);
-            Width = Points.Max(point => point.X) - Points.Min(point => point.X);
-            Height = Points.Max(point => point.Y) - Points.Min(point => point.Y);
         }
         /// <summary>
         /// Добавить точку для продолжения полилинии
