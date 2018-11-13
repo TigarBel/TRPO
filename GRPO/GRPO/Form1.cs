@@ -12,12 +12,16 @@ namespace GRPO
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
-        private Point _pointA, _pointB;
+        private Point _pointA;
+        private Point _pointB;
         private bool _flagMouseDown;
         private List<Pixel> _pixels = new List<Pixel>();
         private List<Bitmap> _bitmaps = new List<Bitmap>();
         private int _index;
         private int _count;
+
+        private List<IDraw> _draws = new List<IDraw>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -30,19 +34,7 @@ namespace GRPO
             FigurePolyline poly2 = new FigurePolyline(new Point(100, 100), new Point(200, 0), false);
             FigurePolyline poly3 = new FigurePolyline(new Point(100, 100), new Point(0, 200), false);
             FigurePolyline poly4 = new FigurePolyline(new Point(100, 100), new Point(0, 0), false);
-
-            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 8, 30);
-
-            Bitmap btm = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
-            Graphics g = Graphics.FromImage(btm);
-            Pen pen = new Pen(Color.Red);
-            for (int i = 1; i < polygon1.Points.Count; i++)
-            {
-                g.DrawLine(pen, polygon1.Points[i-1].X, polygon1.Points[i-1].Y, polygon1.Points[i].X, polygon1.Points[i].Y);
-            }
-            g.DrawLine(pen, polygon1.Points[polygon1.Points.Count - 1].X, polygon1.Points[polygon1.Points.Count - 1].Y, 
-                polygon1.Points[0].X, polygon1.Points[0].Y);
-            mainPictureBox.Image = btm;
+            
         }
 
         private void Draw(MouseEventArgs e)
@@ -88,34 +80,99 @@ namespace GRPO
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
-            _index = _pixels.Count;
+            DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(e.X, e.Y), mainPictureBox);
+            _draws.Add(drawFigureLine);
+            _index = _draws.Count - 1;
+            //_flagMouseDown = true;
+            //_pointA = new Point(e.X, e.Y);
+            //_index = _pixels.Count;
         }
 
         private void mainPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (_flagMouseDown)
             {
-                _count = _pixels.Count;
+                _draws[_index].Clear();
+                _draws.Remove(_draws[_index]);
                 _pointB = new Point(e.X, e.Y);
-                DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
-                _count = _pixels.Count - _count;
-                _pixels.RemoveRange(_index, _count);
-            }
-        }
+                DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(_pointB.X, _pointB.Y), mainPictureBox);
+                drawFigureLine.Draw();
+                _draws.Add(drawFigureLine);
+                _index = _draws.Count - 1;
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            _pixels.Clear();
-            mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+                //foreach (IDraw drawFigure in _draws)
+                //{
+                //    drawFigure.Draw();
+                //}
+            }
+            //if (_flagMouseDown)
+            //{
+            //    _count = _pixels.Count;
+            //    _pointB = new Point(e.X, e.Y);
+            //    DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
+            //    _count = _pixels.Count - _count;
+            //    _pixels.RemoveRange(_index, _count);
+            //}
         }
 
         private void mainPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
+            _draws[_index].Clear();
+            _draws.Remove(_draws[_index]);
             _flagMouseDown = false;
             _pointB = new Point(e.X, e.Y);
-            DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
+            DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(_pointB.X, _pointB.Y), mainPictureBox);
+            _draws.Add(drawFigureLine);
+            _index = _draws.Count - 1;
+            _draws[_index].Draw();
 
-            _index = _count = 0;
+            //foreach (IDraw drawFigure in _draws)
+            //{
+            //    drawFigure.Draw();
+            //}
+
+            //_flagMouseDown = false;
+            //_pointB = new Point(e.X, e.Y);
+            //DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
+            //_index = _count = 0;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            _draws.Clear();
+            mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //DrawFigureLine drawFigureLine1 = new DrawFigureLine(new Point(100, 20), new Point(200, 20), mainPictureBox);
+            //drawFigureLine1.Draw();
+            //DrawFigureLine drawFigureLine2 = new DrawFigureLine(new Point(100, 40), new Point(200, 40), mainPictureBox);
+            //drawFigureLine2.Draw();
+            //DrawFigureLine drawFigureLine3 = new DrawFigureLine(new Point(100, 60), new Point(200, 60), mainPictureBox);
+            //drawFigureLine3.Draw();
+            for (int i = 0; i < 100; i++)
+            {
+                DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(10, i + 1), new Point(100, i + 100), mainPictureBox);
+                _draws.Add(drawFigureLine);
+                _draws[i].Draw();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 4, 45);
+
+            Bitmap btm = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+            Graphics g = Graphics.FromImage(btm);
+            Pen pen = new Pen(Color.Red);
+            for (int i = 1; i < polygon1.Points.Count; i++)
+            {
+                g.DrawLine(pen, polygon1.Points[i - 1].X, polygon1.Points[i - 1].Y, polygon1.Points[i].X, polygon1.Points[i].Y);
+            }
+            g.DrawLine(pen, polygon1.Points[polygon1.Points.Count - 1].X, polygon1.Points[polygon1.Points.Count - 1].Y,
+                polygon1.Points[0].X, polygon1.Points[0].Y);
+            mainPictureBox.Image = btm;
         }
     }
 }

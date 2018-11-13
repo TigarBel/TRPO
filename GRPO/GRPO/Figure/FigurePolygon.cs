@@ -14,6 +14,10 @@ namespace GRPO
         /// </summary>
         private List<Point> _points;
         /// <summary>
+        /// Количество углов многоугольника
+        /// </summary>
+        private int _countAngle;
+        /// <summary>
         /// Внести значения в класс фигура
         /// </summary>
         /// <param name="a">Начальная точка</param>
@@ -111,6 +115,27 @@ namespace GRPO
             Y = Points.Min(point => point.Y);
             Width = Points.Max(point => point.X) - Points.Min(point => point.X);
             Height = Points.Max(point => point.Y) - Points.Min(point => point.Y);
+        }
+        /// <summary>
+        /// Количество углов многоугольника
+        /// </summary>
+        public int CountAngle
+        {
+            get
+            {
+                return _countAngle;
+            }
+            set
+            {
+                if (value >= 3)
+                {
+                    _countAngle = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Многоугольник не может содержать менее 3х углов!");
+                }
+            }
         }
         /// <summary>
         /// Список точек многоугольника

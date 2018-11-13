@@ -46,19 +46,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtendedFigure.cs" />
-    <Compile Include="Figure.cs" />
-    <Compile Include="FigureCircle.cs" />
-    <Compile Include="FigureEllipse.cs" />
-    <Compile Include="FigureLine.cs" />
-    <Compile Include="FigurePolygon.cs" />
-    <Compile Include="FigurePolyline.cs" />
+    <Compile Include="Drawing\DrawFigureCircle.cs" />
+    <Compile Include="Drawing\DrawFigureEllipse.cs" />
+    <Compile Include="Drawing\DrawFigurePolygon.cs" />
+    <Compile Include="Drawing\DrawFigurePolyline.cs" />
+    <Compile Include="Drawing\DrawFigureLine.cs" />
+    <Compile Include="Drawing\ExtendedForLine.cs" />
+    <Compile Include="Drawing\ExtendedForFigure.cs" />
+    <Compile Include="Figure\Figure.cs" />
+    <Compile Include="Figure\FigureCircle.cs" />
+    <Compile Include="Figure\FigureEllipse.cs" />
+    <Compile Include="Figure\FigureLine.cs" />
+    <Compile Include="Figure\FigurePolygon.cs" />
+    <Compile Include="Figure\FigurePolyline.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drawing\IDraw.cs" />
     <Compile Include="Pixel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
