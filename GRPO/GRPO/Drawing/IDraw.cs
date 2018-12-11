@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace GRPO
 {
@@ -16,5 +18,10 @@ namespace GRPO
         /// Очистить место
         /// </summary>
         void Clear();
+        /// <summary>
+        /// Взять список точек
+        /// </summary>
+        /// <returns>Списко точек формирующих фигуру</returns>
+        List<Point> GetPoints();
     }
 }

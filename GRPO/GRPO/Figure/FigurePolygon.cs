@@ -72,8 +72,6 @@ namespace GRPO
 
             for (int i = 0; i < countAngle; i++)
             {
-                //double angleInDegrees = 32.471192290848492;
-                //double cos = Math.Cos(angleInDegrees * (Math.PI / 180.0));
                 double cos = Math.Cos((i * (360 / countAngle) + phase) * (Math.PI / 180.0));
                 double sin = Math.Sin((i * (360 / countAngle) + phase) * (Math.PI / 180.0));
                 double x = X + Width / 2 + Width * cos / 2;

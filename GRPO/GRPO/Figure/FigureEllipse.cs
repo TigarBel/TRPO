@@ -10,10 +10,6 @@ namespace GRPO
     class FigureEllipse : Figure
     {
         /// <summary>
-        /// Наклон эллипса
-        /// </summary>
-        private int _angle;
-        /// <summary>
         ///  Пустой класс фигуры Эллипс
         /// </summary>
         public FigureEllipse()
@@ -22,7 +18,6 @@ namespace GRPO
             Y = 0;
             Width = 0;
             Height = 0;
-            Angle = 0;
         }
         /// <summary>
         /// Класс фигуры Эллипс
@@ -30,28 +25,12 @@ namespace GRPO
         /// <param name="position">Расположения эллипса</param>
         /// <param name="width">Ширина эллипса</param>
         /// <param name="height">Высота эллипса</param>
-        /// <param name="angle">Наклон элипса</param>
-        public FigureEllipse(Point position, int width, int height, int angle)
+        public FigureEllipse(Point position, int width, int height)
         {
             X = position.X;
             Y = position.Y;
             Width = width;
             Height = height;
-            Angle = angle;
-        }
-        /// <summary>
-        /// Наклон эллипса
-        /// </summary>
-        public int Angle
-        {
-            get
-            {
-                return _angle;
-            }
-            set
-            {
-                _angle = value;
-            }
         }
     }
 }

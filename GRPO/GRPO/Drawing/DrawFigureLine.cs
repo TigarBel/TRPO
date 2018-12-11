@@ -89,5 +89,16 @@ namespace GRPO
             Graphics g = _pictureBox.CreateGraphics();
             g.DrawLine(new Pen(Brushes.White), A.X, A.Y, B.X, B.Y);
         }
+        /// <summary>
+        /// Взять список точек
+        /// </summary>
+        /// <returns>Списко точек формирующих фигуру</returns>
+        public List<Point> GetPoints()
+        {
+            List<Point> points = new List<Point>();
+            points.Add(A);
+            points.Add(B);
+            return points;
+        }
     }
 }

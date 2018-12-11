@@ -17,21 +17,6 @@ namespace GRPO
         /// Вторая точка линии
         /// </summary>
         private Point _pointB;
-        
-        //private void Ratio(int one, int two, ref int coord, ref int value)
-        //{
-        //    if (one >= two)
-        //    {
-        //        coord = one;
-        //        value = one - two;
-        //    }
-        //    else
-        //    {
-        //        coord = two;
-        //        value = two - one;
-        //    }
-        //}
-
         /// <summary>
         /// Пустой класс фигуры Линия
         /// </summary>

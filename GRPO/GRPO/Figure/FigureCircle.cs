@@ -31,8 +31,8 @@ namespace GRPO
         /// <param name="radius"> Радиус окружности</param>
         public FigureCircle(Point position, int radius)
         {
-            X = position.X;
-            Y = position.Y;
+            X = position.X - radius;
+            Y = position.Y - radius;
             Radius = radius;
             Width = Radius * 2;
             Height = Radius * 2;
@@ -48,14 +48,7 @@ namespace GRPO
             }
             set
             {
-                if (value >= 0)
-                {
-                    _radius = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Радиус окружности не может быть меньше нуля");
-                }
+                _radius = value;
             }
         }
     }

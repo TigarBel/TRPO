@@ -25,16 +25,10 @@ namespace GRPO
         public MainForm()
         {
             InitializeComponent();
-            FigureLine line1 = new FigureLine(new Point(100, 100), new Point(200, 200));
-            FigureLine line2 = new FigureLine(new Point(100, 100), new Point(200, 0));
-            FigureLine line3 = new FigureLine(new Point(100, 100), new Point(0, 200));
-            FigureLine line4 = new FigureLine(new Point(100, 100), new Point(0, 0));
 
-            FigurePolyline poly1 = new FigurePolyline(new Point(100, 100), new Point(200, 200), false);
-            FigurePolyline poly2 = new FigurePolyline(new Point(100, 100), new Point(200, 0), false);
-            FigurePolyline poly3 = new FigurePolyline(new Point(100, 100), new Point(0, 200), false);
-            FigurePolyline poly4 = new FigurePolyline(new Point(100, 100), new Point(0, 0), false);
-            
+            DrawFigureLine drawFigure = new DrawFigureLine();
+            _draws.Add(drawFigure);
+            _index = _draws.Count - 1;
         }
 
         private void Draw(MouseEventArgs e)
@@ -80,67 +74,134 @@ namespace GRPO
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
-            DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(e.X, e.Y), mainPictureBox);
-            _draws.Add(drawFigureLine);
-            _index = _draws.Count - 1;
-            //_flagMouseDown = true;
-            //_pointA = new Point(e.X, e.Y);
-            //_index = _pixels.Count;
+            
+            if (_draws[_index].GetType() == typeof(DrawFigurePolyline) && radioButtonPolyline.Checked)
+            {
+                List<Point> points = new List<Point>();
+                points = _draws[_index].GetPoints();
+                points.Add(_pointA);
+                DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox);
+                drawFigure.Draw();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
+            else
+            {
+                DrawFigureLine drawFigure = new DrawFigureLine();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
+
+            
         }
 
         private void mainPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (_flagMouseDown)
             {
-                _draws[_index].Clear();
-                _draws.Remove(_draws[_index]);
+                /*_draws[_index].Clear();
+                _draws.Remove(_draws[_index]);*/
                 _pointB = new Point(e.X, e.Y);
-                DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(_pointB.X, _pointB.Y), mainPictureBox);
-                drawFigureLine.Draw();
-                _draws.Add(drawFigureLine);
-                _index = _draws.Count - 1;
+                
+                if (radioButtonLine.Checked)
+                {
+                    _draws[_index].Clear();
+                    _draws.Remove(_draws[_index]);
+                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox);
+                    drawFigure.Draw();
+                    _draws.Add(drawFigure);
+                    _index = _draws.Count - 1;
+                }
+                if (radioButtonPolyline.Checked)
+                {
+                    if (_draws[_index].GetType() != typeof(DrawFigurePolyline))
+                    {
+                        _draws[_index].Clear();
+                        _draws.Remove(_draws[_index]);
+
+                        List<Point> points = new List<Point>();
+                        points.Add(_pointA);
+                        points.Add(_pointB);
+
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox);
+
+                        drawFigure.Draw();
+                        _draws.Add(drawFigure);
+                        _index = _draws.Count - 1;
+                    }
+                }
+                if (radioButtonPolygon.Checked)
+                {
+                    _draws[_index].Clear();
+                    _draws.Remove(_draws[_index]);
+
+                    List<Point> squer = new List<Point>();
+                    squer.Add(_pointA);
+                    squer.Add(new Point(_pointA.X, _pointB.Y));
+                    squer.Add(_pointB);
+                    squer.Add(new Point(_pointB.X, _pointA.Y));
+
+                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox);
+                    drawFigure.Draw();
+                    _draws.Add(drawFigure);
+                    _index = _draws.Count - 1;
+                }
+                if (radioButtonCircle.Checked)
+                {
+                    _draws[_index].Clear();
+                    _draws.Remove(_draws[_index]);
+                    DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
+                        /*(_pointB.X - _pointA.X) / 2, mainPictureBox);*/
+                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))), mainPictureBox);
+                    drawFigure.Draw();
+                    _draws.Add(drawFigure);
+                    _index = _draws.Count - 1;
+                }
+                if (radioButtonEllipse.Checked)
+                {
+                    _draws[_index].Clear();
+                    _draws.Remove(_draws[_index]);
+                    DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox);
+                    drawFigure.Draw();
+                    _draws.Add(drawFigure);
+                    _index = _draws.Count - 1;
+                }
+
+                /*_draws.Add(drawFigureLine);
+                _index = _draws.Count - 1;*/
 
                 //foreach (IDraw drawFigure in _draws)
                 //{
                 //    drawFigure.Draw();
                 //}
             }
-            //if (_flagMouseDown)
-            //{
-            //    _count = _pixels.Count;
-            //    _pointB = new Point(e.X, e.Y);
-            //    DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
-            //    _count = _pixels.Count - _count;
-            //    _pixels.RemoveRange(_index, _count);
-            //}
         }
 
         private void mainPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            _draws[_index].Clear();
-            _draws.Remove(_draws[_index]);
+            /*_draws[_index].Clear();
+            _draws.Remove(_draws[_index]);*/
             _flagMouseDown = false;
             _pointB = new Point(e.X, e.Y);
-            DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(_pointA.X, _pointA.Y), new Point(_pointB.X, _pointB.Y), mainPictureBox);
-            _draws.Add(drawFigureLine);
+
+
+            /*_draws.Add(drawFigureLine);
             _index = _draws.Count - 1;
-            _draws[_index].Draw();
+            _draws[_index].Draw();*/
 
             //foreach (IDraw drawFigure in _draws)
             //{
             //    drawFigure.Draw();
             //}
-
-            //_flagMouseDown = false;
-            //_pointB = new Point(e.X, e.Y);
-            //DrawLine(_pointA, _pointB, Color.FromArgb(255, 0, 0));
-            //_index = _count = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             _draws.Clear();
             mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+            DrawFigureLine drawFigure = new DrawFigureLine();
+            _draws.Add(drawFigure);
+            _index = _draws.Count - 1;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -161,18 +222,61 @@ namespace GRPO
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FigurePolygon polygon1 = new FigurePolygon(new Point(100, 100), 200, 200, 4, 45);
+            _pointA = new Point(100, 100);
+            _pointB = new Point(200, 200);
+            List<Point> squer = new List<Point>();
+            squer.Add(_pointA);
+            squer.Add(new Point(_pointA.X, _pointB.Y));
+            squer.Add(_pointB);
+            squer.Add(new Point(_pointB.X, _pointA.Y));
 
-            Bitmap btm = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
-            Graphics g = Graphics.FromImage(btm);
-            Pen pen = new Pen(Color.Red);
-            for (int i = 1; i < polygon1.Points.Count; i++)
-            {
-                g.DrawLine(pen, polygon1.Points[i - 1].X, polygon1.Points[i - 1].Y, polygon1.Points[i].X, polygon1.Points[i].Y);
-            }
-            g.DrawLine(pen, polygon1.Points[polygon1.Points.Count - 1].X, polygon1.Points[polygon1.Points.Count - 1].Y,
-                polygon1.Points[0].X, polygon1.Points[0].Y);
-            mainPictureBox.Image = btm;
+            DrawFigurePolyline polyline = new DrawFigurePolyline(squer, false, mainPictureBox);
+            polyline.Draw();
+        }
+
+        private void radioButtonLine_Click(object sender, EventArgs e)
+        {
+            radioButtonLine.Checked = true;
+            radioButtonPolyline.Checked = false;
+            radioButtonPolygon.Checked = false;
+            radioButtonCircle.Checked = false;
+            radioButtonEllipse.Checked = false;
+        }
+
+        private void radioButtonPolyline_Click(object sender, EventArgs e)
+        {
+            radioButtonPolyline.Checked = true;
+            radioButtonLine.Checked = false;
+            radioButtonPolygon.Checked = false;
+            radioButtonCircle.Checked = false;
+            radioButtonEllipse.Checked = false;
+        }
+
+        private void radioButtonPolygon_Click(object sender, EventArgs e)
+        {
+            radioButtonPolygon.Checked = true;
+            radioButtonLine.Checked = false;
+            radioButtonPolyline.Checked = false;
+            radioButtonCircle.Checked = false;
+            radioButtonEllipse.Checked = false;
+        }
+
+        private void radioButtonCircle_Click(object sender, EventArgs e)
+        {
+            radioButtonCircle.Checked = true;
+            radioButtonLine.Checked = false;
+            radioButtonPolyline.Checked = false;
+            radioButtonPolygon.Checked = false;
+            radioButtonEllipse.Checked = false;
+        }
+
+        private void radioButtonEllipse_Click(object sender, EventArgs e)
+        {
+            radioButtonEllipse.Checked = true;
+            radioButtonLine.Checked = false;
+            radioButtonPolyline.Checked = false;
+            radioButtonPolygon.Checked = false;
+            radioButtonCircle.Checked = false;
         }
     }
 }

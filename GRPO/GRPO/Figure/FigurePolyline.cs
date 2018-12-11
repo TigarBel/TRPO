@@ -42,14 +42,11 @@ namespace GRPO
         /// <summary>
         /// Класс фигуры Полилиния
         /// </summary>
-        /// <param name="a">Первая точка</param>
-        /// <param name="b">Вторая точка</param>
+        /// <param name="points">Список точек</param>
         /// <param name="circular">Ложь: линейная; Истина: дуговая</param>
-        public FigurePolyline(Point a, Point b, bool circular)
+        public FigurePolyline(List<Point> points, bool circular)
         {
-            Points = new List<Point>();
-            AddPoint(a);
-            AddPoint(b);
+            Points = points;
             Circular = circular;
         }
         /// <summary>
@@ -63,7 +60,18 @@ namespace GRPO
             }
             set
             {
-                _points = value;
+                if (value.Count >= 1)
+                {
+                    _points = value;
+                    if (_points.Count > 1)
+                    {
+                        RefreshValues();
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Спичок не содержит точки!");
+                }
             }
         }
         /// <summary>
@@ -79,15 +87,6 @@ namespace GRPO
             {
                 _circular = value;
             }
-        }
-        /// <summary>
-        /// Добавить точку для продолжения полилинии
-        /// </summary>
-        /// <param name="point">Точка</param>
-        public void AddPoint(Point point)
-        {
-            _points.Add(point);
-            RefreshValues();
         }
     }
 }
