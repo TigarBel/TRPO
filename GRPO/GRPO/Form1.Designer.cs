@@ -38,6 +38,9 @@
             this.radioButtonPolygon = new System.Windows.Forms.RadioButton();
             this.radioButtonPolyline = new System.Windows.Forms.RadioButton();
             this.radioButtonLine = new System.Windows.Forms.RadioButton();
+            this.buttonBlackColor = new System.Windows.Forms.Button();
+            this.buttonRedColor = new System.Windows.Forms.Button();
+            this.buttonColor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.groupBoxSelect.SuspendLayout();
             this.SuspendLayout();
@@ -86,6 +89,9 @@
             // 
             // groupBoxSelect
             // 
+            this.groupBoxSelect.Controls.Add(this.buttonColor);
+            this.groupBoxSelect.Controls.Add(this.buttonRedColor);
+            this.groupBoxSelect.Controls.Add(this.buttonBlackColor);
             this.groupBoxSelect.Controls.Add(this.radioButtonEllipse);
             this.groupBoxSelect.Controls.Add(this.radioButtonCircle);
             this.groupBoxSelect.Controls.Add(this.radioButtonPolygon);
@@ -155,6 +161,36 @@
             this.radioButtonLine.UseVisualStyleBackColor = true;
             this.radioButtonLine.Click += new System.EventHandler(this.radioButtonLine_Click);
             // 
+            // buttonBlackColor
+            // 
+            this.buttonBlackColor.BackColor = System.Drawing.Color.Black;
+            this.buttonBlackColor.Location = new System.Drawing.Point(6, 134);
+            this.buttonBlackColor.Name = "buttonBlackColor";
+            this.buttonBlackColor.Size = new System.Drawing.Size(25, 25);
+            this.buttonBlackColor.TabIndex = 5;
+            this.buttonBlackColor.UseVisualStyleBackColor = false;
+            this.buttonBlackColor.Click += new System.EventHandler(this.buttonBlackColor_Click);
+            // 
+            // buttonRedColor
+            // 
+            this.buttonRedColor.BackColor = System.Drawing.Color.Red;
+            this.buttonRedColor.Location = new System.Drawing.Point(37, 134);
+            this.buttonRedColor.Name = "buttonRedColor";
+            this.buttonRedColor.Size = new System.Drawing.Size(25, 25);
+            this.buttonRedColor.TabIndex = 6;
+            this.buttonRedColor.UseVisualStyleBackColor = false;
+            this.buttonRedColor.Click += new System.EventHandler(this.buttonRedColor_Click);
+            // 
+            // buttonColor
+            // 
+            this.buttonColor.Location = new System.Drawing.Point(6, 165);
+            this.buttonColor.Name = "buttonColor";
+            this.buttonColor.Size = new System.Drawing.Size(56, 25);
+            this.buttonColor.TabIndex = 7;
+            this.buttonColor.Text = "Color";
+            this.buttonColor.UseVisualStyleBackColor = true;
+            this.buttonColor.Click += new System.EventHandler(this.buttonColor_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +222,9 @@
         private System.Windows.Forms.RadioButton radioButtonPolygon;
         private System.Windows.Forms.RadioButton radioButtonPolyline;
         private System.Windows.Forms.RadioButton radioButtonLine;
+        private System.Windows.Forms.Button buttonColor;
+        private System.Windows.Forms.Button buttonRedColor;
+        private System.Windows.Forms.Button buttonBlackColor;
     }
 }
 

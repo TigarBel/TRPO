@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//throw new ArgumentException("Ширина фигуры не может быть меньше нуля");
+
 namespace GRPO
 {
     public partial class MainForm : System.Windows.Forms.Form
@@ -18,6 +18,8 @@ namespace GRPO
         private List<Pixel> _pixels = new List<Pixel>();
         private List<Bitmap> _bitmaps = new List<Bitmap>();
         private int _index;
+        private ExtendedForLine _extendedForLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+        private ExtendedForFigure _extendedForFigure = new ExtendedForFigure(Color.White);
         private int _count;
 
         private List<IDraw> _draws = new List<IDraw>();
@@ -80,7 +82,7 @@ namespace GRPO
                 List<Point> points = new List<Point>();
                 points = _draws[_index].GetPoints();
                 points.Add(_pointA);
-                DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox);
+                DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _extendedForLine);
                 drawFigure.Draw();
                 _draws.Add(drawFigure);
                 _index = _draws.Count - 1;
@@ -107,7 +109,7 @@ namespace GRPO
                 {
                     _draws[_index].Clear();
                     _draws.Remove(_draws[_index]);
-                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox);
+                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _extendedForLine);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -123,7 +125,7 @@ namespace GRPO
                         points.Add(_pointA);
                         points.Add(_pointB);
 
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox);
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _extendedForLine);
 
                         drawFigure.Draw();
                         _draws.Add(drawFigure);
@@ -141,7 +143,7 @@ namespace GRPO
                     squer.Add(_pointB);
                     squer.Add(new Point(_pointB.X, _pointA.Y));
 
-                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox);
+                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _extendedForLine, _extendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -151,8 +153,8 @@ namespace GRPO
                     _draws[_index].Clear();
                     _draws.Remove(_draws[_index]);
                     DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
-                        /*(_pointB.X - _pointA.X) / 2, mainPictureBox);*/
-                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))), mainPictureBox);
+                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),
+                        mainPictureBox, _extendedForLine, _extendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -161,7 +163,8 @@ namespace GRPO
                 {
                     _draws[_index].Clear();
                     _draws.Remove(_draws[_index]);
-                    DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox);
+                    DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox,
+                        _extendedForLine, _extendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -277,6 +280,35 @@ namespace GRPO
             radioButtonPolyline.Checked = false;
             radioButtonPolygon.Checked = false;
             radioButtonCircle.Checked = false;
+        }
+
+        private void buttonColor_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                _extendedForLine.LineColor = MyDialog.Color;
+            }
+            /*// Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = textBox1.ForeColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                textBox1.ForeColor = MyDialog.Color;*/
+        }
+
+        private void buttonBlackColor_Click(object sender, EventArgs e)
+        {
+            _extendedForLine.LineColor = Color.Black;
+        }
+
+        private void buttonRedColor_Click(object sender, EventArgs e)
+        {
+            _extendedForLine.LineColor = Color.Red;
         }
     }
 }
