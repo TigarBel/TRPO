@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace GRPO
 {
-    interface IDraw
+    interface IDrawable
     {
         /// <summary>
         /// Нарисовать объект

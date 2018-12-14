@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigurePolygon : FigurePolygon, IDraw
+    class DrawFigurePolygon : FigurePolygon, IDrawable
     {
         /// <summary>
         /// Холст на котором рисуют
@@ -28,7 +29,7 @@ namespace GRPO
         public DrawFigurePolygon() : base()
         {
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -44,7 +45,7 @@ namespace GRPO
             base(position, width, height, countAngle, phase)
         {
             Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -76,7 +77,7 @@ namespace GRPO
         public DrawFigurePolygon(Point a, Point b, int countAngle, int phase, PictureBox canvas) : base(a, b, countAngle, phase)
         {
             Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -104,7 +105,7 @@ namespace GRPO
         public DrawFigurePolygon(List<Point> points, PictureBox canvas) : base(points)
         {
             Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -166,12 +167,18 @@ namespace GRPO
         {
             if (Points.Count > 2)
             {
-                Graphics g = _pictureBox.CreateGraphics();
+                Graphics g = Graphics.FromImage(_pictureBox.Image);
+                //Graphics g = _pictureBox.CreateGraphics();
+                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+                pen.DashStyle = ExtendedLine.LineType;
+                g.FillPolygon(new SolidBrush(ExtendedFigure.FillColor), Points.ToArray());
                 for (int i = 1; i < Points.Count; i++)
                 {
-                    g.DrawLine(new Pen(ExtendedLine.LineColor), Points[i - 1].X, Points[i - 1].Y, Points[i].X, Points[i].Y);
+                    g.DrawLine(pen, Points[i - 1].X, Points[i - 1].Y, Points[i].X, Points[i].Y);
                 }
-                g.DrawLine(new Pen(ExtendedLine.LineColor), Points[Points.Count - 1].X, Points[Points.Count - 1].Y, Points[0].X, Points[0].Y);
+                g.DrawLine(pen, Points[Points.Count - 1].X, Points[Points.Count - 1].Y, Points[0].X, Points[0].Y);
+                g.Dispose();
+                _pictureBox.Invalidate();
             }
             else
             {
@@ -185,12 +192,18 @@ namespace GRPO
         {
             if (Points.Count > 2)
             {
-                Graphics g = _pictureBox.CreateGraphics();
+                Graphics g = Graphics.FromImage(_pictureBox.Image);
+                //Graphics g = _pictureBox.CreateGraphics();
+                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+                pen.DashStyle = ExtendedLine.LineType;
+                g.FillPolygon(Brushes.White, Points.ToArray());
                 for (int i = 1; i < Points.Count; i++)
                 {
-                    g.DrawLine(new Pen(Brushes.White), Points[i - 1].X, Points[i - 1].Y, Points[i].X, Points[i].Y);
+                    g.DrawLine(pen, Points[i - 1].X, Points[i - 1].Y, Points[i].X, Points[i].Y);
                 }
-                g.DrawLine(new Pen(Brushes.White), Points[Points.Count - 1].X, Points[Points.Count - 1].Y, Points[0].X, Points[0].Y);
+                g.DrawLine(pen, Points[Points.Count - 1].X, Points[Points.Count - 1].Y, Points[0].X, Points[0].Y);
+                g.Dispose();
+                _pictureBox.Invalidate();
             }
             else
             {

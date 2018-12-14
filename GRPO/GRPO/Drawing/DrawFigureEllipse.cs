@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureEllipse : FigureEllipse, IDraw
+    class DrawFigureEllipse : FigureEllipse, IDrawable
     {
         /// <summary>
         /// Холст на котором рисуют
@@ -28,7 +29,7 @@ namespace GRPO
         public DrawFigureEllipse() : base()
         {
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -41,7 +42,7 @@ namespace GRPO
         public DrawFigureEllipse(Point position, int width, int height, PictureBox canvas) : base(position, width, height)
         {
             Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
             ExtendedFigure = new ExtendedForFigure(Color.White);
         }
         /// <summary>
@@ -103,16 +104,28 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics g = _pictureBox.CreateGraphics();
-            g.DrawEllipse(new Pen(ExtendedLine.LineColor), X, Y, Width, Height);
+            Graphics g = Graphics.FromImage(_pictureBox.Image);
+            //Graphics g = _pictureBox.CreateGraphics();
+            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+            pen.DashStyle = ExtendedLine.LineType;
+            g.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), X, Y, Width, Height);
+            g.DrawEllipse(pen, X, Y, Width, Height);
+            g.Dispose();
+            _pictureBox.Invalidate();
         }
         /// <summary>
         /// Очистить многоугольник
         /// </summary>
         public void Clear()
         {
-            Graphics g = _pictureBox.CreateGraphics();
-            g.DrawEllipse(new Pen(Brushes.White), X, Y, Width, Height);
+            Graphics g = Graphics.FromImage(_pictureBox.Image);
+            //Graphics g = _pictureBox.CreateGraphics();
+            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+            pen.DashStyle = ExtendedLine.LineType;
+            g.FillEllipse(Brushes.White, X, Y, Width, Height);
+            g.DrawEllipse(pen, X, Y, Width, Height);
+            g.Dispose();
+            _pictureBox.Invalidate();
         }
         /// <summary>
         /// Взять список точек

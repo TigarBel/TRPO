@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,16 +19,24 @@ namespace GRPO
         private List<Pixel> _pixels = new List<Pixel>();
         private List<Bitmap> _bitmaps = new List<Bitmap>();
         private int _index;
-        private ExtendedForLine _extendedForLine = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+        private ExtendedForLine _extendedForLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
         private ExtendedForFigure _extendedForFigure = new ExtendedForFigure(Color.White);
-        private int _count;
+        private Image _backStep;
+        private Graphics g;
 
-        private List<IDraw> _draws = new List<IDraw>();
+        private List<IDrawable> _draws = new List<IDrawable>();
 
         public MainForm()
         {
             InitializeComponent();
 
+            comboBoxLineType.Items.Add(DashStyle.Solid);
+            comboBoxLineType.Items.Add(DashStyle.Dash);
+            comboBoxLineType.Items.Add(DashStyle.DashDot);
+            comboBoxLineType.Items.Add(DashStyle.DashDotDot);
+            comboBoxLineType.Items.Add(DashStyle.Dot);
+
+            mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
             DrawFigureLine drawFigure = new DrawFigureLine();
             _draws.Add(drawFigure);
             _index = _draws.Count - 1;
@@ -94,7 +103,7 @@ namespace GRPO
                 _index = _draws.Count - 1;
             }
 
-            
+            _backStep = new Bitmap(mainPictureBox.Image);
         }
 
         private void mainPictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -104,10 +113,10 @@ namespace GRPO
                 /*_draws[_index].Clear();
                 _draws.Remove(_draws[_index]);*/
                 _pointB = new Point(e.X, e.Y);
-                
+                mainPictureBox.Image = new Bitmap(_backStep);
+
                 if (radioButtonLine.Checked)
                 {
-                    _draws[_index].Clear();
                     _draws.Remove(_draws[_index]);
                     DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _extendedForLine);
                     drawFigure.Draw();
@@ -118,7 +127,7 @@ namespace GRPO
                 {
                     if (_draws[_index].GetType() != typeof(DrawFigurePolyline))
                     {
-                        _draws[_index].Clear();
+                        //mainPictureBox.Image = _bitmap;
                         _draws.Remove(_draws[_index]);
 
                         List<Point> points = new List<Point>();
@@ -134,7 +143,7 @@ namespace GRPO
                 }
                 if (radioButtonPolygon.Checked)
                 {
-                    _draws[_index].Clear();
+                    //mainPictureBox.Image = _bitmap;
                     _draws.Remove(_draws[_index]);
 
                     List<Point> squer = new List<Point>();
@@ -150,7 +159,7 @@ namespace GRPO
                 }
                 if (radioButtonCircle.Checked)
                 {
-                    _draws[_index].Clear();
+                    //mainPictureBox.Image = _bitmap;
                     _draws.Remove(_draws[_index]);
                     DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
                         Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),
@@ -161,7 +170,7 @@ namespace GRPO
                 }
                 if (radioButtonEllipse.Checked)
                 {
-                    _draws[_index].Clear();
+                    //mainPictureBox.Image = _bitmap;
                     _draws.Remove(_draws[_index]);
                     DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox,
                         _extendedForLine, _extendedForFigure);
@@ -169,7 +178,7 @@ namespace GRPO
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-
+                
                 /*_draws.Add(drawFigureLine);
                 _index = _draws.Count - 1;*/
 
@@ -186,7 +195,67 @@ namespace GRPO
             _draws.Remove(_draws[_index]);*/
             _flagMouseDown = false;
             _pointB = new Point(e.X, e.Y);
+            mainPictureBox.Image = new Bitmap(_backStep);
 
+            if (radioButtonLine.Checked)
+            {
+                _draws.Remove(_draws[_index]);
+                DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _extendedForLine);
+                drawFigure.Draw();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
+            if (radioButtonPolyline.Checked)
+            {
+                if (_draws[_index].GetType() != typeof(DrawFigurePolyline))
+                {
+                    _draws.Remove(_draws[_index]);
+
+                    List<Point> points = new List<Point>();
+                    points.Add(_pointA);
+                    points.Add(_pointB);
+
+                    DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _extendedForLine);
+
+                    drawFigure.Draw();
+                    _draws.Add(drawFigure);
+                    _index = _draws.Count - 1;
+                }
+            }
+            if (radioButtonPolygon.Checked)
+            {
+                _draws.Remove(_draws[_index]);
+
+                List<Point> squer = new List<Point>();
+                squer.Add(_pointA);
+                squer.Add(new Point(_pointA.X, _pointB.Y));
+                squer.Add(_pointB);
+                squer.Add(new Point(_pointB.X, _pointA.Y));
+
+                DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _extendedForLine, _extendedForFigure);
+                drawFigure.Draw();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
+            if (radioButtonCircle.Checked)
+            {
+                _draws.Remove(_draws[_index]);
+                DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
+                    Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),
+                    mainPictureBox, _extendedForLine, _extendedForFigure);
+                drawFigure.Draw();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
+            if (radioButtonEllipse.Checked)
+            {
+                _draws.Remove(_draws[_index]);
+                DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox,
+                    _extendedForLine, _extendedForFigure);
+                drawFigure.Draw();
+                _draws.Add(drawFigure);
+                _index = _draws.Count - 1;
+            }
 
             /*_draws.Add(drawFigureLine);
             _index = _draws.Count - 1;
@@ -209,32 +278,17 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //DrawFigureLine drawFigureLine1 = new DrawFigureLine(new Point(100, 20), new Point(200, 20), mainPictureBox);
-            //drawFigureLine1.Draw();
-            //DrawFigureLine drawFigureLine2 = new DrawFigureLine(new Point(100, 40), new Point(200, 40), mainPictureBox);
-            //drawFigureLine2.Draw();
-            //DrawFigureLine drawFigureLine3 = new DrawFigureLine(new Point(100, 60), new Point(200, 60), mainPictureBox);
-            //drawFigureLine3.Draw();
             for (int i = 0; i < 100; i++)
             {
                 DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(10, i + 1), new Point(100, i + 100), mainPictureBox);
                 _draws.Add(drawFigureLine);
-                _draws[i].Draw();
+                _draws[i + 1].Draw();
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            _pointA = new Point(100, 100);
-            _pointB = new Point(200, 200);
-            List<Point> squer = new List<Point>();
-            squer.Add(_pointA);
-            squer.Add(new Point(_pointA.X, _pointB.Y));
-            squer.Add(_pointB);
-            squer.Add(new Point(_pointB.X, _pointA.Y));
-
-            DrawFigurePolyline polyline = new DrawFigurePolyline(squer, false, mainPictureBox);
-            polyline.Draw();
+            mainPictureBox.Image.Save("111lol.jpg");
         }
 
         private void radioButtonLine_Click(object sender, EventArgs e)
@@ -282,33 +336,79 @@ namespace GRPO
             radioButtonCircle.Checked = false;
         }
 
-        private void buttonColor_Click(object sender, EventArgs e)
+        private void buttonBlackColorLine_Click(object sender, EventArgs e)
+        {
+            _extendedForLine.LineColor = buttonBlackColorLine.BackColor;
+        }
+
+        private void buttonRedColorLine_Click(object sender, EventArgs e)
+        {
+            _extendedForLine.LineColor = buttonRedColorLine.BackColor;
+        }
+
+        private void buttonColorLine_Click(object sender, EventArgs e)
         {
             ColorDialog MyDialog = new ColorDialog();
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 _extendedForLine.LineColor = MyDialog.Color;
             }
-            /*// Keeps the user from selecting a custom color.
-            MyDialog.AllowFullOpen = false;
-            // Allows the user to get help. (The default is false.)
-            MyDialog.ShowHelp = true;
-            // Sets the initial color select to the current text color.
-            MyDialog.Color = textBox1.ForeColor;
+        }
 
-            // Update the text box color if the user clicks OK 
+        private void buttonBlackColorFill_Click(object sender, EventArgs e)
+        {
+            _extendedForFigure.FillColor = buttonBlackColorFill.BackColor;
+        }
+
+        private void buttonRedColorFill_Click(object sender, EventArgs e)
+        {
+            _extendedForFigure.FillColor = buttonRedColorFill.BackColor;
+        }
+
+        private void buttonColorFill_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
             if (MyDialog.ShowDialog() == DialogResult.OK)
-                textBox1.ForeColor = MyDialog.Color;*/
+            {
+                _extendedForFigure.FillColor = MyDialog.Color;
+            }
         }
 
-        private void buttonBlackColor_Click(object sender, EventArgs e)
+        private void numericUpDownLineThickness_ValueChanged(object sender, EventArgs e)
         {
-            _extendedForLine.LineColor = Color.Black;
+            _extendedForLine.LineThickness = (float)numericUpDownLineThickness.Value;
         }
 
-        private void buttonRedColor_Click(object sender, EventArgs e)
+        private void comboBoxLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _extendedForLine.LineColor = Color.Red;
+            switch(comboBoxLineType.SelectedIndex)
+            {
+                case 0:
+                    _extendedForLine.LineType = DashStyle.Solid;
+                    break;
+                case 1:
+                    _extendedForLine.LineType = DashStyle.Dash;
+                    break;
+                case 2:
+                    _extendedForLine.LineType = DashStyle.DashDot;
+                    break;
+                case 3:
+                    _extendedForLine.LineType = DashStyle.DashDotDot;
+                    break;
+                case 4:
+                    _extendedForLine.LineType = DashStyle.Dot;
+                    break;
+            }
+        }
+
+        private void buttonAcceptSizePictureBox_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 640 &&
+                Convert.ToInt32(textBox2.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 480)
+            {
+                mainPictureBox.Location = new Point(317, 65);
+                mainPictureBox.Size = new Size(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
+            }
         }
     }
 }

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureLine : FigureLine, IDraw
+    class DrawFigureLine : FigureLine, IDrawable
     {
         /// <summary>
         /// Холст на котором рисуют
@@ -24,7 +25,7 @@ namespace GRPO
         public DrawFigureLine() : base()
         {
             Canvas = new PictureBox();
-            Extended = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
         }
         /// <summary>
         /// Класс Отрисовки линии
@@ -35,7 +36,7 @@ namespace GRPO
         public DrawFigureLine(Point a, Point b, PictureBox pictureBox) : base(a, b)
         {
             Canvas = pictureBox;
-            Extended = new ExtendedForLine(1, Color.Black, EnumLineType.Solid);
+            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
         }
         /// <summary>
         /// Класс Отрисовки линии
@@ -78,16 +79,24 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics g = _pictureBox.CreateGraphics();
-            g.DrawLine(new Pen(Extended.LineColor), A.X, A.Y, B.X, B.Y);
+            Graphics g = Graphics.FromImage(_pictureBox.Image);
+            //Graphics g = _pictureBox.CreateGraphics();
+            Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
+            pen.DashStyle = Extended.LineType;
+            g.DrawLine(pen, A.X, A.Y, B.X, B.Y);
+            g.Dispose();
+            _pictureBox.Invalidate();
         }
         /// <summary>
         /// Очистить место
         /// </summary>
         public void Clear()
         {
-            Graphics g = _pictureBox.CreateGraphics();
-            g.DrawLine(new Pen(Brushes.White), A.X, A.Y, B.X, B.Y);
+            Graphics g = Graphics.FromImage(_pictureBox.Image);
+            //Graphics g = _pictureBox.CreateGraphics();
+            g.DrawLine(new Pen(Color.White, Extended.LineThickness), A.X, A.Y, B.X, B.Y);
+            g.Dispose();
+            _pictureBox.Invalidate();
         }
         /// <summary>
         /// Взять список точек

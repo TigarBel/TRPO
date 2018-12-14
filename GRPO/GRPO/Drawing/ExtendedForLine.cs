@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    /// <summary>
-    /// Перечесление типов линии
-    /// </summary>
-    public enum EnumLineType
-    {
-        Solid,  //Сплошная
-        Dotted  //Пунктирная
-    }
 
     class ExtendedForLine
     {
         /// <summary>
         /// Толщина линии
         /// </summary>
-        private int _lineThickness;
+        private float _lineThickness;
         /// <summary>
         /// Цвет линии
         /// </summary>
@@ -29,7 +23,7 @@ namespace GRPO
         /// <summary>
         /// Тип линии
         /// </summary>
-        private EnumLineType _lineType;
+        private DashStyle _lineType;
         /// <summary>
         /// Пустой класс Расширения
         /// </summary>
@@ -37,7 +31,7 @@ namespace GRPO
         {
             LineThickness = 0;
             LineColor = new Color();
-            LineType = EnumLineType.Solid;
+            LineType = DashStyle.Solid;
         }
         /// <summary>
         /// Класс Расширения
@@ -46,7 +40,7 @@ namespace GRPO
         /// <param name="lineColor">Цвет линии</param>
         /// <param name="fillColor">Цвет заливки</param>
         /// <param name="lineType">Тип линии</param>
-        public ExtendedForLine(int lineThickness, Color lineColor, EnumLineType lineType)
+        public ExtendedForLine(int lineThickness, Color lineColor, DashStyle lineType)
         {
             LineThickness = lineThickness;
             LineColor = lineColor;
@@ -55,7 +49,7 @@ namespace GRPO
         /// <summary>
         /// Толщина линии
         /// </summary>
-        public int LineThickness
+        public float LineThickness
         {
             get
             {
@@ -90,7 +84,7 @@ namespace GRPO
         /// <summary>
         /// Тип линии
         /// </summary>
-        public EnumLineType LineType
+        public DashStyle LineType
         {
             get
             {
