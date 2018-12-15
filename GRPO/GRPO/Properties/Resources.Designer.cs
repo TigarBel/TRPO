@@ -59,25 +59,5 @@ namespace GRPO.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _23 {
-            get {
-                object obj = ResourceManager.GetObject("23", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _5970406_a1225m5194o1848n238z1078u2058z5348 {
-            get {
-                object obj = ResourceManager.GetObject("5970406_a1225m5194o1848n238z1078u2058z5348", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

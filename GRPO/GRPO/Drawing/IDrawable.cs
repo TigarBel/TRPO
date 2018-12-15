@@ -15,10 +15,6 @@ namespace GRPO
         /// </summary>
         void Draw();
         /// <summary>
-        /// Очистить место
-        /// </summary>
-        void Clear();
-        /// <summary>
         /// Взять список точек
         /// </summary>
         /// <returns>Списко точек формирующих фигуру</returns>

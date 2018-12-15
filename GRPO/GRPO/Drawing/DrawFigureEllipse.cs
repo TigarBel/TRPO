@@ -9,8 +9,12 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureEllipse : FigureEllipse, IDrawable
+    class DrawFigureEllipse : IDrawable
     {
+        /// <summary>
+        /// Объект эллипса
+        /// </summary>
+        private FigureEllipse _figureEllipse;
         /// <summary>
         /// Холст на котором рисуют
         /// </summary>
@@ -26,24 +30,12 @@ namespace GRPO
         /// <summary>
         /// Пустой класс Отрисовки эллипса
         /// </summary>
-        public DrawFigureEllipse() : base()
+        public DrawFigureEllipse()
         {
+            Ellipse = new FigureEllipse();
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-            ExtendedFigure = new ExtendedForFigure(Color.White);
-        }
-        /// <summary>
-        /// Класс Отрисовки эллипса
-        /// </summary>
-        /// <param name="position">Расположения эллипса</param>
-        /// <param name="width">Ширина эллипса</param>
-        /// <param name="height">Высота эллипса</param>
-        /// <param name="canvas">Полотно на котором отрисовывается эллипс</param>
-        public DrawFigureEllipse(Point position, int width, int height, PictureBox canvas) : base(position, width, height)
-        {
-            Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-            ExtendedFigure = new ExtendedForFigure(Color.White);
+            ExtendedLine = new ExtendedForLine();
+            ExtendedFigure = new ExtendedForFigure();
         }
         /// <summary>
         /// Класс Отрисовки эллипса
@@ -55,11 +47,26 @@ namespace GRPO
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
         public DrawFigureEllipse(Point position, int width, int height, PictureBox canvas,
-            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure) : base(position, width, height)
+            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure)
         {
+            Ellipse = new FigureEllipse(position, width, height);
             Canvas = canvas;
             ExtendedLine = extendedForLine;
             ExtendedFigure = extendedForFigure;
+        }
+        /// <summary>
+        /// Векторный объект эллипса
+        /// </summary>
+        public FigureEllipse Ellipse
+        {
+            get
+            {
+                return _figureEllipse;
+            }
+            set
+            {
+                _figureEllipse = value;
+            }
         }
         /// <summary>
         /// Холст на котором рисуют
@@ -104,27 +111,12 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
+            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
             Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
             pen.DashStyle = ExtendedLine.LineType;
-            g.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), X, Y, Width, Height);
-            g.DrawEllipse(pen, X, Y, Width, Height);
-            g.Dispose();
-            _pictureBox.Invalidate();
-        }
-        /// <summary>
-        /// Очистить многоугольник
-        /// </summary>
-        public void Clear()
-        {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
-            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-            pen.DashStyle = ExtendedLine.LineType;
-            g.FillEllipse(Brushes.White, X, Y, Width, Height);
-            g.DrawEllipse(pen, X, Y, Width, Height);
-            g.Dispose();
+            graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
+            graphics.DrawEllipse(pen, Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
+            graphics.Dispose();
             _pictureBox.Invalidate();
         }
         /// <summary>
@@ -134,10 +126,10 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(new Point(X, Y));
-            points.Add(new Point(X + Width, Y));
-            points.Add(new Point(X + Width, Y + Height));
-            points.Add(new Point(X, Y + Height));
+            points.Add(new Point(Ellipse.X, Ellipse.Y));
+            points.Add(new Point(Ellipse.X + Ellipse.Width, Ellipse.Y));
+            points.Add(new Point(Ellipse.X + Ellipse.Width, Ellipse.Y + Ellipse.Height));
+            points.Add(new Point(Ellipse.X, Ellipse.Y + Ellipse.Height));
             return points;
         }
     }

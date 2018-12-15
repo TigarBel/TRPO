@@ -28,10 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            GRPO.ExtendedForLine extendedForLine1 = new GRPO.ExtendedForLine();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBoxSelect = new System.Windows.Forms.GroupBox();
+            this.labelLineType = new System.Windows.Forms.Label();
+            this.comboBoxLineType = new System.Windows.Forms.ComboBox();
             this.numericUpDownLineThickness = new System.Windows.Forms.NumericUpDown();
             this.labelLineThickness = new System.Windows.Forms.Label();
             this.buttonColorFill = new System.Windows.Forms.Button();
@@ -48,12 +51,11 @@
             this.radioButtonPolyline = new System.Windows.Forms.RadioButton();
             this.radioButtonLine = new System.Windows.Forms.RadioButton();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
-            this.comboBoxLineType = new System.Windows.Forms.ComboBox();
-            this.labelLineType = new System.Windows.Forms.Label();
             this.buttonAcceptSizePictureBox = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this._propertyLineControl = new GRPO.PropertyLineControl();
             this.groupBoxSelect.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
@@ -110,14 +112,45 @@
             this.groupBoxSelect.Controls.Add(this.radioButtonLine);
             this.groupBoxSelect.Location = new System.Drawing.Point(12, 65);
             this.groupBoxSelect.Name = "groupBoxSelect";
-            this.groupBoxSelect.Size = new System.Drawing.Size(299, 480);
+            this.groupBoxSelect.Size = new System.Drawing.Size(299, 307);
             this.groupBoxSelect.TabIndex = 4;
             this.groupBoxSelect.TabStop = false;
             this.groupBoxSelect.Text = "Уструменты";
             // 
+            // labelLineType
+            // 
+            this.labelLineType.AutoSize = true;
+            this.labelLineType.Location = new System.Drawing.Point(92, 196);
+            this.labelLineType.Name = "labelLineType";
+            this.labelLineType.Size = new System.Drawing.Size(54, 13);
+            this.labelLineType.TabIndex = 16;
+            this.labelLineType.Text = "Line Type";
+            // 
+            // comboBoxLineType
+            // 
+            this.comboBoxLineType.DisplayMember = "1";
+            this.comboBoxLineType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLineType.FormattingEnabled = true;
+            this.comboBoxLineType.Items.AddRange(new object[] {
+            "Solid",
+            "Dash",
+            "DashDot",
+            "DashDotDot",
+            "Dot"});
+            this.comboBoxLineType.Location = new System.Drawing.Point(152, 193);
+            this.comboBoxLineType.Name = "comboBoxLineType";
+            this.comboBoxLineType.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxLineType.TabIndex = 15;
+            this.comboBoxLineType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLineType_SelectedIndexChanged);
+            // 
             // numericUpDownLineThickness
             // 
             this.numericUpDownLineThickness.Location = new System.Drawing.Point(152, 141);
+            this.numericUpDownLineThickness.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             this.numericUpDownLineThickness.Minimum = new decimal(new int[] {
             1,
             0,
@@ -289,25 +322,6 @@
             this.mainPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseMove);
             this.mainPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseUp);
             // 
-            // comboBoxLineType
-            // 
-            this.comboBoxLineType.DisplayMember = "1";
-            this.comboBoxLineType.FormattingEnabled = true;
-            this.comboBoxLineType.Location = new System.Drawing.Point(152, 193);
-            this.comboBoxLineType.Name = "comboBoxLineType";
-            this.comboBoxLineType.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxLineType.TabIndex = 15;
-            this.comboBoxLineType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLineType_SelectedIndexChanged);
-            // 
-            // labelLineType
-            // 
-            this.labelLineType.AutoSize = true;
-            this.labelLineType.Location = new System.Drawing.Point(92, 196);
-            this.labelLineType.Name = "labelLineType";
-            this.labelLineType.Size = new System.Drawing.Size(54, 13);
-            this.labelLineType.TabIndex = 16;
-            this.labelLineType.Text = "Line Type";
-            // 
             // buttonAcceptSizePictureBox
             // 
             this.buttonAcceptSizePictureBox.Location = new System.Drawing.Point(236, 12);
@@ -341,11 +355,23 @@
             this.textBox2.Size = new System.Drawing.Size(55, 20);
             this.textBox2.TabIndex = 8;
             // 
+            // _propertyLineControl
+            // 
+            extendedForLine1.LineColor = System.Drawing.Color.Black;
+            extendedForLine1.LineThickness = 1F;
+            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._propertyLineControl.Extended = extendedForLine1;
+            this._propertyLineControl.Location = new System.Drawing.Point(12, 378);
+            this._propertyLineControl.Name = "_propertyLineControl";
+            this._propertyLineControl.Size = new System.Drawing.Size(190, 146);
+            this._propertyLineControl.TabIndex = 9;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1193, 557);
+            this.ClientSize = new System.Drawing.Size(1193, 604);
+            this.Controls.Add(this._propertyLineControl);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -394,6 +420,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
+        private PropertyLineControl _propertyLineControl;
     }
 }
 

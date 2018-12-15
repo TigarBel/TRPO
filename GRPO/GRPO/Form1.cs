@@ -30,11 +30,12 @@ namespace GRPO
         {
             InitializeComponent();
 
-            comboBoxLineType.Items.Add(DashStyle.Solid);
+            comboBoxLineType.SelectedIndex = 0;
+            /*comboBoxLineType.Items.Add(DashStyle.Solid);
             comboBoxLineType.Items.Add(DashStyle.Dash);
             comboBoxLineType.Items.Add(DashStyle.DashDot);
             comboBoxLineType.Items.Add(DashStyle.DashDotDot);
-            comboBoxLineType.Items.Add(DashStyle.Dot);
+            comboBoxLineType.Items.Add(DashStyle.Dot);*/
 
             mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
             DrawFigureLine drawFigure = new DrawFigureLine();
@@ -118,7 +119,7 @@ namespace GRPO
                 if (radioButtonLine.Checked)
                 {
                     _draws.Remove(_draws[_index]);
-                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _extendedForLine);
+                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _propertyLineControl.Extended);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -200,7 +201,7 @@ namespace GRPO
             if (radioButtonLine.Checked)
             {
                 _draws.Remove(_draws[_index]);
-                DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _extendedForLine);
+                DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _propertyLineControl.Extended);
                 drawFigure.Draw();
                 _draws.Add(drawFigure);
                 _index = _draws.Count - 1;
@@ -280,10 +281,22 @@ namespace GRPO
         {
             for (int i = 0; i < 100; i++)
             {
-                DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(10, i + 1), new Point(100, i + 100), mainPictureBox);
+                DrawFigureLine drawFigureLine = new DrawFigureLine(new Point(10, i + 1), new Point(100, i + 100), mainPictureBox, new ExtendedForLine());
                 _draws.Add(drawFigureLine);
                 _draws[i + 1].Draw();
             }
+
+            DrawFigureLine drawFigureLine1 = new DrawFigureLine(new Point(190, 190), new Point(200, 200), mainPictureBox, new ExtendedForLine());
+            drawFigureLine1.Draw();
+            DrawFigureLine drawFigureLine2 = new DrawFigureLine(new Point(510, 190), new Point(500, 200), mainPictureBox, new ExtendedForLine());
+            drawFigureLine2.Draw();
+            DrawFigureLine drawFigureLine3 = new DrawFigureLine(new Point(510, 310), new Point(500, 300), mainPictureBox, new ExtendedForLine());
+            drawFigureLine3.Draw();
+            DrawFigureLine drawFigureLine4 = new DrawFigureLine(new Point(190, 310), new Point(200, 300), mainPictureBox, new ExtendedForLine());
+            drawFigureLine4.Draw();
+            DrawFigurePolygon drawFigurePolygon = new DrawFigurePolygon(new Point(200, 200), 300, 100, 4, 45, mainPictureBox,
+                new ExtendedForLine(), new ExtendedForFigure());
+            drawFigurePolygon.Draw();
         }
 
         private void button3_Click(object sender, EventArgs e)

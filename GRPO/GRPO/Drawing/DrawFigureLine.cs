@@ -9,8 +9,12 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureLine : FigureLine, IDrawable
+    class DrawFigureLine : IDrawable
     {
+        /// <summary>
+        /// Объект класса линии
+        /// </summary>
+        private FigureLine _figureLine;
         /// <summary>
         /// Холст на котором рисуют
         /// </summary>
@@ -22,21 +26,11 @@ namespace GRPO
         /// <summary>
         /// Псутой класс Отрисовки линии
         /// </summary>
-        public DrawFigureLine() : base()
+        public DrawFigureLine()
         {
+            Line = new FigureLine();
             Canvas = new PictureBox();
-            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-        }
-        /// <summary>
-        /// Класс Отрисовки линии
-        /// </summary>
-        /// <param name="a">Начальная точка</param>
-        /// <param name="b">Конечная точка</param>
-        /// <param name="pictureBox">Холст на котором рисуют линию</param>
-        public DrawFigureLine(Point a, Point b, PictureBox pictureBox) : base(a, b)
-        {
-            Canvas = pictureBox;
-            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
+            Extended = new ExtendedForLine();
         }
         /// <summary>
         /// Класс Отрисовки линии
@@ -45,10 +39,25 @@ namespace GRPO
         /// <param name="b">Конечная точка</param>
         /// <param name="pictureBox">Холст на котором рисуют линию</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigureLine(Point a, Point b, PictureBox pictureBox, ExtendedForLine extended) : base(a, b)
+        public DrawFigureLine(Point a, Point b, PictureBox pictureBox, ExtendedForLine extended)
         {
+            Line = new FigureLine(a, b);
             Canvas = pictureBox;
             Extended = extended;
+        }
+        /// <summary>
+        /// Векторный объект линии
+        /// </summary>
+        public FigureLine Line
+        {
+            get
+            {
+                return _figureLine;
+            }
+            set
+            {
+                _figureLine = value;
+            }
         }
         /// <summary>
         /// Холст на котором рисуют
@@ -79,23 +88,11 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
+            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
             Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
             pen.DashStyle = Extended.LineType;
-            g.DrawLine(pen, A.X, A.Y, B.X, B.Y);
-            g.Dispose();
-            _pictureBox.Invalidate();
-        }
-        /// <summary>
-        /// Очистить место
-        /// </summary>
-        public void Clear()
-        {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
-            g.DrawLine(new Pen(Color.White, Extended.LineThickness), A.X, A.Y, B.X, B.Y);
-            g.Dispose();
+            graphics.DrawLine(pen, Line.A.X, Line.A.Y, Line.B.X, Line.B.Y);
+            graphics.Dispose();
             _pictureBox.Invalidate();
         }
         /// <summary>
@@ -105,8 +102,8 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(A);
-            points.Add(B);
+            points.Add(Line.A);
+            points.Add(Line.B);
             return points;
         }
     }

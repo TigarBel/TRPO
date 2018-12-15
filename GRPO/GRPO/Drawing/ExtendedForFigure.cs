@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace GRPO
 {
-    class ExtendedForFigure
+    public class ExtendedForFigure
     {
         /// <summary>
         /// Цвет заливки
@@ -18,7 +18,7 @@ namespace GRPO
         /// </summary>
         public ExtendedForFigure()
         {
-            FillColor = new Color();
+            FillColor = Color.White;
         }
         /// <summary>
         /// Класс Расширения

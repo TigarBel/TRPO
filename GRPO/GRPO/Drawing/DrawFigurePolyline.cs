@@ -9,8 +9,12 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigurePolyline : FigurePolyline, IDrawable
+    class DrawFigurePolyline : IDrawable
     {
+        /// <summary>
+        /// Объект полилинии
+        /// </summary>
+        private FigurePolyline _figurePolyline;
         /// <summary>
         /// Холст на котором рисуют
         /// </summary>
@@ -22,35 +26,38 @@ namespace GRPO
         /// <summary>
         /// Псутой класс Отрисовки полилинии
         /// </summary>
-        public DrawFigurePolyline() : base()
+        public DrawFigurePolyline()
         {
+            Polyline = new FigurePolyline();
             Canvas = new PictureBox();
-            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
+            Extended = new ExtendedForLine();
         }
         /// <summary>
         /// Класс Отрисовки полилинии
         /// </summary>
-        /// <param name="a">Начальная точка</param>
-        /// <param name="b">Точка продолжения</param>
-        /// <param name="circular">Тип полилинии</param>
-        /// <param name="pictureBox">Полотно на котором рисуем</param>
-        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox) : base(points, circular)
-        {
-            Canvas = pictureBox;
-            Extended = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-        }
-        /// <summary>
-        /// Класс Отрисовки полилинии
-        /// </summary>
-        /// <param name="a">Начальная точка</param>
-        /// <param name="b">Точка продолжения</param>
+        /// <param name="points">Список точек полилиинии</param>
         /// <param name="circular">Тип полилинии</param>
         /// <param name="pictureBox">Полотно на котором рисуем</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox, ExtendedForLine extended) : base(points, circular)
+        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox, ExtendedForLine extended)
         {
+            Polyline = new FigurePolyline(points, circular);
             Canvas = pictureBox;
             Extended = extended;
+        }
+        /// <summary>
+        /// Векторный объект полилинии
+        /// </summary>
+        public FigurePolyline Polyline
+        {
+            get
+            {
+                return _figurePolyline;
+            }
+            set
+            {
+                _figurePolyline = value;
+            }
         }
         /// <summary>
         /// Холст на котором рисуют
@@ -81,37 +88,15 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            if (Points.Count > 1)
+            if (Polyline.Points.Count > 1)
             {
-                for (int i = 0; i < Points.Count - 1; i++)
+                for (int i = 0; i < Polyline.Points.Count - 1; i++)
                 {
-                    Graphics g = Graphics.FromImage(_pictureBox.Image);
-                    //Graphics g = _pictureBox.CreateGraphics();
+                    Graphics graphics = Graphics.FromImage(_pictureBox.Image);
                     Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
                     pen.DashStyle = Extended.LineType;
-                    g.DrawLine(pen, Points[i].X, Points[i].Y, Points[i + 1].X, Points[i + 1].Y);
-                    g.Dispose();
-                    _pictureBox.Invalidate();
-                }
-            }
-            else
-            {
-                throw new Exception("Полилиниия пустая, либо не имеет 2 точек отрисовки!");
-            }
-        }
-        /// <summary>
-        /// Очистить полилинию
-        /// </summary>
-        public void Clear()
-        {
-            if (Points.Count > 1)
-            {
-                for (int i = 0; i < Points.Count - 1; i++)
-                {
-                    Graphics g = Graphics.FromImage(_pictureBox.Image);
-                    //Graphics g = _pictureBox.CreateGraphics();
-                    g.DrawLine(new Pen(Color.White, Extended.LineThickness), Points[i].X, Points[i].Y, Points[i + 1].X, Points[i + 1].Y);
-                    g.Dispose();
+                    graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
+                    graphics.Dispose();
                     _pictureBox.Invalidate();
                 }
             }
@@ -126,7 +111,7 @@ namespace GRPO
         /// <returns>Списко точек формирующих фигуру</returns>
         public List<Point> GetPoints()
         {
-            return Points;
+            return Polyline.Points;
         }
     }
 }

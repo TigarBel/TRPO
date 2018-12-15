@@ -65,10 +65,22 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drawing\IDraw.cs" />
+    <Compile Include="Drawing\IDrawable.cs" />
     <Compile Include="Pixel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyLine.Designer.cs">
+      <DependentUpon>PropertyLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyLineControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyLineControl.Designer.cs">
+      <DependentUpon>PropertyLineControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -76,6 +88,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyLine.resx">
+      <DependentUpon>PropertyLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyLineControl.resx">
+      <DependentUpon>PropertyLineControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -96,16 +114,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Defused_Mine_Field.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Снимок.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\5970406_a1225m5194o1848n238z1078u2058z5348.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\23.JPG" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

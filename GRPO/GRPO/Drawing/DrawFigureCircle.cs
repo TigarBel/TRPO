@@ -9,8 +9,12 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureCircle : FigureCircle, IDrawable
+    class DrawFigureCircle : IDrawable
     {
+        /// <summary>
+        /// Объект круга
+        /// </summary>
+        private FigureCircle _figureCircle;
         /// <summary>
         /// Холст на котором рисуют
         /// </summary>
@@ -26,23 +30,12 @@ namespace GRPO
         /// <summary>
         /// Пустой класс Отрисовки круга
         /// </summary>
-        public DrawFigureCircle() : base()
+        public DrawFigureCircle()
         {
+            Circle = new FigureCircle();
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-            ExtendedFigure = new ExtendedForFigure(Color.White);
-        }
-        /// <summary>
-        /// Класс Отрисовки круга
-        /// </summary>
-        /// <param name="position">Расположение окружности</param>
-        /// <param name="radius"> Радиус окружности</param>
-        /// <param name="canvas">Полотно на котором отрисовывается круг</param>
-        public DrawFigureCircle(Point position, int radius, PictureBox canvas) : base(position, radius)
-        {
-            Canvas = canvas;
-            ExtendedLine = new ExtendedForLine(1, Color.Black, DashStyle.Solid);
-            ExtendedFigure = new ExtendedForFigure(Color.White);
+            ExtendedLine = new ExtendedForLine();
+            ExtendedFigure = new ExtendedForFigure();
         }
         /// <summary>
         /// Класс Отрисовки круга
@@ -53,11 +46,26 @@ namespace GRPO
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
         public DrawFigureCircle(Point position, int radius, PictureBox canvas,
-            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure) : base(position, radius)
+            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure)
         {
+            Circle = new FigureCircle(position, radius);
             Canvas = canvas;
             ExtendedLine = extendedForLine;
             ExtendedFigure = extendedForFigure;
+        }
+        /// <summary>
+        /// Векторный объект круга
+        /// </summary>
+        public FigureCircle Circle
+        {
+            get
+            {
+                return _figureCircle;
+            }
+            set
+            {
+                _figureCircle = value;
+            }
         }
         /// <summary>
         /// Холст на котором рисуют
@@ -102,27 +110,12 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
+            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
             Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
             pen.DashStyle = ExtendedLine.LineType;
-            g.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), X, Y, Width, Height);
-            g.DrawEllipse(pen, X, Y, Width, Height);
-            g.Dispose();
-            _pictureBox.Invalidate();
-        }
-        /// <summary>
-        /// Очистить многоугольник
-        /// </summary>
-        public void Clear()
-        {
-            Graphics g = Graphics.FromImage(_pictureBox.Image);
-            //Graphics g = _pictureBox.CreateGraphics();
-            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-            pen.DashStyle = ExtendedLine.LineType;
-            g.FillEllipse(Brushes.White, X, Y, Width, Height);
-            g.DrawEllipse(pen, X, Y, Width, Height);
-            g.Dispose();
+            graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), Circle.X, Circle.Y, Circle.Width, Circle.Height);
+            graphics.DrawEllipse(pen, Circle.X, Circle.Y, Circle.Width, Circle.Height);
+            graphics.Dispose();
             _pictureBox.Invalidate();
         }
         /// <summary>
@@ -132,10 +125,10 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(new Point(X, Y));
-            points.Add(new Point(X + Width, Y));
-            points.Add(new Point(X + Width, Y + Height));
-            points.Add(new Point(X, Y + Height));
+            points.Add(new Point(Circle.X, Circle.Y));
+            points.Add(new Point(Circle.X + Circle.Width, Circle.Y));
+            points.Add(new Point(Circle.X + Circle.Width, Circle.Y + Circle.Height));
+            points.Add(new Point(Circle.X, Circle.Y + Circle.Height));
             return points;
         }
     }
