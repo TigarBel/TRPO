@@ -132,5 +132,48 @@ namespace GRPO
             points.Add(new Point(Ellipse.X, Ellipse.Y + Ellipse.Height));
             return points;
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(Ellipse.X, Ellipse.Y);
+            }
+            set
+            {
+                Ellipse.X = value.X;
+                Ellipse.Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return Ellipse.Width;
+            }
+            set
+            {
+                Ellipse.Width = value;
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return Ellipse.Height;
+            }
+            set
+            {
+                Ellipse.Height = value;
+            }
+        }
     }
 }

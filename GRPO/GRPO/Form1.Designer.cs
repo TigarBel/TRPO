@@ -28,36 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            GRPO.ExtendedForFigure extendedForFigure1 = new GRPO.ExtendedForFigure();
             GRPO.ExtendedForLine extendedForLine1 = new GRPO.ExtendedForLine();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBoxSelect = new System.Windows.Forms.GroupBox();
-            this.labelLineType = new System.Windows.Forms.Label();
-            this.comboBoxLineType = new System.Windows.Forms.ComboBox();
-            this.numericUpDownLineThickness = new System.Windows.Forms.NumericUpDown();
-            this.labelLineThickness = new System.Windows.Forms.Label();
-            this.buttonColorFill = new System.Windows.Forms.Button();
-            this.buttonRedColorFill = new System.Windows.Forms.Button();
-            this.buttonBlackColorFill = new System.Windows.Forms.Button();
-            this.labelFillExtended = new System.Windows.Forms.Label();
-            this.labelLineExtended = new System.Windows.Forms.Label();
-            this.buttonColorLine = new System.Windows.Forms.Button();
-            this.buttonRedColorLine = new System.Windows.Forms.Button();
-            this.buttonBlackColorLine = new System.Windows.Forms.Button();
-            this.radioButtonEllipse = new System.Windows.Forms.RadioButton();
-            this.radioButtonCircle = new System.Windows.Forms.RadioButton();
-            this.radioButtonPolygon = new System.Windows.Forms.RadioButton();
-            this.radioButtonPolyline = new System.Windows.Forms.RadioButton();
-            this.radioButtonLine = new System.Windows.Forms.RadioButton();
+            this.buttonDeleteFigure = new System.Windows.Forms.Button();
+            this.buttonCutFigure = new System.Windows.Forms.Button();
+            this.buttonPasteFigure = new System.Windows.Forms.Button();
+            this.buttonCopyFigure = new System.Windows.Forms.Button();
+            this.buttonSelectFigure = new System.Windows.Forms.Button();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.buttonAcceptSizePictureBox = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this._fillFigureControl = new GRPO.FillFigureControl();
             this._propertyLineControl = new GRPO.PropertyLineControl();
+            this._toolsControl = new GRPO.ToolsControl();
             this.groupBoxSelect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,222 +83,70 @@
             // 
             // groupBoxSelect
             // 
-            this.groupBoxSelect.Controls.Add(this.labelLineType);
-            this.groupBoxSelect.Controls.Add(this.comboBoxLineType);
-            this.groupBoxSelect.Controls.Add(this.numericUpDownLineThickness);
-            this.groupBoxSelect.Controls.Add(this.labelLineThickness);
-            this.groupBoxSelect.Controls.Add(this.buttonColorFill);
-            this.groupBoxSelect.Controls.Add(this.buttonRedColorFill);
-            this.groupBoxSelect.Controls.Add(this.buttonBlackColorFill);
-            this.groupBoxSelect.Controls.Add(this.labelFillExtended);
-            this.groupBoxSelect.Controls.Add(this.labelLineExtended);
-            this.groupBoxSelect.Controls.Add(this.buttonColorLine);
-            this.groupBoxSelect.Controls.Add(this.buttonRedColorLine);
-            this.groupBoxSelect.Controls.Add(this.buttonBlackColorLine);
-            this.groupBoxSelect.Controls.Add(this.radioButtonEllipse);
-            this.groupBoxSelect.Controls.Add(this.radioButtonCircle);
-            this.groupBoxSelect.Controls.Add(this.radioButtonPolygon);
-            this.groupBoxSelect.Controls.Add(this.radioButtonPolyline);
-            this.groupBoxSelect.Controls.Add(this.radioButtonLine);
+            this.groupBoxSelect.Controls.Add(this._toolsControl);
+            this.groupBoxSelect.Controls.Add(this.buttonDeleteFigure);
+            this.groupBoxSelect.Controls.Add(this.buttonCutFigure);
+            this.groupBoxSelect.Controls.Add(this.buttonPasteFigure);
+            this.groupBoxSelect.Controls.Add(this.buttonCopyFigure);
+            this.groupBoxSelect.Controls.Add(this.buttonSelectFigure);
+            this.groupBoxSelect.Controls.Add(this._fillFigureControl);
+            this.groupBoxSelect.Controls.Add(this._propertyLineControl);
             this.groupBoxSelect.Location = new System.Drawing.Point(12, 65);
             this.groupBoxSelect.Name = "groupBoxSelect";
-            this.groupBoxSelect.Size = new System.Drawing.Size(299, 307);
+            this.groupBoxSelect.Size = new System.Drawing.Size(299, 480);
             this.groupBoxSelect.TabIndex = 4;
             this.groupBoxSelect.TabStop = false;
             this.groupBoxSelect.Text = "Уструменты";
             // 
-            // labelLineType
+            // buttonDeleteFigure
             // 
-            this.labelLineType.AutoSize = true;
-            this.labelLineType.Location = new System.Drawing.Point(92, 196);
-            this.labelLineType.Name = "labelLineType";
-            this.labelLineType.Size = new System.Drawing.Size(54, 13);
-            this.labelLineType.TabIndex = 16;
-            this.labelLineType.Text = "Line Type";
+            this.buttonDeleteFigure.Location = new System.Drawing.Point(87, 406);
+            this.buttonDeleteFigure.Name = "buttonDeleteFigure";
+            this.buttonDeleteFigure.Size = new System.Drawing.Size(75, 23);
+            this.buttonDeleteFigure.TabIndex = 18;
+            this.buttonDeleteFigure.Text = "Delete figure";
+            this.buttonDeleteFigure.UseVisualStyleBackColor = true;
+            this.buttonDeleteFigure.Click += new System.EventHandler(this.buttonDeleteFigure_Click);
             // 
-            // comboBoxLineType
+            // buttonCutFigure
             // 
-            this.comboBoxLineType.DisplayMember = "1";
-            this.comboBoxLineType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxLineType.FormattingEnabled = true;
-            this.comboBoxLineType.Items.AddRange(new object[] {
-            "Solid",
-            "Dash",
-            "DashDot",
-            "DashDotDot",
-            "Dot"});
-            this.comboBoxLineType.Location = new System.Drawing.Point(152, 193);
-            this.comboBoxLineType.Name = "comboBoxLineType";
-            this.comboBoxLineType.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxLineType.TabIndex = 15;
-            this.comboBoxLineType.SelectedIndexChanged += new System.EventHandler(this.comboBoxLineType_SelectedIndexChanged);
+            this.buttonCutFigure.Location = new System.Drawing.Point(6, 406);
+            this.buttonCutFigure.Name = "buttonCutFigure";
+            this.buttonCutFigure.Size = new System.Drawing.Size(75, 23);
+            this.buttonCutFigure.TabIndex = 17;
+            this.buttonCutFigure.Text = "Cut figure";
+            this.buttonCutFigure.UseVisualStyleBackColor = true;
+            this.buttonCutFigure.Click += new System.EventHandler(this.buttonCutFigure_Click);
             // 
-            // numericUpDownLineThickness
+            // buttonPasteFigure
             // 
-            this.numericUpDownLineThickness.Location = new System.Drawing.Point(152, 141);
-            this.numericUpDownLineThickness.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            this.numericUpDownLineThickness.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownLineThickness.Name = "numericUpDownLineThickness";
-            this.numericUpDownLineThickness.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDownLineThickness.TabIndex = 14;
-            this.numericUpDownLineThickness.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownLineThickness.ValueChanged += new System.EventHandler(this.numericUpDownLineThickness_ValueChanged);
+            this.buttonPasteFigure.Location = new System.Drawing.Point(87, 377);
+            this.buttonPasteFigure.Name = "buttonPasteFigure";
+            this.buttonPasteFigure.Size = new System.Drawing.Size(75, 23);
+            this.buttonPasteFigure.TabIndex = 16;
+            this.buttonPasteFigure.Text = "Paste figure";
+            this.buttonPasteFigure.UseVisualStyleBackColor = true;
+            this.buttonPasteFigure.Click += new System.EventHandler(this.buttonPasteFigure_Click);
             // 
-            // labelLineThickness
+            // buttonCopyFigure
             // 
-            this.labelLineThickness.AutoSize = true;
-            this.labelLineThickness.Location = new System.Drawing.Point(68, 143);
-            this.labelLineThickness.Name = "labelLineThickness";
-            this.labelLineThickness.Size = new System.Drawing.Size(78, 13);
-            this.labelLineThickness.TabIndex = 13;
-            this.labelLineThickness.Text = "Line thickness:";
+            this.buttonCopyFigure.Location = new System.Drawing.Point(6, 377);
+            this.buttonCopyFigure.Name = "buttonCopyFigure";
+            this.buttonCopyFigure.Size = new System.Drawing.Size(75, 23);
+            this.buttonCopyFigure.TabIndex = 15;
+            this.buttonCopyFigure.Text = "Copy figure";
+            this.buttonCopyFigure.UseVisualStyleBackColor = true;
+            this.buttonCopyFigure.Click += new System.EventHandler(this.buttonCopyFigure_Click);
             // 
-            // buttonColorFill
+            // buttonSelectFigure
             // 
-            this.buttonColorFill.Location = new System.Drawing.Point(6, 278);
-            this.buttonColorFill.Name = "buttonColorFill";
-            this.buttonColorFill.Size = new System.Drawing.Size(56, 25);
-            this.buttonColorFill.TabIndex = 12;
-            this.buttonColorFill.Text = "Color";
-            this.buttonColorFill.UseVisualStyleBackColor = true;
-            this.buttonColorFill.Click += new System.EventHandler(this.buttonColorFill_Click);
-            // 
-            // buttonRedColorFill
-            // 
-            this.buttonRedColorFill.BackColor = System.Drawing.Color.Red;
-            this.buttonRedColorFill.Location = new System.Drawing.Point(37, 247);
-            this.buttonRedColorFill.Name = "buttonRedColorFill";
-            this.buttonRedColorFill.Size = new System.Drawing.Size(25, 25);
-            this.buttonRedColorFill.TabIndex = 11;
-            this.buttonRedColorFill.UseVisualStyleBackColor = false;
-            this.buttonRedColorFill.Click += new System.EventHandler(this.buttonRedColorFill_Click);
-            // 
-            // buttonBlackColorFill
-            // 
-            this.buttonBlackColorFill.BackColor = System.Drawing.Color.Black;
-            this.buttonBlackColorFill.Location = new System.Drawing.Point(6, 247);
-            this.buttonBlackColorFill.Name = "buttonBlackColorFill";
-            this.buttonBlackColorFill.Size = new System.Drawing.Size(25, 25);
-            this.buttonBlackColorFill.TabIndex = 10;
-            this.buttonBlackColorFill.UseVisualStyleBackColor = false;
-            this.buttonBlackColorFill.Click += new System.EventHandler(this.buttonBlackColorFill_Click);
-            // 
-            // labelFillExtended
-            // 
-            this.labelFillExtended.AutoSize = true;
-            this.labelFillExtended.Location = new System.Drawing.Point(6, 231);
-            this.labelFillExtended.Name = "labelFillExtended";
-            this.labelFillExtended.Size = new System.Drawing.Size(22, 13);
-            this.labelFillExtended.TabIndex = 9;
-            this.labelFillExtended.Text = "Fill:";
-            // 
-            // labelLineExtended
-            // 
-            this.labelLineExtended.AutoSize = true;
-            this.labelLineExtended.Location = new System.Drawing.Point(6, 143);
-            this.labelLineExtended.Name = "labelLineExtended";
-            this.labelLineExtended.Size = new System.Drawing.Size(30, 13);
-            this.labelLineExtended.TabIndex = 8;
-            this.labelLineExtended.Text = "Line:";
-            // 
-            // buttonColorLine
-            // 
-            this.buttonColorLine.Location = new System.Drawing.Point(6, 190);
-            this.buttonColorLine.Name = "buttonColorLine";
-            this.buttonColorLine.Size = new System.Drawing.Size(56, 25);
-            this.buttonColorLine.TabIndex = 7;
-            this.buttonColorLine.Text = "Color";
-            this.buttonColorLine.UseVisualStyleBackColor = true;
-            this.buttonColorLine.Click += new System.EventHandler(this.buttonColorLine_Click);
-            // 
-            // buttonRedColorLine
-            // 
-            this.buttonRedColorLine.BackColor = System.Drawing.Color.Red;
-            this.buttonRedColorLine.Location = new System.Drawing.Point(37, 159);
-            this.buttonRedColorLine.Name = "buttonRedColorLine";
-            this.buttonRedColorLine.Size = new System.Drawing.Size(25, 25);
-            this.buttonRedColorLine.TabIndex = 6;
-            this.buttonRedColorLine.UseVisualStyleBackColor = false;
-            this.buttonRedColorLine.Click += new System.EventHandler(this.buttonRedColorLine_Click);
-            // 
-            // buttonBlackColorLine
-            // 
-            this.buttonBlackColorLine.BackColor = System.Drawing.Color.Black;
-            this.buttonBlackColorLine.Location = new System.Drawing.Point(6, 159);
-            this.buttonBlackColorLine.Name = "buttonBlackColorLine";
-            this.buttonBlackColorLine.Size = new System.Drawing.Size(25, 25);
-            this.buttonBlackColorLine.TabIndex = 5;
-            this.buttonBlackColorLine.UseVisualStyleBackColor = false;
-            this.buttonBlackColorLine.Click += new System.EventHandler(this.buttonBlackColorLine_Click);
-            // 
-            // radioButtonEllipse
-            // 
-            this.radioButtonEllipse.AutoSize = true;
-            this.radioButtonEllipse.Location = new System.Drawing.Point(6, 111);
-            this.radioButtonEllipse.Name = "radioButtonEllipse";
-            this.radioButtonEllipse.Size = new System.Drawing.Size(109, 17);
-            this.radioButtonEllipse.TabIndex = 4;
-            this.radioButtonEllipse.Text = "radioButtonEllipse";
-            this.radioButtonEllipse.UseVisualStyleBackColor = true;
-            this.radioButtonEllipse.Click += new System.EventHandler(this.radioButtonEllipse_Click);
-            // 
-            // radioButtonCircle
-            // 
-            this.radioButtonCircle.AutoSize = true;
-            this.radioButtonCircle.Location = new System.Drawing.Point(6, 88);
-            this.radioButtonCircle.Name = "radioButtonCircle";
-            this.radioButtonCircle.Size = new System.Drawing.Size(105, 17);
-            this.radioButtonCircle.TabIndex = 3;
-            this.radioButtonCircle.Text = "radioButtonCircle";
-            this.radioButtonCircle.UseVisualStyleBackColor = true;
-            this.radioButtonCircle.Click += new System.EventHandler(this.radioButtonCircle_Click);
-            // 
-            // radioButtonPolygon
-            // 
-            this.radioButtonPolygon.AutoSize = true;
-            this.radioButtonPolygon.Location = new System.Drawing.Point(6, 65);
-            this.radioButtonPolygon.Name = "radioButtonPolygon";
-            this.radioButtonPolygon.Size = new System.Drawing.Size(117, 17);
-            this.radioButtonPolygon.TabIndex = 2;
-            this.radioButtonPolygon.Text = "radioButtonPolygon";
-            this.radioButtonPolygon.UseVisualStyleBackColor = true;
-            this.radioButtonPolygon.Click += new System.EventHandler(this.radioButtonPolygon_Click);
-            // 
-            // radioButtonPolyline
-            // 
-            this.radioButtonPolyline.AutoSize = true;
-            this.radioButtonPolyline.Location = new System.Drawing.Point(6, 42);
-            this.radioButtonPolyline.Name = "radioButtonPolyline";
-            this.radioButtonPolyline.Size = new System.Drawing.Size(115, 17);
-            this.radioButtonPolyline.TabIndex = 1;
-            this.radioButtonPolyline.Text = "radioButtonPolyline";
-            this.radioButtonPolyline.UseVisualStyleBackColor = true;
-            this.radioButtonPolyline.Click += new System.EventHandler(this.radioButtonPolyline_Click);
-            // 
-            // radioButtonLine
-            // 
-            this.radioButtonLine.AutoSize = true;
-            this.radioButtonLine.Checked = true;
-            this.radioButtonLine.Location = new System.Drawing.Point(6, 19);
-            this.radioButtonLine.Name = "radioButtonLine";
-            this.radioButtonLine.Size = new System.Drawing.Size(99, 17);
-            this.radioButtonLine.TabIndex = 0;
-            this.radioButtonLine.TabStop = true;
-            this.radioButtonLine.Text = "radioButtonLine";
-            this.radioButtonLine.UseVisualStyleBackColor = true;
-            this.radioButtonLine.Click += new System.EventHandler(this.radioButtonLine_Click);
+            this.buttonSelectFigure.Location = new System.Drawing.Point(6, 348);
+            this.buttonSelectFigure.Name = "buttonSelectFigure";
+            this.buttonSelectFigure.Size = new System.Drawing.Size(75, 23);
+            this.buttonSelectFigure.TabIndex = 14;
+            this.buttonSelectFigure.Text = "Select figure";
+            this.buttonSelectFigure.UseVisualStyleBackColor = true;
+            this.buttonSelectFigure.Click += new System.EventHandler(this.buttonSelectFigure_Click);
             // 
             // mainPictureBox
             // 
@@ -355,23 +193,39 @@
             this.textBox2.Size = new System.Drawing.Size(55, 20);
             this.textBox2.TabIndex = 8;
             // 
+            // _fillFigureControl
+            // 
+            extendedForFigure1.FillColor = System.Drawing.Color.White;
+            this._fillFigureControl.Extended = extendedForFigure1;
+            this._fillFigureControl.Location = new System.Drawing.Point(6, 261);
+            this._fillFigureControl.Name = "_fillFigureControl";
+            this._fillFigureControl.Size = new System.Drawing.Size(182, 81);
+            this._fillFigureControl.TabIndex = 6;
+            // 
             // _propertyLineControl
             // 
             extendedForLine1.LineColor = System.Drawing.Color.Black;
             extendedForLine1.LineThickness = 1F;
             extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
             this._propertyLineControl.Extended = extendedForLine1;
-            this._propertyLineControl.Location = new System.Drawing.Point(12, 378);
+            this._propertyLineControl.Location = new System.Drawing.Point(6, 109);
             this._propertyLineControl.Name = "_propertyLineControl";
             this._propertyLineControl.Size = new System.Drawing.Size(190, 146);
-            this._propertyLineControl.TabIndex = 9;
+            this._propertyLineControl.TabIndex = 5;
+            // 
+            // _toolsControl
+            // 
+            this._toolsControl.Location = new System.Drawing.Point(6, 19);
+            this._toolsControl.Name = "_toolsControl";
+            this._toolsControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
+            this._toolsControl.Size = new System.Drawing.Size(125, 84);
+            this._toolsControl.TabIndex = 19;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1193, 604);
-            this.Controls.Add(this._propertyLineControl);
+            this.ClientSize = new System.Drawing.Size(1193, 563);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -384,8 +238,6 @@
             this.Name = "MainForm";
             this.Text = "GRPO";
             this.groupBoxSelect.ResumeLayout(false);
-            this.groupBoxSelect.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLineThickness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -399,28 +251,18 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBoxSelect;
-        private System.Windows.Forms.RadioButton radioButtonEllipse;
-        private System.Windows.Forms.RadioButton radioButtonCircle;
-        private System.Windows.Forms.RadioButton radioButtonPolygon;
-        private System.Windows.Forms.RadioButton radioButtonPolyline;
-        private System.Windows.Forms.RadioButton radioButtonLine;
-        private System.Windows.Forms.Button buttonColorLine;
-        private System.Windows.Forms.Button buttonRedColorLine;
-        private System.Windows.Forms.Button buttonBlackColorLine;
-        private System.Windows.Forms.Label labelFillExtended;
-        private System.Windows.Forms.Label labelLineExtended;
-        private System.Windows.Forms.Button buttonColorFill;
-        private System.Windows.Forms.Button buttonRedColorFill;
-        private System.Windows.Forms.Button buttonBlackColorFill;
-        private System.Windows.Forms.Label labelLineThickness;
-        private System.Windows.Forms.NumericUpDown numericUpDownLineThickness;
-        private System.Windows.Forms.Label labelLineType;
-        private System.Windows.Forms.ComboBox comboBoxLineType;
         private System.Windows.Forms.Button buttonAcceptSizePictureBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private PropertyLineControl _propertyLineControl;
+        private FillFigureControl _fillFigureControl;
+        private System.Windows.Forms.Button buttonSelectFigure;
+        private System.Windows.Forms.Button buttonDeleteFigure;
+        private System.Windows.Forms.Button buttonCutFigure;
+        private System.Windows.Forms.Button buttonPasteFigure;
+        private System.Windows.Forms.Button buttonCopyFigure;
+        private ToolsControl _toolsControl;
     }
 }
 

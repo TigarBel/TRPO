@@ -18,6 +18,19 @@ namespace GRPO
         /// </summary>
         private Point _pointB;
         /// <summary>
+        /// Изменение параметров: расположения, ширины и высоты фигуры
+        /// </summary>
+        private void Init()
+        {
+            List<Point> points = new List<Point>();
+            points.Add(A);
+            points.Add(B);
+            X = points.Min(point => point.X);
+            Y = points.Min(point => point.Y);
+            Width = points.Max(point => point.X) - points.Min(point => point.X);
+            Height = points.Max(point => point.Y) - points.Min(point => point.Y);
+        }
+        /// <summary>
         /// Пустой класс фигуры Линия
         /// </summary>
         public FigureLine()
@@ -26,8 +39,8 @@ namespace GRPO
             Y = 0;
             Width = 0;
             Height = 0;
-            A = new Point(0, 0);
-            B = new Point(0, 0);
+            A = new Point(X, Y);
+            B = new Point(X + Width, Y + Height);
         }
         /// <summary>
         /// Класс фигуры Линия
@@ -38,33 +51,7 @@ namespace GRPO
         {
             A = a;
             B = b;
-
-            int xOne = a.X;
-            int yOne = a.Y;
-            int xTwo = b.X;
-            int yTwo = b.Y;
-
-            if (xOne <= xTwo)
-            {
-                X = xOne;
-                Width = xTwo - xOne;
-            }
-            else
-            {
-                X = xTwo;
-                Width = xOne - xTwo;
-            }
-
-            if (yOne <= yTwo)
-            {
-                Y = yOne;
-                Height = yTwo - yOne;
-            }
-            else
-            {
-                Y = yTwo;
-                Height = yOne - yTwo;
-            }
+            Init();
         }
         /// <summary>
         /// Первая точка линии
@@ -78,6 +65,7 @@ namespace GRPO
             set
             {
                 _pointA = value;
+                Init();
             }
         }
         /// <summary>
@@ -92,6 +80,7 @@ namespace GRPO
             set
             {
                 _pointB = value;
+                Init();
             }
         }
     }

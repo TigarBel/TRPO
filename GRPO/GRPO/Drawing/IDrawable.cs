@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace GRPO
 {
-    interface IDrawable
+    public interface IDrawable
     {
         /// <summary>
         /// Нарисовать объект
@@ -19,5 +19,17 @@ namespace GRPO
         /// </summary>
         /// <returns>Списко точек формирующих фигуру</returns>
         List<Point> GetPoints();
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        Point Position { get; set; }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        int Width { get; set; }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        int Height { get; set; }
     }
 }

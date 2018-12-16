@@ -113,5 +113,48 @@ namespace GRPO
         {
             return Polyline.Points;
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(Polyline.X, Polyline.Y);
+            }
+            set
+            {
+                Polyline.X = value.X;
+                Polyline.Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return Polyline.Width;
+            }
+            set
+            {
+                Polyline.Width = value;
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return Polyline.Height;
+            }
+            set
+            {
+                Polyline.Height = value;
+            }
+        }
     }
 }

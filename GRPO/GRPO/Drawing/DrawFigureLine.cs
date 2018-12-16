@@ -106,5 +106,48 @@ namespace GRPO
             points.Add(Line.B);
             return points;
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(Line.X, Line.Y);
+            }
+            set
+            {
+                Line.X = value.X;
+                Line.Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return Line.Width;
+            }
+            set
+            {
+                Line.Width = value;
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return Line.Height;
+            }
+            set
+            {
+                Line.Height = value;
+            }
+        }
     }
 }

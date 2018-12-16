@@ -131,5 +131,48 @@ namespace GRPO
             points.Add(new Point(Circle.X, Circle.Y + Circle.Height));
             return points;
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(Circle.X, Circle.Y);
+            }
+            set
+            {
+                Circle.X = value.X;
+                Circle.Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return Circle.Width;
+            }
+            set
+            {
+                Circle.Width = value;
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return Circle.Height;
+            }
+            set
+            {
+                Circle.Height = value;
+            }
+        }
     }
 }

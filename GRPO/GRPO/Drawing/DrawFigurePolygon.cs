@@ -160,5 +160,48 @@ namespace GRPO
         {
             return Polygon.Points;
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(Polygon.X, Polygon.Y);
+            }
+            set
+            {
+                Polygon.X = value.X;
+                Polygon.Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int Width
+        {
+            get
+            {
+                return Polygon.Width;
+            }
+            set
+            {
+                Polygon.Width = value;
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int Height
+        {
+            get
+            {
+                return Polygon.Height;
+            }
+            set
+            {
+                Polygon.Height = value;
+            }
+        }
     }
 }
