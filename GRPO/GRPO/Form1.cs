@@ -317,17 +317,14 @@ namespace GRPO
             }
         }
 
-        private void buttonCopyFigure_Click(object sender, EventArgs e)
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
+            //MessageBox.Show(e.KeyCode.ToString());
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.C && _indexSelectFigure > 0)
             {
                 _drawableBufer = _draws[_indexSelectFigure];
             }
-        }
-
-        private void buttonPasteFigure_Click(object sender, EventArgs e)
-        {
-            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
+            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null && e.Control && e.KeyCode == Keys.V)
             {
                 mainPictureBox.Image = new Bitmap(_backStep);
 
@@ -335,10 +332,9 @@ namespace GRPO
                 {
                     case "DrawFigureLine":
                         {
-                            DrawFigureLine drawFigureLine = new DrawFigureLine(((DrawFigureLine)_drawableBufer).Line.A, 
+                            DrawFigureLine drawFigureLine = new DrawFigureLine(((DrawFigureLine)_drawableBufer).Line.A,
                                 ((DrawFigureLine)_drawableBufer).Line.B, mainPictureBox, ((DrawFigureLine)_drawableBufer).Extended);
-                            drawFigureLine.Line.A = new Point(drawFigureLine.Line.A.X - 100, drawFigureLine.Line.A.Y);
-                            drawFigureLine.Line.B = new Point(drawFigureLine.Line.B.X - 100, drawFigureLine.Line.B.Y);
+                            drawFigureLine.Position = new Point(10, 10);
                             drawFigureLine.Draw();
                             _draws.Add(drawFigureLine);
                             break;
@@ -389,11 +385,18 @@ namespace GRPO
 
                 _backStep = new Bitmap(mainPictureBox.Image);
             }
-        }
-
-        private void buttonCutFigure_Click(object sender, EventArgs e)
-        {
-            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
+            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.KeyCode == Keys.Delete && _indexSelectFigure > 0)
+            {
+                _draws.Remove(_draws[_indexSelectFigure]);
+                mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
+                for (int i = 1; i <= _draws.Count - 1; i++)
+                {
+                    _draws[i].Draw();
+                }
+                _backStep = new Bitmap(mainPictureBox.Image);
+                _index--;
+            }
+            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.X)
             {
                 _drawableBufer = _draws[_indexSelectFigure];
 
@@ -406,37 +409,17 @@ namespace GRPO
                 _backStep = new Bitmap(mainPictureBox.Image);
                 _index--;
             }
-        }
 
-        private void buttonDeleteFigure_Click(object sender, EventArgs e)
-        {
-            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
-            {
-                _draws.Remove(_draws[_indexSelectFigure]);
-                mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
-                for (int i = 1; i <= _draws.Count - 1; i++)
+            /*if (_flagSelectFigure && e.KeyCode == Keys.C && e.Control)
                 {
-                    _draws[i].Draw();
+                    _draws.Add(_draws[_indexSelectFigure]);
                 }
-                _backStep = new Bitmap(mainPictureBox.Image);
-                _index--;
-            }
+                else if (e.KeyCode == Keys.V && e.Control)
+                {
+                    DrawFigureLine line = new DrawFigureLine(new Point(1, 1), new Point(100, 100), mainPictureBox,
+                        new ExtendedForLine(1, Color.Blue, DashStyle.Dash));
+                    line.Draw();
+                }*/
         }
-
-        private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            MessageBox.Show(e.KeyCode.ToString());
-        }
-
-        /*if (_flagSelectFigure && e.KeyCode == Keys.C && e.Control)
-            {
-                _draws.Add(_draws[_indexSelectFigure]);
-            }
-            else if (e.KeyCode == Keys.V && e.Control)
-            {
-                DrawFigureLine line = new DrawFigureLine(new Point(1, 1), new Point(100, 100), mainPictureBox,
-                    new ExtendedForLine(1, Color.Blue, DashStyle.Dash));
-                line.Draw();
-            }*/
     }
 }

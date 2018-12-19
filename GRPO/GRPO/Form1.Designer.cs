@@ -34,16 +34,12 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBoxSelect = new System.Windows.Forms.GroupBox();
-            this._toolsWithPropertyControl = new GRPO.ToolsWithPropertyControl();
-            this.buttonDeleteFigure = new System.Windows.Forms.Button();
-            this.buttonCutFigure = new System.Windows.Forms.Button();
-            this.buttonPasteFigure = new System.Windows.Forms.Button();
-            this.buttonCopyFigure = new System.Windows.Forms.Button();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.buttonAcceptSizePictureBox = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this._toolsWithPropertyControl = new GRPO.ToolsWithPropertyControl();
             this.groupBoxSelect.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -81,70 +77,12 @@
             // groupBoxSelect
             // 
             this.groupBoxSelect.Controls.Add(this._toolsWithPropertyControl);
-            this.groupBoxSelect.Controls.Add(this.buttonDeleteFigure);
-            this.groupBoxSelect.Controls.Add(this.buttonCutFigure);
-            this.groupBoxSelect.Controls.Add(this.buttonPasteFigure);
-            this.groupBoxSelect.Controls.Add(this.buttonCopyFigure);
             this.groupBoxSelect.Location = new System.Drawing.Point(12, 65);
             this.groupBoxSelect.Name = "groupBoxSelect";
             this.groupBoxSelect.Size = new System.Drawing.Size(299, 480);
             this.groupBoxSelect.TabIndex = 4;
             this.groupBoxSelect.TabStop = false;
             this.groupBoxSelect.Text = "Уструменты";
-            // 
-            // _toolsWithPropertyControl
-            // 
-            extendedForFigure1.FillColor = System.Drawing.Color.White;
-            this._toolsWithPropertyControl.ExtendedForFigure = extendedForFigure1;
-            extendedForLine1.LineColor = System.Drawing.Color.Black;
-            extendedForLine1.LineThickness = 1F;
-            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
-            this._toolsWithPropertyControl.ExtendedForLine = extendedForLine1;
-            this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
-            this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
-            this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
-            this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
-            this._toolsWithPropertyControl.TabIndex = 19;
-            // 
-            // buttonDeleteFigure
-            // 
-            this.buttonDeleteFigure.Location = new System.Drawing.Point(87, 406);
-            this.buttonDeleteFigure.Name = "buttonDeleteFigure";
-            this.buttonDeleteFigure.Size = new System.Drawing.Size(75, 23);
-            this.buttonDeleteFigure.TabIndex = 18;
-            this.buttonDeleteFigure.Text = "Delete figure";
-            this.buttonDeleteFigure.UseVisualStyleBackColor = true;
-            this.buttonDeleteFigure.Click += new System.EventHandler(this.buttonDeleteFigure_Click);
-            // 
-            // buttonCutFigure
-            // 
-            this.buttonCutFigure.Location = new System.Drawing.Point(6, 406);
-            this.buttonCutFigure.Name = "buttonCutFigure";
-            this.buttonCutFigure.Size = new System.Drawing.Size(75, 23);
-            this.buttonCutFigure.TabIndex = 17;
-            this.buttonCutFigure.Text = "Cut figure";
-            this.buttonCutFigure.UseVisualStyleBackColor = true;
-            this.buttonCutFigure.Click += new System.EventHandler(this.buttonCutFigure_Click);
-            // 
-            // buttonPasteFigure
-            // 
-            this.buttonPasteFigure.Location = new System.Drawing.Point(87, 377);
-            this.buttonPasteFigure.Name = "buttonPasteFigure";
-            this.buttonPasteFigure.Size = new System.Drawing.Size(75, 23);
-            this.buttonPasteFigure.TabIndex = 16;
-            this.buttonPasteFigure.Text = "Paste figure";
-            this.buttonPasteFigure.UseVisualStyleBackColor = true;
-            this.buttonPasteFigure.Click += new System.EventHandler(this.buttonPasteFigure_Click);
-            // 
-            // buttonCopyFigure
-            // 
-            this.buttonCopyFigure.Location = new System.Drawing.Point(6, 377);
-            this.buttonCopyFigure.Name = "buttonCopyFigure";
-            this.buttonCopyFigure.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopyFigure.TabIndex = 15;
-            this.buttonCopyFigure.Text = "Copy figure";
-            this.buttonCopyFigure.UseVisualStyleBackColor = true;
-            this.buttonCopyFigure.Click += new System.EventHandler(this.buttonCopyFigure_Click);
             // 
             // mainPictureBox
             // 
@@ -191,6 +129,20 @@
             this.textBox2.Size = new System.Drawing.Size(55, 20);
             this.textBox2.TabIndex = 8;
             // 
+            // _toolsWithPropertyControl
+            // 
+            extendedForFigure1.FillColor = System.Drawing.Color.White;
+            this._toolsWithPropertyControl.ExtendedForFigure = extendedForFigure1;
+            extendedForLine1.LineColor = System.Drawing.Color.Black;
+            extendedForLine1.LineThickness = 1F;
+            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._toolsWithPropertyControl.ExtendedForLine = extendedForLine1;
+            this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
+            this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
+            this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
+            this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
+            this._toolsWithPropertyControl.TabIndex = 19;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -205,9 +157,10 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.mainPictureBox);
+            this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "GRPO";
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainForm_PreviewKeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.groupBoxSelect.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.ResumeLayout(false);
@@ -226,10 +179,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button buttonDeleteFigure;
-        private System.Windows.Forms.Button buttonCutFigure;
-        private System.Windows.Forms.Button buttonPasteFigure;
-        private System.Windows.Forms.Button buttonCopyFigure;
         private ToolsWithPropertyControl _toolsWithPropertyControl;
     }
 }
