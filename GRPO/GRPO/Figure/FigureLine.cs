@@ -65,7 +65,6 @@ namespace GRPO
             set
             {
                 _pointA = value;
-                Init();
             }
         }
         /// <summary>
@@ -80,7 +79,75 @@ namespace GRPO
             set
             {
                 _pointB = value;
-                Init();
+            }
+        }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(X, Y);
+            }
+            set
+            {
+                A = new Point(A.X - (X - value.X), A.Y - (Y - value.Y));
+                B = new Point(B.X - (X - value.X), B.Y - (Y - value.Y));
+                X = value.X;
+                Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int WidthLine
+        {
+            get
+            {
+                return Width;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    if (Width != 0)
+                    {
+                        A = new Point(X + Convert.ToInt32((float)(A.X - X) / (float)Width * (float)value), A.Y);
+                        B = new Point(X + Convert.ToInt32((float)(B.X - X) / (float)Width * (float)value), B.Y);
+                        Width = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Линия вертикальная!");
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int HeightLine
+        {
+            get
+            {
+                return Height;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    if (Height != 0)
+                    {
+                        A = new Point(A.X, Y + Convert.ToInt32((float)(A.Y - Y) / (float)Height * (float)value));
+                        B = new Point(B.X, Y + Convert.ToInt32((float)(B.Y - Y) / (float)Height * (float)value));
+                        Height = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Линия горизонтальная!");
+                    }
+                }
             }
         }
     }

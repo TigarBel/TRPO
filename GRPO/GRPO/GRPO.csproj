@@ -59,10 +59,16 @@
     <Compile Include="Figure\FigureLine.cs" />
     <Compile Include="Figure\FigurePolygon.cs" />
     <Compile Include="Figure\FigurePolyline.cs" />
-    <Compile Include="ToolsControl.cs">
+    <Compile Include="UserControl\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolsControl.Designer.cs">
+    <Compile Include="UserControl\ToolsWithPropertyControl.Designer.cs">
+      <DependentUpon>ToolsWithPropertyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\ToolsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\ToolsControl.Designer.cs">
       <DependentUpon>ToolsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl\FillFigureControl.cs">
@@ -86,7 +92,10 @@
     <Compile Include="UserControl\PropertyLineControl.Designer.cs">
       <DependentUpon>PropertyLineControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ToolsControl.resx">
+    <EmbeddedResource Include="UserControl\ToolsWithPropertyControl.resx">
+      <DependentUpon>ToolsWithPropertyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl\ToolsControl.resx">
       <DependentUpon>ToolsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\FillFigureControl.resx">

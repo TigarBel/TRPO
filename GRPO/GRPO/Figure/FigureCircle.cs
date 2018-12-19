@@ -51,5 +51,56 @@ namespace GRPO
                 _radius = value;
             }
         }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(X, Y);
+            }
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int WidthCircle
+        {
+            get
+            {
+                return Width;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    Width = value;
+                    Height = value;
+                }
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int HeightCircle
+        {
+            get
+            {
+                return Height;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    Width = value;
+                    Height = value;
+                }
+            }
+        }
     }
 }

@@ -111,13 +111,21 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-            pen.DashStyle = ExtendedLine.LineType;
-            graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
-            graphics.DrawEllipse(pen, Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
-            graphics.Dispose();
-            _pictureBox.Invalidate();
+            if (_pictureBox.Image != null)
+            {
+                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+                pen.DashStyle = ExtendedLine.LineType;
+                graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), 
+                    Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
+                graphics.DrawEllipse(pen, Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
+                graphics.Dispose();
+                _pictureBox.Invalidate();
+            }
+            else
+            {
+                throw new Exception("Не выбран холст!");
+            }
         }
         /// <summary>
         /// Взять список точек
@@ -126,10 +134,10 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(new Point(Ellipse.X, Ellipse.Y));
-            points.Add(new Point(Ellipse.X + Ellipse.Width, Ellipse.Y));
-            points.Add(new Point(Ellipse.X + Ellipse.Width, Ellipse.Y + Ellipse.Height));
-            points.Add(new Point(Ellipse.X, Ellipse.Y + Ellipse.Height));
+            points.Add(new Point(Ellipse.Position.X, Ellipse.Position.Y));
+            points.Add(new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y));
+            points.Add(new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y + Ellipse.HeightEllipse));
+            points.Add(new Point(Ellipse.Position.X, Ellipse.Position.Y + Ellipse.HeightEllipse));
             return points;
         }
         /// <summary>
@@ -139,12 +147,11 @@ namespace GRPO
         {
             get
             {
-                return new Point(Ellipse.X, Ellipse.Y);
+                return Ellipse.Position;
             }
             set
             {
-                Ellipse.X = value.X;
-                Ellipse.Y = value.Y;
+                Ellipse.Position = value;
             }
         }
         /// <summary>
@@ -154,11 +161,11 @@ namespace GRPO
         {
             get
             {
-                return Ellipse.Width;
+                return Ellipse.WidthEllipse;
             }
             set
             {
-                Ellipse.Width = value;
+                Ellipse.WidthEllipse = value;
             }
         }
         /// <summary>
@@ -168,11 +175,11 @@ namespace GRPO
         {
             get
             {
-                return Ellipse.Height;
+                return Ellipse.HeightEllipse;
             }
             set
             {
-                Ellipse.Height = value;
+                Ellipse.HeightEllipse = value;
             }
         }
     }

@@ -16,7 +16,9 @@ namespace GRPO
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Свойство заливки
+        /// </summary>
         public ExtendedForFigure Extended
         {
             get

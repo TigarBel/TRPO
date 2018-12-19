@@ -25,6 +25,9 @@ namespace GRPO
         private DrawingTools _selectTool;
         private List<Button> _buttons = new List<Button>();
 
+        public delegate void ButtonStateHandler();
+        public event ButtonStateHandler ButtonClick;
+
         public ToolsControl()
         {
             InitializeComponent();
@@ -50,6 +53,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigureLine;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
 
         private void buttonFigurePolyline_Click(object sender, EventArgs e)
@@ -57,6 +61,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigurePolyline;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
 
         private void buttonCursorSelect_Click(object sender, EventArgs e)
@@ -64,6 +69,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.CursorSelect;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
 
         private void buttonFigurePolygon_Click(object sender, EventArgs e)
@@ -71,6 +77,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigurePolygon;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
 
         private void buttonFigureCircle_Click(object sender, EventArgs e)
@@ -78,6 +85,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigureCircle;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
 
         private void buttonFigureEllips_Click(object sender, EventArgs e)
@@ -85,6 +93,7 @@ namespace GRPO
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigureEllipse;
             ((Button)sender).BackColor = Color.Black;
+            if (ButtonClick != null) ButtonClick();
         }
         /// <summary>
         /// Выбранный тип класса IDrawable

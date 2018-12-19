@@ -20,7 +20,6 @@ namespace GRPO
         private int _index;
         private Image _backStep;
         private List<IDrawable> _draws = new List<IDrawable>();
-        private bool _flagSelectFigure;
         private int _indexSelectFigure;
         private IDrawable _drawableBufer;
 
@@ -38,17 +37,17 @@ namespace GRPO
 
         private void mainPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (_toolsControl.SelectTool != DrawingTools.CursorSelect)
+            if (_toolsWithPropertyControl.SelectTool != DrawingTools.CursorSelect)
             {
                 _flagMouseDown = true;
                 _pointA = new Point(e.X, e.Y);
 
-                if (_draws[_index].GetType() == typeof(DrawFigurePolyline) && _toolsControl.SelectTool == DrawingTools.DrawFigurePolyline)
+                if (_draws[_index].GetType() == typeof(DrawFigurePolyline) && _toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigurePolyline)
                 {
                     List<Point> points = new List<Point>();
                     points = _draws[_index].GetPoints();
                     points.Add(_pointA);
-                    DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _propertyLineControl.Extended);
+                    DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -63,7 +62,7 @@ namespace GRPO
                 _backStep = new Bitmap(mainPictureBox.Image);
             }
 
-            if (_toolsControl.SelectTool == DrawingTools.CursorSelect && _draws.Count > 1) 
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _draws.Count > 1) 
             {
                 mainPictureBox.Image = new Bitmap(_backStep);
                 _pointA = new Point(e.X, e.Y);
@@ -86,7 +85,28 @@ namespace GRPO
                         DrawFigurePolygon polygon = new DrawFigurePolygon(pointsForSquer, mainPictureBox,
                             new ExtendedForLine(1, Color.Black, DashStyle.Dash), new ExtendedForFigure(Color.Transparent));
                         polygon.Draw();
+                        if (_draws[i] is DrawFigureLine) _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureLine)_draws[i]).Extended;
+                        if (_draws[i] is DrawFigurePolyline) _toolsWithPropertyControl.ExtendedForLine = ((DrawFigurePolyline)_draws[i]).Extended;
+                        if (_draws[i] is DrawFigurePolygon)
+                        {
+                            _toolsWithPropertyControl.ExtendedForLine = ((DrawFigurePolygon)_draws[i]).ExtendedLine;
+                            _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigurePolygon)_draws[i]).ExtendedFigure;
+                        }
+                        if (_draws[i] is DrawFigureCircle)
+                        {
+                            _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureCircle)_draws[i]).ExtendedLine;
+                            _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigureCircle)_draws[i]).ExtendedFigure;
+                        }
+                        if (_draws[i] is DrawFigureEllipse)
+                        {
+                            _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureEllipse)_draws[i]).ExtendedLine;
+                            _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigureEllipse)_draws[i]).ExtendedFigure;
+                        }
                         break;
+                    }
+                    else
+                    {
+                        _toolsWithPropertyControl.HidingUserControl();
                     }
                 }
             }
@@ -101,15 +121,15 @@ namespace GRPO
                 _pointB = new Point(e.X, e.Y);
                 mainPictureBox.Image = new Bitmap(_backStep);
 
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureLine)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureLine)
                 {
                     _draws.Remove(_draws[_index]);
-                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _propertyLineControl.Extended);
+                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigurePolyline)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigurePolyline)
                 {
                     if (_draws[_index].GetType() != typeof(DrawFigurePolyline))
                     {
@@ -119,14 +139,14 @@ namespace GRPO
                         points.Add(_pointA);
                         points.Add(_pointB);
 
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _propertyLineControl.Extended);
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine);
 
                         drawFigure.Draw();
                         _draws.Add(drawFigure);
                         _index = _draws.Count - 1;
                     }
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigurePolygon)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigurePolygon)
                 {
                     _draws.Remove(_draws[_index]);
 
@@ -136,27 +156,27 @@ namespace GRPO
                     squer.Add(_pointB);
                     squer.Add(new Point(_pointB.X, _pointA.Y));
 
-                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _propertyLineControl.Extended, 
-                        _fillFigureControl.Extended);
+                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine,
+                        _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureCircle)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureCircle)
                 {
                     _draws.Remove(_draws[_index]);
                     DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
                         Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),
-                        mainPictureBox, _propertyLineControl.Extended, _fillFigureControl.Extended);
+                        mainPictureBox, _toolsWithPropertyControl.ExtendedForLine, _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureEllipse)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureEllipse)
                 {
                     _draws.Remove(_draws[_index]);
                     DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox,
-                        _propertyLineControl.Extended, _fillFigureControl.Extended);
+                        _toolsWithPropertyControl.ExtendedForLine, _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -180,15 +200,15 @@ namespace GRPO
                 _pointB = new Point(e.X, e.Y);
                 mainPictureBox.Image = new Bitmap(_backStep);
 
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureLine)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureLine)
                 {
                     _draws.Remove(_draws[_index]);
-                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _propertyLineControl.Extended);
+                    DrawFigureLine drawFigure = new DrawFigureLine(_pointA, _pointB, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigurePolyline)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigurePolyline)
                 {
                     if (_draws[_index].GetType() != typeof(DrawFigurePolyline))
                     {
@@ -198,14 +218,14 @@ namespace GRPO
                         points.Add(_pointA);
                         points.Add(_pointB);
 
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _propertyLineControl.Extended);
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine);
 
                         drawFigure.Draw();
                         _draws.Add(drawFigure);
                         _index = _draws.Count - 1;
                     }
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigurePolygon)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigurePolygon)
                 {
                     _draws.Remove(_draws[_index]);
 
@@ -215,27 +235,27 @@ namespace GRPO
                     squer.Add(_pointB);
                     squer.Add(new Point(_pointB.X, _pointA.Y));
 
-                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _propertyLineControl.Extended,
-                        _fillFigureControl.Extended);
+                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(squer, mainPictureBox, _toolsWithPropertyControl.ExtendedForLine,
+                        _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureCircle)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureCircle)
                 {
                     _draws.Remove(_draws[_index]);
                     DrawFigureCircle drawFigure = new DrawFigureCircle(_pointA,
                         Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),
-                        mainPictureBox, _propertyLineControl.Extended, _fillFigureControl.Extended);
+                        mainPictureBox, _toolsWithPropertyControl.ExtendedForLine, _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
                 }
-                if (_toolsControl.SelectTool == DrawingTools.DrawFigureEllipse)
+                if (_toolsWithPropertyControl.SelectTool == DrawingTools.DrawFigureEllipse)
                 {
                     _draws.Remove(_draws[_index]);
                     DrawFigureEllipse drawFigure = new DrawFigureEllipse(_pointA, _pointB.X - _pointA.X, _pointB.Y - _pointA.Y, mainPictureBox,
-                        _propertyLineControl.Extended, _fillFigureControl.Extended);
+                        _toolsWithPropertyControl.ExtendedForLine, _toolsWithPropertyControl.ExtendedForFigure);
                     drawFigure.Draw();
                     _draws.Add(drawFigure);
                     _index = _draws.Count - 1;
@@ -283,7 +303,7 @@ namespace GRPO
 
         private void button3_Click(object sender, EventArgs e)
         {
-            mainPictureBox.Image.Save("111lol.jpg");
+            //mainPictureBox.Image.Save("111lol.jpg");
             var count = _draws.Count;
         }
 
@@ -297,14 +317,9 @@ namespace GRPO
             }
         }
 
-        private void buttonSelectFigure_Click(object sender, EventArgs e)
-        {
-            _flagSelectFigure = true;
-        }
-
         private void buttonCopyFigure_Click(object sender, EventArgs e)
         {
-            if (_toolsControl.SelectTool == DrawingTools.CursorSelect)
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
             {
                 _drawableBufer = _draws[_indexSelectFigure];
             }
@@ -312,7 +327,7 @@ namespace GRPO
 
         private void buttonPasteFigure_Click(object sender, EventArgs e)
         {
-            if (_toolsControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
             {
                 mainPictureBox.Image = new Bitmap(_backStep);
 
@@ -330,9 +345,15 @@ namespace GRPO
                         }
                     case "DrawFigurePolyline":
                         {
-                            DrawFigurePolyline drawFigurePolyline = (DrawFigurePolyline)_drawableBufer;
-                            drawFigurePolyline.Polyline.X = 10;
-                            drawFigurePolyline.Polyline.Y = 10;
+                            //DrawFigurePolyline drawFigurePolyline = (DrawFigurePolyline)_drawableBufer;
+                            DrawFigurePolyline drawFigurePolyline = new DrawFigurePolyline(((DrawFigurePolyline)_drawableBufer).Polyline.Points,
+                                ((DrawFigurePolyline)_drawableBufer).Polyline.Circular, mainPictureBox, ((DrawFigurePolyline)_drawableBufer).Extended);
+                            for (int i = 0; i < ((DrawFigurePolyline)drawFigurePolyline).Polyline.Points.Count - 1; i++)
+                            {
+                                drawFigurePolyline.Polyline.Points[i] = new Point(
+                                    drawFigurePolyline.Polyline.Points[i].X - 100,
+                                    drawFigurePolyline.Polyline.Points[i].Y);
+                            }
                             drawFigurePolyline.Draw();
                             _draws.Add(drawFigurePolyline);
                             break;
@@ -340,17 +361,17 @@ namespace GRPO
                     case "DrawFigurePolygon":
                         {
                             DrawFigurePolygon drawFigurePolygon = (DrawFigurePolygon)_drawableBufer;
-                            drawFigurePolygon.Polygon.X = 10;
-                            drawFigurePolygon.Polygon.Y = 10;
+                            drawFigurePolygon.Polygon.Position = new Point(10, 10);
                             drawFigurePolygon.Draw();
                             _draws.Add(drawFigurePolygon);
                             break;
                         }
                     case "DrawFigureCircle":
                         {
-                            DrawFigureCircle drawFigureCircle = (DrawFigureCircle)_drawableBufer;
-                            drawFigureCircle.Circle.X = 10;
-                            drawFigureCircle.Circle.Y = 10;
+                            DrawFigureCircle drawFigureCircle = new DrawFigureCircle(((DrawFigureCircle)_drawableBufer).Position,
+                                ((DrawFigureCircle)_drawableBufer).Width / 2, mainPictureBox, ((DrawFigureCircle)_drawableBufer).ExtendedLine,
+                                ((DrawFigureCircle)_drawableBufer).ExtendedFigure);
+                            drawFigureCircle.Circle.Position = new Point(10, 10);
                             drawFigureCircle.Draw();
                             _draws.Add(drawFigureCircle);
                             break;
@@ -359,8 +380,7 @@ namespace GRPO
                         {
 
                             DrawFigureEllipse drawFigureEllipse = (DrawFigureEllipse)_drawableBufer;
-                            drawFigureEllipse.Ellipse.X = 10;
-                            drawFigureEllipse.Ellipse.Y = 10;
+                            drawFigureEllipse.Ellipse.Position = new Point(10, 10);
                             drawFigureEllipse.Draw();
                             _draws.Add(drawFigureEllipse);
                             break;
@@ -373,7 +393,7 @@ namespace GRPO
 
         private void buttonCutFigure_Click(object sender, EventArgs e)
         {
-            if (_toolsControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && _drawableBufer != null)
             {
                 _drawableBufer = _draws[_indexSelectFigure];
 
@@ -384,12 +404,13 @@ namespace GRPO
                     _draws[i].Draw();
                 }
                 _backStep = new Bitmap(mainPictureBox.Image);
+                _index--;
             }
         }
 
         private void buttonDeleteFigure_Click(object sender, EventArgs e)
         {
-            if (_toolsControl.SelectTool == DrawingTools.CursorSelect)
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
             {
                 _draws.Remove(_draws[_indexSelectFigure]);
                 mainPictureBox.Image = new Bitmap(mainPictureBox.Width, mainPictureBox.Height);
@@ -398,7 +419,13 @@ namespace GRPO
                     _draws[i].Draw();
                 }
                 _backStep = new Bitmap(mainPictureBox.Image);
+                _index--;
             }
+        }
+
+        private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            MessageBox.Show(e.KeyCode.ToString());
         }
 
         /*if (_flagSelectFigure && e.KeyCode == Keys.C && e.Control)

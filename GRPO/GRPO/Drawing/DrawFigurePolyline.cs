@@ -88,21 +88,28 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            if (Polyline.Points.Count > 1)
+            if (_pictureBox.Image != null)
             {
-                for (int i = 0; i < Polyline.Points.Count - 1; i++)
+                if (Polyline.Points.Count > 1)
                 {
-                    Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                    Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
-                    pen.DashStyle = Extended.LineType;
-                    graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
-                    graphics.Dispose();
-                    _pictureBox.Invalidate();
+                    for (int i = 0; i < Polyline.Points.Count - 1; i++)
+                    {
+                        Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                        Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
+                        pen.DashStyle = Extended.LineType;
+                        graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
+                        graphics.Dispose();
+                        _pictureBox.Invalidate();
+                    }
+                }
+                else
+                {
+                    throw new Exception("Полилиниия пустая, либо не имеет 2 точек отрисовки!");
                 }
             }
             else
             {
-                throw new Exception("Полилиниия пустая, либо не имеет 2 точек отрисовки!");
+                throw new Exception("Не выбран холст!");
             }
         }
         /// <summary>
@@ -120,12 +127,11 @@ namespace GRPO
         {
             get
             {
-                return new Point(Polyline.X, Polyline.Y);
+                return Polyline.Position;
             }
             set
             {
-                Polyline.X = value.X;
-                Polyline.Y = value.Y;
+                Polyline.Position = value;
             }
         }
         /// <summary>
@@ -135,11 +141,11 @@ namespace GRPO
         {
             get
             {
-                return Polyline.Width;
+                return Polyline.WidthPolyline;
             }
             set
             {
-                Polyline.Width = value;
+                Polyline.WidthPolyline = value;
             }
         }
         /// <summary>
@@ -149,11 +155,11 @@ namespace GRPO
         {
             get
             {
-                return Polyline.Height;
+                return Polyline.HeightPolyline;
             }
             set
             {
-                Polyline.Height = value;
+                Polyline.HeightPolyline = value;
             }
         }
     }

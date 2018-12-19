@@ -23,7 +23,9 @@ namespace GRPO
             comboBoxLineType.Items.Add(DashStyle.DashDotDot);
             comboBoxLineType.SelectedIndex = 0;
         }
-        
+        /// <summary>
+        /// Свойство линии
+        /// </summary>
         public ExtendedForLine Extended
         {
             get

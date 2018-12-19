@@ -30,6 +30,6 @@ namespace GRPO
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        int Height { get; set; }
+        int Height { get ; set ; }
     }
 }

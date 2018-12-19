@@ -27,7 +27,7 @@ namespace GRPO
         /// <summary>
         /// Пустой класс фигуры
         /// </summary>
-        public Figure()
+        protected Figure()
         {
             X = 0;
             Y = 0;
@@ -41,7 +41,7 @@ namespace GRPO
         /// <param name="y">Позиция фигуры по координате Y</param>
         /// <param name="width">Ширина фигуры</param>
         /// <param name="height">Высота фигуры</param>
-        public Figure(int x, int y, int width, int height)
+        protected Figure(int x, int y, int width, int height)
         {
             X = x;
             Y = y;
@@ -51,7 +51,7 @@ namespace GRPO
         /// <summary>
         /// Позиция фигуры по координате X
         /// </summary>
-        public int X
+        protected int X
         {
             get
             {
@@ -65,7 +65,7 @@ namespace GRPO
         /// <summary>
         /// Позиция фигуры по координате Y
         /// </summary>
-        public int Y
+        protected int Y
         {
             get
             {
@@ -79,7 +79,7 @@ namespace GRPO
         /// <summary>
         /// Ширина фигуры
         /// </summary>
-        public int Width
+        protected int Width
         {
             get
             {
@@ -93,7 +93,7 @@ namespace GRPO
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        public int Height
+        protected int Height
         {
             get
             {

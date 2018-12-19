@@ -128,28 +128,31 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            /*if(_pictureBox.Image == null)
+            if (_pictureBox.Image != null)
             {
-
-            }*/
-            if (Polygon.Points.Count > 2)
-            {
-                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-                pen.DashStyle = ExtendedLine.LineType;
-                graphics.FillPolygon(new SolidBrush(ExtendedFigure.FillColor), Polygon.Points.ToArray());
-                for (int i = 1; i < Polygon.Points.Count; i++)
+                if (Polygon.Points.Count > 2)
                 {
-                    graphics.DrawLine(pen, Polygon.Points[i - 1].X, Polygon.Points[i - 1].Y, Polygon.Points[i].X, Polygon.Points[i].Y);
+                    Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                    Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+                    pen.DashStyle = ExtendedLine.LineType;
+                    graphics.FillPolygon(new SolidBrush(ExtendedFigure.FillColor), Polygon.Points.ToArray());
+                    for (int i = 1; i < Polygon.Points.Count; i++)
+                    {
+                        graphics.DrawLine(pen, Polygon.Points[i - 1].X, Polygon.Points[i - 1].Y, Polygon.Points[i].X, Polygon.Points[i].Y);
+                    }
+                    graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1].X, Polygon.Points[Polygon.Points.Count - 1].Y,
+                        Polygon.Points[0].X, Polygon.Points[0].Y);
+                    graphics.Dispose();
+                    _pictureBox.Invalidate();
                 }
-                graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1].X, Polygon.Points[Polygon.Points.Count - 1].Y, 
-                    Polygon.Points[0].X, Polygon.Points[0].Y);
-                graphics.Dispose();
-                _pictureBox.Invalidate();
+                else
+                {
+                    throw new Exception("Многоугольник пустой, либо не имеет минимум 3 точек отрисовки!");
+                }
             }
             else
             {
-                throw new Exception("Многоугольник пустой, либо не имеет минимум 3 точек отрисовки!");
+                throw new Exception("Не выбран холст!");
             }
         }
         /// <summary>
@@ -167,12 +170,11 @@ namespace GRPO
         {
             get
             {
-                return new Point(Polygon.X, Polygon.Y);
+                return Polygon.Position;
             }
             set
             {
-                Polygon.X = value.X;
-                Polygon.Y = value.Y;
+                Polygon.Position = value;
             }
         }
         /// <summary>
@@ -182,11 +184,11 @@ namespace GRPO
         {
             get
             {
-                return Polygon.Width;
+                return Polygon.WidthPolygon;
             }
             set
             {
-                Polygon.Width = value;
+                Polygon.WidthPolygon = value;
             }
         }
         /// <summary>
@@ -196,11 +198,11 @@ namespace GRPO
         {
             get
             {
-                return Polygon.Height;
+                return Polygon.HeightPolygon;
             }
             set
             {
-                Polygon.Height = value;
+                Polygon.HeightPolygon = value;
             }
         }
     }

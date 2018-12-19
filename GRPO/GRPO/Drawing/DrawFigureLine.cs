@@ -88,12 +88,19 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-            Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
-            pen.DashStyle = Extended.LineType;
-            graphics.DrawLine(pen, Line.A.X, Line.A.Y, Line.B.X, Line.B.Y);
-            graphics.Dispose();
-            _pictureBox.Invalidate();
+            if (_pictureBox.Image != null)
+            {
+                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
+                pen.DashStyle = Extended.LineType;
+                graphics.DrawLine(pen, Line.A.X, Line.A.Y, Line.B.X, Line.B.Y);
+                graphics.Dispose();
+                _pictureBox.Invalidate();
+            }
+            else
+            {
+                throw new Exception("Не выбран холст!");
+            }
         }
         /// <summary>
         /// Взять список точек
@@ -113,12 +120,11 @@ namespace GRPO
         {
             get
             {
-                return new Point(Line.X, Line.Y);
+                return Line.Position;
             }
             set
             {
-                Line.X = value.X;
-                Line.Y = value.Y;
+                Line.Position = value;
             }
         }
         /// <summary>
@@ -128,11 +134,11 @@ namespace GRPO
         {
             get
             {
-                return Line.Width;
+                return Line.WidthLine;
             }
             set
             {
-                Line.Width = value;
+                Line.WidthLine = value;
             }
         }
         /// <summary>
@@ -142,11 +148,11 @@ namespace GRPO
         {
             get
             {
-                return Line.Height;
+                return Line.HeightLine;
             }
             set
             {
-                Line.Height = value;
+                Line.HeightLine = value;
             }
         }
     }

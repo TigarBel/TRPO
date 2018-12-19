@@ -110,13 +110,21 @@ namespace GRPO
         /// </summary>
         public void Draw()
         {
-            Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-            Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-            pen.DashStyle = ExtendedLine.LineType;
-            graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), Circle.X, Circle.Y, Circle.Width, Circle.Height);
-            graphics.DrawEllipse(pen, Circle.X, Circle.Y, Circle.Width, Circle.Height);
-            graphics.Dispose();
-            _pictureBox.Invalidate();
+            if (_pictureBox.Image != null)
+            {
+                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
+                pen.DashStyle = ExtendedLine.LineType;
+                graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), 
+                    Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
+                graphics.DrawEllipse(pen, Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
+                graphics.Dispose();
+                _pictureBox.Invalidate();
+            }
+            else
+            {
+                throw new Exception("Не выбран холст!");
+            }
         }
         /// <summary>
         /// Взять список точек
@@ -125,10 +133,10 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(new Point(Circle.X, Circle.Y));
-            points.Add(new Point(Circle.X + Circle.Width, Circle.Y));
-            points.Add(new Point(Circle.X + Circle.Width, Circle.Y + Circle.Height));
-            points.Add(new Point(Circle.X, Circle.Y + Circle.Height));
+            points.Add(new Point(Circle.Position.X, Circle.Position.Y));
+            points.Add(new Point(Circle.Position.X + Circle.WidthCircle, Circle.Position.Y));
+            points.Add(new Point(Circle.Position.X + Circle.WidthCircle, Circle.Position.Y + Circle.HeightCircle));
+            points.Add(new Point(Circle.Position.X, Circle.Position.Y + Circle.HeightCircle));
             return points;
         }
         /// <summary>
@@ -138,12 +146,11 @@ namespace GRPO
         {
             get
             {
-                return new Point(Circle.X, Circle.Y);
+                return Circle.Position;
             }
             set
             {
-                Circle.X = value.X;
-                Circle.Y = value.Y;
+                Circle.Position = value;
             }
         }
         /// <summary>
@@ -153,11 +160,11 @@ namespace GRPO
         {
             get
             {
-                return Circle.Width;
+                return Circle.WidthCircle;
             }
             set
             {
-                Circle.Width = value;
+                Circle.WidthCircle = value;
             }
         }
         /// <summary>
@@ -167,11 +174,11 @@ namespace GRPO
         {
             get
             {
-                return Circle.Height;
+                return Circle.HeightCircle;
             }
             set
             {
-                Circle.Height = value;
+                Circle.HeightCircle = value;
             }
         }
     }

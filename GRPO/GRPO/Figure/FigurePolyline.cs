@@ -70,7 +70,7 @@ namespace GRPO
                 }
                 else
                 {
-                    throw new ArgumentException("Спичок не содержит точки!");
+                    throw new ArgumentException("Спиcок не содержит точки!");
                 }
             }
         }
@@ -86,6 +86,84 @@ namespace GRPO
             set
             {
                 _circular = value;
+            }
+        }
+        /// <summary>
+        /// Позиция фигуры
+        /// </summary>
+        public Point Position
+        {
+            get
+            {
+                return new Point(X, Y);
+            }
+            set
+            {
+                for (int i = 0; i < Points.Count; i++)
+                {
+                    Points[i] = new Point(Points[i].X - (X - value.X), Points[i].Y - (Y - value.Y));
+                }
+                X = value.X;
+                Y = value.Y;
+            }
+        }
+        /// <summary>
+        /// Ширина фигуры
+        /// </summary>
+        public int WidthPolyline
+        {
+            get
+            {
+                return Width;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    if (Width != 0)
+                    {
+                        for (int i = 0; i < Points.Count; i++)
+                        {
+                            Points[i] = new Point(X +
+                                Convert.ToInt32((float)(Points[i].X - X) / (float)Width * (float)value),
+                                Points[i].Y);
+                        }
+                        Width = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Линия вертикальная!");
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Высота фигуры
+        /// </summary>
+        public int HeightPolyline
+        {
+            get
+            {
+                return Height;
+            }
+            set
+            {
+                if (value > 10)
+                {
+                    if (Height != 0)
+                    {
+                        for (int i = 0; i < Points.Count; i++)
+                        {
+                            Points[i] = new Point(Points[i].X,
+                                Y + Convert.ToInt32((float)(Points[i].Y - Y) / (float)Height * (float)value));
+                        }
+                        Height = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Линия горизонтальная!");
+                    }
+                }
             }
         }
     }

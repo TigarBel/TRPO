@@ -93,7 +93,7 @@
             // 
             // buttonFigureLine
             // 
-            this.buttonFigureLine.BackColor = System.Drawing.Color.White;
+            this.buttonFigureLine.BackColor = System.Drawing.Color.Black;
             this.buttonFigureLine.Image = global::GRPO.Properties.Resources.line;
             this.buttonFigureLine.Location = new System.Drawing.Point(3, 3);
             this.buttonFigureLine.Name = "buttonFigureLine";
