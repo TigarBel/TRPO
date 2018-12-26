@@ -43,7 +43,7 @@ namespace GRPO
                         _fillFigureControl.Visible = false;
                         break;
                     }
-                case DrawingTools.DrawFigurePolygon:
+                case DrawingTools.DrawFigureRectangle:
                     {
                         _propertyLineControl.Visible = true;
                         _fillFigureControl.Visible = true;
@@ -88,8 +88,8 @@ namespace GRPO
             }
             set
             {
-                _propertyLineControl.Visible = true;
                 _propertyLineControl.Extended = value;
+                _propertyLineControl.Visible = true;
             }
         }
         /// <summary>
@@ -103,8 +103,8 @@ namespace GRPO
             }
             set
             {
-                _fillFigureControl.Visible = true;
                 _fillFigureControl.Extended = value;
+                _fillFigureControl.Visible = true;
             }
         }
     }

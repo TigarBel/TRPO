@@ -155,5 +155,13 @@ namespace GRPO
                 Line.HeightLine = value;
             }
         }
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Новая копия объекта</returns>
+        public IDrawable Clone()
+        {
+            return new DrawFigureLine(Line.A, Line.B, _pictureBox, Extended);
+        }
     }
 }

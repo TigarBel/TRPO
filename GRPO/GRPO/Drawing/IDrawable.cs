@@ -11,15 +11,6 @@ namespace GRPO
     public interface IDrawable
     {
         /// <summary>
-        /// Нарисовать объект
-        /// </summary>
-        void Draw();
-        /// <summary>
-        /// Взять список точек
-        /// </summary>
-        /// <returns>Списко точек формирующих фигуру</returns>
-        List<Point> GetPoints();
-        /// <summary>
         /// Позиция фигуры
         /// </summary>
         Point Position { get; set; }
@@ -30,6 +21,20 @@ namespace GRPO
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        int Height { get ; set ; }
+        int Height { get; set; }
+        /// <summary>
+        /// Нарисовать объект
+        /// </summary>
+        void Draw();
+        /// <summary>
+        /// Взять список точек
+        /// </summary>
+        /// <returns>Списко точек формирующих фигуру</returns>
+        List<Point> GetPoints();
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Новая копия объекта</returns>
+        IDrawable Clone();
     }
 }

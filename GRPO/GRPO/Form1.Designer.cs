@@ -30,23 +30,24 @@
         {
             GRPO.ExtendedForFigure extendedForFigure1 = new GRPO.ExtendedForFigure();
             GRPO.ExtendedForLine extendedForLine1 = new GRPO.ExtendedForLine();
+            GRPO.ExtendedForFigure extendedForFigure2 = new GRPO.ExtendedForFigure();
+            GRPO.ExtendedForLine extendedForLine2 = new GRPO.ExtendedForLine();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBoxSelect = new System.Windows.Forms.GroupBox();
-            this.mainPictureBox = new System.Windows.Forms.PictureBox();
+            this._toolsWithPropertyControl = new GRPO.ToolsWithPropertyControl();
             this.buttonAcceptSizePictureBox = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this._toolsWithPropertyControl = new GRPO.ToolsWithPropertyControl();
+            this._canvasControl = new GRPO.CanvasControl();
             this.groupBoxSelect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(963, 457);
+            this.button1.Location = new System.Drawing.Point(6, 386);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(109, 88);
             this.button1.TabIndex = 1;
@@ -66,7 +67,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1078, 65);
+            this.button3.Location = new System.Drawing.Point(963, 161);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(109, 90);
             this.button3.TabIndex = 3;
@@ -77,6 +78,7 @@
             // groupBoxSelect
             // 
             this.groupBoxSelect.Controls.Add(this._toolsWithPropertyControl);
+            this.groupBoxSelect.Controls.Add(this.button1);
             this.groupBoxSelect.Location = new System.Drawing.Point(12, 65);
             this.groupBoxSelect.Name = "groupBoxSelect";
             this.groupBoxSelect.Size = new System.Drawing.Size(299, 480);
@@ -84,17 +86,19 @@
             this.groupBoxSelect.TabStop = false;
             this.groupBoxSelect.Text = "Уструменты";
             // 
-            // mainPictureBox
+            // _toolsWithPropertyControl
             // 
-            this.mainPictureBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.mainPictureBox.Location = new System.Drawing.Point(317, 65);
-            this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(640, 480);
-            this.mainPictureBox.TabIndex = 0;
-            this.mainPictureBox.TabStop = false;
-            this.mainPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseDown);
-            this.mainPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseMove);
-            this.mainPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mainPictureBox_MouseUp);
+            extendedForFigure1.FillColor = System.Drawing.Color.White;
+            this._toolsWithPropertyControl.ExtendedForFigure = extendedForFigure1;
+            extendedForLine1.LineColor = System.Drawing.Color.Black;
+            extendedForLine1.LineThickness = 1F;
+            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._toolsWithPropertyControl.ExtendedForLine = extendedForLine1;
+            this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
+            this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
+            this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
+            this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
+            this._toolsWithPropertyControl.TabIndex = 19;
             // 
             // buttonAcceptSizePictureBox
             // 
@@ -129,25 +133,27 @@
             this.textBox2.Size = new System.Drawing.Size(55, 20);
             this.textBox2.TabIndex = 8;
             // 
-            // _toolsWithPropertyControl
+            // _canvasControl
             // 
-            extendedForFigure1.FillColor = System.Drawing.Color.White;
-            this._toolsWithPropertyControl.ExtendedForFigure = extendedForFigure1;
-            extendedForLine1.LineColor = System.Drawing.Color.Black;
-            extendedForLine1.LineThickness = 1F;
-            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
-            this._toolsWithPropertyControl.ExtendedForLine = extendedForLine1;
-            this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
-            this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
-            this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
-            this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
-            this._toolsWithPropertyControl.TabIndex = 19;
+            this._canvasControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            extendedForFigure2.FillColor = System.Drawing.Color.White;
+            this._canvasControl.ExtendedForFigure = extendedForFigure2;
+            extendedForLine2.LineColor = System.Drawing.Color.Black;
+            extendedForLine2.LineThickness = 1F;
+            extendedForLine2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._canvasControl.ExtendedForLine = extendedForLine2;
+            this._canvasControl.Location = new System.Drawing.Point(317, 65);
+            this._canvasControl.Name = "_canvasControl";
+            this._canvasControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
+            this._canvasControl.Size = new System.Drawing.Size(640, 480);
+            this._canvasControl.TabIndex = 9;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1193, 563);
+            this.ClientSize = new System.Drawing.Size(1193, 610);
+            this.Controls.Add(this._canvasControl);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -155,22 +161,18 @@
             this.Controls.Add(this.groupBoxSelect);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.mainPictureBox);
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "GRPO";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.groupBoxSelect.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox mainPictureBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
@@ -180,6 +182,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private ToolsWithPropertyControl _toolsWithPropertyControl;
+        private CanvasControl _canvasControl;
     }
 }
 

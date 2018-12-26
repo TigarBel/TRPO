@@ -161,7 +161,12 @@ namespace GRPO
         /// <returns>Списко точек формирующих фигуру</returns>
         public List<Point> GetPoints()
         {
-            return Polygon.Points;
+            List<Point> points = new List<Point>();
+            for (int i = 0; i < Polygon.Points.Count; i++)
+            {
+                points.Add(Polygon.Points[i]);
+            }
+            return points;
         }
         /// <summary>
         /// Позиция фигуры
@@ -204,6 +209,14 @@ namespace GRPO
             {
                 Polygon.HeightPolygon = value;
             }
+        }
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Новая копия объекта</returns>
+        public IDrawable Clone()
+        {
+            return new DrawFigurePolygon(GetPoints(), _pictureBox, ExtendedLine, ExtendedFigure);
         }
     }
 }

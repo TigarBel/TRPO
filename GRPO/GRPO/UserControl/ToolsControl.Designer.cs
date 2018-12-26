@@ -31,7 +31,7 @@
             this.buttonCursorSelect = new System.Windows.Forms.Button();
             this.buttonFigureEllips = new System.Windows.Forms.Button();
             this.buttonFigureCircle = new System.Windows.Forms.Button();
-            this.buttonFigurePolygon = new System.Windows.Forms.Button();
+            this.buttonFigureRectangle = new System.Windows.Forms.Button();
             this.buttonFigurePolyline = new System.Windows.Forms.Button();
             this.buttonFigureLine = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -69,16 +69,16 @@
             this.buttonFigureCircle.UseVisualStyleBackColor = false;
             this.buttonFigureCircle.Click += new System.EventHandler(this.buttonFigureCircle_Click);
             // 
-            // buttonFigurePolygon
+            // buttonFigureRectangle
             // 
-            this.buttonFigurePolygon.BackColor = System.Drawing.Color.White;
-            this.buttonFigurePolygon.Image = global::GRPO.Properties.Resources.squer;
-            this.buttonFigurePolygon.Location = new System.Drawing.Point(3, 44);
-            this.buttonFigurePolygon.Name = "buttonFigurePolygon";
-            this.buttonFigurePolygon.Size = new System.Drawing.Size(35, 35);
-            this.buttonFigurePolygon.TabIndex = 4;
-            this.buttonFigurePolygon.UseVisualStyleBackColor = false;
-            this.buttonFigurePolygon.Click += new System.EventHandler(this.buttonFigurePolygon_Click);
+            this.buttonFigureRectangle.BackColor = System.Drawing.Color.White;
+            this.buttonFigureRectangle.Image = global::GRPO.Properties.Resources.squer;
+            this.buttonFigureRectangle.Location = new System.Drawing.Point(3, 44);
+            this.buttonFigureRectangle.Name = "buttonFigureRectangle";
+            this.buttonFigureRectangle.Size = new System.Drawing.Size(35, 35);
+            this.buttonFigureRectangle.TabIndex = 4;
+            this.buttonFigureRectangle.UseVisualStyleBackColor = false;
+            this.buttonFigureRectangle.Click += new System.EventHandler(this.buttonFigureRectangle_Click);
             // 
             // buttonFigurePolyline
             // 
@@ -109,7 +109,7 @@
             this.Controls.Add(this.buttonCursorSelect);
             this.Controls.Add(this.buttonFigureEllips);
             this.Controls.Add(this.buttonFigureCircle);
-            this.Controls.Add(this.buttonFigurePolygon);
+            this.Controls.Add(this.buttonFigureRectangle);
             this.Controls.Add(this.buttonFigurePolyline);
             this.Controls.Add(this.buttonFigureLine);
             this.Name = "ToolsControl";
@@ -122,7 +122,7 @@
 
         private System.Windows.Forms.Button buttonFigureLine;
         private System.Windows.Forms.Button buttonFigurePolyline;
-        private System.Windows.Forms.Button buttonFigurePolygon;
+        private System.Windows.Forms.Button buttonFigureRectangle;
         private System.Windows.Forms.Button buttonFigureCircle;
         private System.Windows.Forms.Button buttonFigureEllips;
         private System.Windows.Forms.Button buttonCursorSelect;

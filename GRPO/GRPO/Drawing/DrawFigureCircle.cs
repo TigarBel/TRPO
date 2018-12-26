@@ -181,5 +181,13 @@ namespace GRPO
                 Circle.HeightCircle = value;
             }
         }
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Новая копия объекта</returns>
+        public IDrawable Clone()
+        {
+            return new DrawFigureCircle(Circle.Position, Circle.Radius, _pictureBox, ExtendedLine, ExtendedFigure);
+        }
     }
 }

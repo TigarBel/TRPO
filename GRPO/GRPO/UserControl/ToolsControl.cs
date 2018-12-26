@@ -15,9 +15,10 @@ namespace GRPO
         DrawFigureLine = 0,
         DrawFigurePolyline,
         CursorSelect,
-        DrawFigurePolygon,
+        DrawFigureRectangle,
         DrawFigureCircle,
         DrawFigureEllipse,
+        DrawFigurePolygon
     }
 
     public partial class ToolsControl : UserControl
@@ -35,7 +36,7 @@ namespace GRPO
             _buttons.Add(buttonFigureLine);
             _buttons.Add(buttonFigurePolyline);
             _buttons.Add(buttonCursorSelect);
-            _buttons.Add(buttonFigurePolygon);
+            _buttons.Add(buttonFigureRectangle);
             _buttons.Add(buttonFigureCircle);
             _buttons.Add(buttonFigureEllips);
         }
@@ -72,10 +73,10 @@ namespace GRPO
             if (ButtonClick != null) ButtonClick();
         }
 
-        private void buttonFigurePolygon_Click(object sender, EventArgs e)
+        private void buttonFigureRectangle_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigurePolygon;
+            SelectTool = DrawingTools.DrawFigureRectangle;
             ((Button)sender).BackColor = Color.Black;
             if (ButtonClick != null) ButtonClick();
         }
@@ -106,15 +107,8 @@ namespace GRPO
             }
             set
             {
-                if (value == DrawingTools.DrawFigureLine ||
-                    value == DrawingTools.DrawFigurePolyline ||
-                    value == DrawingTools.DrawFigurePolygon ||
-                    value == DrawingTools.DrawFigureCircle ||
-                    value == DrawingTools.DrawFigureEllipse ||
-                    value == DrawingTools.CursorSelect)
-                {
-                    _selectTool = value;
-                }
+                _selectTool = value;
+                if (ButtonClick != null) ButtonClick();
             }
         }
     }

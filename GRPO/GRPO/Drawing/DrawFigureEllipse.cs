@@ -182,5 +182,13 @@ namespace GRPO
                 Ellipse.HeightEllipse = value;
             }
         }
+        /// <summary>
+        /// Клонировать объект
+        /// </summary>
+        /// <returns>Новая копия объекта</returns>
+        public IDrawable Clone()
+        {
+            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, _pictureBox, ExtendedLine, ExtendedFigure);
+        }
     }
 }
