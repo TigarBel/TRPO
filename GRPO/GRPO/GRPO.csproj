@@ -52,13 +52,14 @@
     <Compile Include="CanvasControl.Designer.cs">
       <DependentUpon>CanvasControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drawing\DrawFigureRectangle.cs" />
     <Compile Include="Drawing\DrawFigureCircle.cs" />
     <Compile Include="Drawing\DrawFigureEllipse.cs" />
     <Compile Include="Drawing\DrawFigurePolygon.cs" />
     <Compile Include="Drawing\DrawFigurePolyline.cs" />
     <Compile Include="Drawing\DrawFigureLine.cs" />
-    <Compile Include="Drawing\ExtendedForLine.cs" />
-    <Compile Include="Drawing\ExtendedForFigure.cs" />
+    <Compile Include="Drawing\LineProperty.cs" />
+    <Compile Include="Drawing\FillProperty.cs" />
     <Compile Include="Figure\Figure.cs" />
     <Compile Include="Figure\FigureCircle.cs" />
     <Compile Include="Figure\FigureEllipse.cs" />

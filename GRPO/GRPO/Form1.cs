@@ -19,8 +19,9 @@ namespace GRPO
             InitializeComponent();
             
             _canvasControl.SetSizeCanvas(640, 480);
-
-            _canvasControl.DragExtended += SetExtended;
+            
+            _toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
+            _canvasControl.DragProperty += SetProperty;
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -50,39 +51,71 @@ namespace GRPO
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(e.KeyCode.ToString());
-            if (/*_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && */e.Control && e.KeyCode == Keys.C)
+            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.C)
             {
                 _canvasControl.Copy();
             }
-            else if (/*_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && */e.Control && e.KeyCode == Keys.V)
+            else if (e.Control && e.KeyCode == Keys.V)
             {
                 _canvasControl.Paste();
             }
-            else if (/*_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && */e.KeyCode == Keys.Delete)
+            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.KeyCode == Keys.Delete)
             {
                 _canvasControl.Delete();
             }
-            else if (/*_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && */e.Control && e.KeyCode == Keys.X)
+            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.X)
             {
                 _canvasControl.Cut();
             }
         }
-
-        public void GetPropertyDrawable()
+        
+        private void _toolsWithPropertyControl_FigurePropertyChanged()
         {
             _canvasControl.SelectTool = _toolsWithPropertyControl.SelectTool;
-            _canvasControl.ExtendedForLine = _toolsWithPropertyControl.ExtendedForLine;
-            _canvasControl.ExtendedForFigure = _toolsWithPropertyControl.ExtendedForFigure;
+            _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
+            _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
+            if(_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
+            {
+                if (_canvasControl.interaction != null)
+                {
+                    switch (_canvasControl.interaction.DrawableFigure.GetType().Name)
+                    {
+                        case "DrawFigureLine":
+                            {
+                                ((DrawFigureLine)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
+                                break;
+                            }
+                        case "DrawFigurePolyline":
+                            {
+                                ((DrawFigurePolyline)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
+                                break;
+                            }
+                        case "DrawFigureRectangle":
+                            {
+                                ((DrawFigureRectangle)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
+                                ((DrawFigureRectangle)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
+                                break;
+                            }
+                        case "DrawFigureCircle":
+                            {
+                                ((DrawFigureCircle)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
+                                ((DrawFigureCircle)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
+                                break;
+                            }
+                        case "DrawFigureEllipse":
+                            {
+                                ((DrawFigureEllipse)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
+                                ((DrawFigureEllipse)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
+                                break;
+                            }
+                    }
+                    _canvasControl.RefreshCanvas();
+                    _canvasControl.interaction.EnablePoints = false;
+                }
+            }
         }
 
-        private void MainForm_MouseMove(object sender, MouseEventArgs e)
-        {
-            _canvasControl.SelectTool = _toolsWithPropertyControl.SelectTool;
-            _canvasControl.ExtendedForLine = _toolsWithPropertyControl.ExtendedForLine;
-            _canvasControl.ExtendedForFigure = _toolsWithPropertyControl.ExtendedForFigure;
-        }
-
-        public void SetExtended(IDrawable drawable)
+        public void SetProperty(IDrawable drawable)
         {
             if (drawable == null)
             {
@@ -93,35 +126,30 @@ namespace GRPO
             {
                 case "DrawFigureLine":
                     {
-                        _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
-                        _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureLine)drawable).Extended;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigureLine)drawable).LineProperty;
                         break;
                     }
                 case "DrawFigurePolyline":
                     {
-                        _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
-                        _toolsWithPropertyControl.ExtendedForLine = ((DrawFigurePolyline)drawable).Extended;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigurePolyline)drawable).LineProperty;
                         break;
                     }
-                case "DrawFigurePolygon":
+                case "DrawFigureRectangle":
                     {
-                        _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
-                        _toolsWithPropertyControl.ExtendedForLine = ((DrawFigurePolygon)drawable).ExtendedLine;
-                        _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigurePolygon)drawable).ExtendedFigure;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigurePolygon)drawable).LineProperty;
+                        _toolsWithPropertyControl.FillProperty = ((DrawFigurePolygon)drawable).FillProperty;
                         break;
                     }
                 case "DrawFigureCircle":
                     {
-                        _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
-                        _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureCircle)drawable).ExtendedLine;
-                        _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigureCircle)drawable).ExtendedFigure;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigureCircle)drawable).LineProperty;
+                        _toolsWithPropertyControl.FillProperty = ((DrawFigureCircle)drawable).FillProperty;
                         break;
                     }
                 case "DrawFigureEllipse":
                     {
-                        _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
-                        _toolsWithPropertyControl.ExtendedForLine = ((DrawFigureEllipse)drawable).ExtendedLine;
-                        _toolsWithPropertyControl.ExtendedForFigure = ((DrawFigureEllipse)drawable).ExtendedFigure;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigureEllipse)drawable).LineProperty;
+                        _toolsWithPropertyControl.FillProperty = ((DrawFigureEllipse)drawable).FillProperty;
                         break;
                     }
             }

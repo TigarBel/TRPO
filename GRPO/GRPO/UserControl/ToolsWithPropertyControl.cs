@@ -12,11 +12,17 @@ namespace GRPO
 {
     public partial class ToolsWithPropertyControl : UserControl
     {
-        
+        public delegate void FigurePropertyEventHandler();
+        public event FigurePropertyEventHandler FigurePropertyChanged;
 
         public ToolsWithPropertyControl()
         {
             InitializeComponent();
+
+            _toolsControl.ButtonClick += ChangeProperty;
+            _propertyLineControl.LinePropertyChanged += ChangeProperty;
+            _fillFigureControl.FillPropertyChanged += ChangeProperty;
+
             _toolsControl.ButtonClick += HidingUserControl;
             HidingUserControl();
         }
@@ -80,32 +86,37 @@ namespace GRPO
         /// <summary>
         /// Свойство линии
         /// </summary>
-        public ExtendedForLine ExtendedForLine
+        public LineProperty LineProperty
         {
             get
             {
-                return _propertyLineControl.Extended;
+                return _propertyLineControl.LineProperty;
             }
             set
             {
-                _propertyLineControl.Extended = value;
+                _propertyLineControl.LineProperty = value;
                 _propertyLineControl.Visible = true;
             }
         }
         /// <summary>
         /// Свойство заливки
         /// </summary>
-        public ExtendedForFigure ExtendedForFigure
+        public FillProperty FillProperty
         {
             get
             {
-                return _fillFigureControl.Extended;
+                return _fillFigureControl.FillProperty;
             }
             set
             {
-                _fillFigureControl.Extended = value;
+                _fillFigureControl.FillProperty = value;
                 _fillFigureControl.Visible = true;
             }
+        }
+
+        private void ChangeProperty()
+        {
+            if (FigurePropertyChanged != null) FigurePropertyChanged();
         }
     }
 }

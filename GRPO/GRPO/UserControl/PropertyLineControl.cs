@@ -13,6 +13,9 @@ namespace GRPO
 {
     public partial class PropertyLineControl : UserControl
     {
+        public delegate void LinePropertyEventHandler();
+        public event LinePropertyEventHandler LinePropertyChanged;
+
         public PropertyLineControl()
         {
             InitializeComponent();
@@ -22,15 +25,19 @@ namespace GRPO
             comboBoxLineType.Items.Add(DashStyle.DashDot);
             comboBoxLineType.Items.Add(DashStyle.DashDotDot);
             comboBoxLineType.SelectedIndex = 0;
+
+            buttonSelectColorLine.BackColorChanged += buttonSelectColorLine_BackColorChanged;
+            numericUpDownLineThickness.ValueChanged += numericUpDownLineThickness_ValueChanged;
+            comboBoxLineType.SelectedValueChanged += comboBoxLineType_SelectedValueChanged;
         }
         /// <summary>
         /// Свойство линии
         /// </summary>
-        public ExtendedForLine Extended
+        public LineProperty LineProperty
         {
             get
             {
-                return new ExtendedForLine(
+                return new LineProperty(
                     (float)numericUpDownLineThickness.Value,
                     buttonSelectColorLine.BackColor,
                     (DashStyle)comboBoxLineType.Items[comboBoxLineType.SelectedIndex]);
@@ -65,6 +72,21 @@ namespace GRPO
             {
                 buttonSelectColorLine.BackColor = MyDialog.Color;
             }
+        }
+
+        private void buttonSelectColorLine_BackColorChanged(object sender, EventArgs e)
+        {
+            if (LinePropertyChanged != null) LinePropertyChanged();
+        }
+
+        private void numericUpDownLineThickness_ValueChanged(object sender, EventArgs e)
+        {
+            if (LinePropertyChanged != null) LinePropertyChanged();
+        }
+
+        private void comboBoxLineType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (LinePropertyChanged != null) LinePropertyChanged();
         }
     }
 }

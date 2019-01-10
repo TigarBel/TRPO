@@ -108,7 +108,7 @@ namespace GRPO
         {
             List<Point> points = GetBorderPoints();
             DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, _canvas,
-                new ExtendedForLine(1, Color.Black, DashStyle.Dash), new ExtendedForFigure(Color.Transparent));
+                new LineProperty(1, Color.Black, DashStyle.Dash), new FillProperty(Color.Transparent));
             drawFigure.Draw();
         }
         /// <summary>
@@ -119,7 +119,7 @@ namespace GRPO
             List<Point> points = GetBorderPoints();
             for (int i = 0; i < 4; i++)
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new ExtendedForLine(), new ExtendedForFigure());
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new LineProperty(), new FillProperty());
                 drawFigure.Draw();
             }
         }
@@ -143,7 +143,7 @@ namespace GRPO
             List<Point> points = DrawableFigure.GetPoints();
             for (int i = 0; i < points.Count; i++) 
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new ExtendedForLine(), new ExtendedForFigure(Color.Transparent));
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new LineProperty(), new FillProperty(Color.Transparent));
                 drawFigure.Draw();
             }
         }

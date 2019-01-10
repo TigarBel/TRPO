@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace GRPO
 {
-    class FigureCircle : Figure
+    class FigureCircle : FigureEllipse
     {
         /// <summary>
         /// Радиус фигуры Окружность

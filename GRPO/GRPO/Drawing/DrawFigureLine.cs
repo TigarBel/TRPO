@@ -22,7 +22,7 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        private ExtendedForLine _extendedForLine;
+        private LineProperty _lineProperty;
         /// <summary>
         /// Псутой класс Отрисовки линии
         /// </summary>
@@ -30,7 +30,7 @@ namespace GRPO
         {
             Line = new FigureLine();
             Canvas = new PictureBox();
-            Extended = new ExtendedForLine();
+            LineProperty = new LineProperty();
         }
         /// <summary>
         /// Класс Отрисовки линии
@@ -39,11 +39,11 @@ namespace GRPO
         /// <param name="b">Конечная точка</param>
         /// <param name="pictureBox">Холст на котором рисуют линию</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigureLine(Point a, Point b, PictureBox pictureBox, ExtendedForLine extended)
+        public DrawFigureLine(Point a, Point b, PictureBox pictureBox, LineProperty extended)
         {
             Line = new FigureLine(a, b);
             Canvas = pictureBox;
-            Extended = extended;
+            LineProperty = extended;
         }
         /// <summary>
         /// Векторный объект линии
@@ -72,15 +72,15 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        public ExtendedForLine Extended
+        public LineProperty LineProperty
         {
             get
             {
-                return _extendedForLine;
+                return _lineProperty;
             }
             set
             {
-                _extendedForLine = value;
+                _lineProperty = value;
             }
         }
         /// <summary>
@@ -91,8 +91,8 @@ namespace GRPO
             if (_pictureBox.Image != null)
             {
                 Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
-                pen.DashStyle = Extended.LineType;
+                Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
+                pen.DashStyle = LineProperty.LineType;
                 graphics.DrawLine(pen, Line.A.X, Line.A.Y, Line.B.X, Line.B.Y);
                 graphics.Dispose();
                 _pictureBox.Invalidate();
@@ -161,7 +161,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureLine(Line.A, Line.B, _pictureBox, Extended);
+            return new DrawFigureLine(Line.A, Line.B, _pictureBox, LineProperty);
         }
     }
 }

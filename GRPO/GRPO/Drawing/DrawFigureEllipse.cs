@@ -22,11 +22,11 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        private ExtendedForLine _extendedForLine;
+        private LineProperty _lineProperty;
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
-        private ExtendedForFigure _extendedForFigure;
+        private FillProperty _fillProperty;
         /// <summary>
         /// Пустой класс Отрисовки эллипса
         /// </summary>
@@ -34,8 +34,8 @@ namespace GRPO
         {
             Ellipse = new FigureEllipse();
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine();
-            ExtendedFigure = new ExtendedForFigure();
+            LineProperty = new LineProperty();
+            FillProperty = new FillProperty();
         }
         /// <summary>
         /// Класс Отрисовки эллипса
@@ -47,12 +47,12 @@ namespace GRPO
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
         public DrawFigureEllipse(Point position, int width, int height, PictureBox canvas,
-            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure)
+            LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Ellipse = new FigureEllipse(position, width, height);
             Canvas = canvas;
-            ExtendedLine = extendedForLine;
-            ExtendedFigure = extendedForFigure;
+            LineProperty = extendedForLine;
+            FillProperty = extendedForFigure;
         }
         /// <summary>
         /// Векторный объект эллипса
@@ -81,29 +81,29 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        public ExtendedForLine ExtendedLine
+        public LineProperty LineProperty
         {
             get
             {
-                return _extendedForLine;
+                return _lineProperty;
             }
             set
             {
-                _extendedForLine = value;
+                _lineProperty = value;
             }
         }
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
-        public ExtendedForFigure ExtendedFigure
+        public FillProperty FillProperty
         {
             get
             {
-                return _extendedForFigure;
+                return _fillProperty;
             }
             set
             {
-                _extendedForFigure = value;
+                _fillProperty = value;
             }
         }
         /// <summary>
@@ -114,9 +114,9 @@ namespace GRPO
             if (_pictureBox.Image != null)
             {
                 Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-                pen.DashStyle = ExtendedLine.LineType;
-                graphics.FillEllipse(new SolidBrush(ExtendedFigure.FillColor), 
+                Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
+                pen.DashStyle = LineProperty.LineType;
+                graphics.FillEllipse(new SolidBrush(FillProperty.FillColor), 
                     Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
                 graphics.DrawEllipse(pen, Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
                 graphics.Dispose();
@@ -188,7 +188,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, _pictureBox, ExtendedLine, ExtendedFigure);
+            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, _pictureBox, LineProperty, FillProperty);
         }
     }
 }

@@ -22,14 +22,14 @@ namespace GRPO
         private List<Bitmap> _bitmaps = new List<Bitmap>();
         private Image _backStep;
         private DrawingTools _selectTool = DrawingTools.DrawFigureLine;
-        private ExtendedForLine _extendedForLine = new ExtendedForLine();
-        private ExtendedForFigure _extendedForFigure = new ExtendedForFigure();
+        private LineProperty _lineProperty = new LineProperty();
+        private FillProperty _fillProperty = new FillProperty();
 
 
         public Interaction interaction;
 
         public delegate void Drag(IDrawable drawable);
-        public event Drag DragExtended;
+        public event Drag DragProperty;
 
         public CanvasControl()
         {
@@ -83,11 +83,11 @@ namespace GRPO
             {
                 _selectTool = value;
                 if (_backStep != null)
-                {///////////////////////////////////////////////////
+                {
                     _flagMouseDown = false;
                     _flagPolyline = false;
                     canvas.Image = new Bitmap(_backStep);
-                }///////////////////////////////////////////////////
+                }
             }
         }
         /// <summary>
@@ -102,35 +102,35 @@ namespace GRPO
         /// <summary>
         /// Свойство линии
         /// </summary>
-        public ExtendedForLine ExtendedForLine
+        public LineProperty LineProperty
         {
             get
             {
-                return _extendedForLine;
+                return _lineProperty;
             }
             set
             {
-                _extendedForLine = value;
+                _lineProperty = value;
             }
         }
         /// <summary>
         /// Свойство заливки
         /// </summary>
-        public ExtendedForFigure ExtendedForFigure
+        public FillProperty FillProperty
         {
             get
             {
-                return _extendedForFigure;
+                return _fillProperty;
             }
             set
             {
-                _extendedForFigure = value;
+                _fillProperty = value;
             }
         }
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            if (SelectTool != DrawingTools.CursorSelect)
+            if (SelectTool != DrawingTools.CursorSelect && _flagPolyline != true)
             {
                 _flagMouseDown = true;
                 _pointA = new Point(e.X, e.Y);
@@ -165,9 +165,40 @@ namespace GRPO
                 {
                     _draws.Remove(_draws[_draws.Count - 2]);
                 }
-                _flagMouseDown = true;
-                _flagPolyline = true;
+                if(e.Button == MouseButtons.Left)
+                {
+                    _flagMouseDown = true;
+                    _flagPolyline = true;
+                    _pointA = new Point(e.X, e.Y);
+                }
+                else
+                {
+                    _flagPolyline = false;
+                }
+            }
+        }
+
+        private void canvas_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
+            {
+                interaction = null;
+                canvas.Image = new Bitmap(_backStep);
                 _pointA = new Point(e.X, e.Y);
+                if (DragProperty != null) DragProperty(null);
+                for (int i = _draws.Count - 1; i >= 0; i--)
+                {
+                    int minX = _draws[i].GetPoints().Min(point => point.X);
+                    int maxX = _draws[i].GetPoints().Max(point => point.X);
+                    int minY = _draws[i].GetPoints().Min(point => point.Y);
+                    int maxY = _draws[i].GetPoints().Max(point => point.Y);
+                    if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
+                    {
+                        if (DragProperty != null) DragProperty(_draws[i]);
+                        interaction = new Interaction(_draws[i], canvas, false);
+                        break;
+                    }
+                }
             }
         }
 
@@ -177,7 +208,7 @@ namespace GRPO
             {
                 case DrawingTools.DrawFigureLine:
                     {
-                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _extendedForLine);
+                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _lineProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigurePolyline:
@@ -187,68 +218,40 @@ namespace GRPO
                             List<Point> points;
                             points = _draws[_draws.Count - 1].GetPoints();
                             points.Add(pointB);
-                            DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, _extendedForLine);
+                            DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, _lineProperty);
                             return drawFigure;
                         }
                         else
                         {
-                            DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _extendedForLine);
+                            DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _lineProperty);
                             return drawFigure;
                         }
                     }
                 case DrawingTools.DrawFigureRectangle:
                     {
-                        List<Point> points = new List<Point>();
-                        points.Add(pointA);
-                        points.Add(new Point(pointA.X, pointB.Y));
-                        points.Add(pointB);
-                        points.Add(new Point(pointB.X, pointA.Y));
-                        DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, canvas, _extendedForLine, _extendedForFigure);
+                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, canvas, _lineProperty, _fillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureCircle:
                     {
                         DrawFigureCircle drawFigure = new DrawFigureCircle(pointA,
                         Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),/******/
-                        canvas, _extendedForLine, _extendedForFigure);
+                        canvas, _lineProperty, _fillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureEllipse:
                     {
-                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, _extendedForLine,
-                            _extendedForFigure);
+                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, _lineProperty,
+                            _fillProperty);
                         return drawFigure;
                     }
             }
             return null;
         }
-
-        private void canvas_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
-            {
-                canvas.Image = new Bitmap(_backStep);
-                _pointA = new Point(e.X, e.Y);
-                DragExtended(null);
-                for (int i = _draws.Count - 1; i >= 0; i--)
-                {
-                    int minX = _draws[i].GetPoints().Min(point => point.X);
-                    int maxX = _draws[i].GetPoints().Max(point => point.X);
-                    int minY = _draws[i].GetPoints().Min(point => point.Y);
-                    int maxY = _draws[i].GetPoints().Max(point => point.Y);
-                    if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
-                    {
-                        interaction = new Interaction(_draws[i], canvas, false);
-                        DragExtended(interaction.DrawableFigure);
-                        break;
-                    }
-                }
-            }
-        }
-
+        
         public void Copy()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
             {
                 _buferDraw = interaction.DrawableFigure.Clone();
             }
@@ -268,7 +271,7 @@ namespace GRPO
 
         public void Delete()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
             {
                 _draws.Remove(interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
@@ -282,7 +285,7 @@ namespace GRPO
 
         public void Cut()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
             {
                 _buferDraw = interaction.DrawableFigure.Clone();
                 _draws.Remove(interaction.DrawableFigure);
@@ -294,51 +297,15 @@ namespace GRPO
                 _backStep = new Bitmap(canvas.Image);
             }
         }
-
-        public IDrawable ExtrndedDrawable
+        
+        public void RefreshCanvas()
         {
-            set
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            foreach (IDrawable drawable in _draws)
             {
-                if (interaction.DrawableFigure != null)
-                {
-                    switch (value.GetType().Name)
-                    {
-                        case "DrawFigureLine":
-                            {
-                                ((DrawFigureLine)interaction.DrawableFigure).Extended = ((DrawFigureLine)value).Extended;
-                                break;
-                            }
-                        case "DrawFigurePolyline":
-                            {
-                                ((DrawFigurePolyline)interaction.DrawableFigure).Extended = ((DrawFigurePolyline)value).Extended;
-                                break;
-                            }
-                        case "DrawFigurePolygon":
-                            {
-                                ((DrawFigurePolygon)interaction.DrawableFigure).ExtendedLine = ((DrawFigurePolygon)value).ExtendedLine;
-                                ((DrawFigurePolygon)interaction.DrawableFigure).ExtendedFigure = ((DrawFigurePolygon)value).ExtendedFigure;
-                                break;
-                            }
-                        case "DrawFigureCircle":
-                            {
-                                ((DrawFigureCircle)interaction.DrawableFigure).ExtendedLine = ((DrawFigureCircle)value).ExtendedLine;
-                                ((DrawFigureCircle)interaction.DrawableFigure).ExtendedFigure = ((DrawFigureCircle)value).ExtendedFigure;
-                                break;
-                            }
-                        case "DrawFigureEllipse":
-                            {
-                                ((DrawFigureEllipse)interaction.DrawableFigure).ExtendedLine = ((DrawFigureEllipse)value).ExtendedLine;
-                                ((DrawFigureEllipse)interaction.DrawableFigure).ExtendedFigure = ((DrawFigureEllipse)value).ExtendedFigure;
-                                break;
-                            }
-                    }
-                    foreach(IDrawable drawable in _draws)
-                    {
-                        drawable.Draw();
-                    }
-                }
+                drawable.Draw();
             }
-
+            _backStep = new Bitmap(canvas.Image);
         }
     }
 }

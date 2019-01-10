@@ -10,7 +10,7 @@ using System.Drawing.Drawing2D;
 namespace GRPO
 {
 
-    public class ExtendedForLine
+    public class LineProperty
     {
         /// <summary>
         /// Толщина линии
@@ -27,7 +27,7 @@ namespace GRPO
         /// <summary>
         /// Пустой класс Расширения
         /// </summary>
-        public ExtendedForLine()
+        public LineProperty()
         {
             LineThickness = 1;
             LineColor = Color.Black;
@@ -40,7 +40,7 @@ namespace GRPO
         /// <param name="lineColor">Цвет линии</param>
         /// <param name="fillColor">Цвет заливки</param>
         /// <param name="lineType">Тип линии</param>
-        public ExtendedForLine(float lineThickness, Color lineColor, DashStyle lineType)
+        public LineProperty(float lineThickness, Color lineColor, DashStyle lineType)
         {
             LineThickness = lineThickness;
             LineColor = lineColor;

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            GRPO.ExtendedForFigure extendedForFigure1 = new GRPO.ExtendedForFigure();
-            GRPO.ExtendedForLine extendedForLine1 = new GRPO.ExtendedForLine();
-            GRPO.ExtendedForFigure extendedForFigure2 = new GRPO.ExtendedForFigure();
-            GRPO.ExtendedForLine extendedForLine2 = new GRPO.ExtendedForLine();
+            GRPO.FillProperty fillProperty1 = new GRPO.FillProperty();
+            GRPO.LineProperty lineProperty1 = new GRPO.LineProperty();
+            GRPO.FillProperty fillProperty2 = new GRPO.FillProperty();
+            GRPO.LineProperty lineProperty2 = new GRPO.LineProperty();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -57,7 +57,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(963, 65);
+            this.button2.Location = new System.Drawing.Point(1017, 65);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 90);
             this.button2.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(963, 161);
+            this.button3.Location = new System.Drawing.Point(1017, 161);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(109, 90);
             this.button3.TabIndex = 3;
@@ -88,12 +88,12 @@
             // 
             // _toolsWithPropertyControl
             // 
-            extendedForFigure1.FillColor = System.Drawing.Color.White;
-            this._toolsWithPropertyControl.ExtendedForFigure = extendedForFigure1;
-            extendedForLine1.LineColor = System.Drawing.Color.Black;
-            extendedForLine1.LineThickness = 1F;
-            extendedForLine1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
-            this._toolsWithPropertyControl.ExtendedForLine = extendedForLine1;
+            fillProperty1.FillColor = System.Drawing.Color.White;
+            this._toolsWithPropertyControl.FillProperty = fillProperty1;
+            lineProperty1.LineColor = System.Drawing.Color.Black;
+            lineProperty1.LineThickness = 1F;
+            lineProperty1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._toolsWithPropertyControl.LineProperty = lineProperty1;
             this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
             this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
             this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
@@ -136,13 +136,13 @@
             // _canvasControl
             // 
             this._canvasControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            extendedForFigure2.FillColor = System.Drawing.Color.White;
-            this._canvasControl.ExtendedForFigure = extendedForFigure2;
-            extendedForLine2.LineColor = System.Drawing.Color.Black;
-            extendedForLine2.LineThickness = 1F;
-            extendedForLine2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
-            this._canvasControl.ExtendedForLine = extendedForLine2;
-            this._canvasControl.Location = new System.Drawing.Point(317, 65);
+            fillProperty2.FillColor = System.Drawing.Color.White;
+            this._canvasControl.FillProperty = fillProperty2;
+            lineProperty2.LineColor = System.Drawing.Color.Black;
+            lineProperty2.LineThickness = 1F;
+            lineProperty2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._canvasControl.LineProperty = lineProperty2;
+            this._canvasControl.Location = new System.Drawing.Point(371, 65);
             this._canvasControl.Name = "_canvasControl";
             this._canvasControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
             this._canvasControl.Size = new System.Drawing.Size(640, 480);
@@ -165,7 +165,6 @@
             this.Name = "MainForm";
             this.Text = "GRPO";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.groupBoxSelect.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

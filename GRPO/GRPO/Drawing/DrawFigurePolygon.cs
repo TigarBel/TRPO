@@ -22,11 +22,11 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        private ExtendedForLine _extendedForLine;
+        private LineProperty _lineProperty;
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
-        private ExtendedForFigure _extendedForFigure;
+        private FillProperty _fillProperty;
         /// <summary>
         /// Пустой класс Отрисовки многоугольника
         /// </summary>
@@ -34,8 +34,8 @@ namespace GRPO
         {
             Polygon = new FigurePolygon();
             Canvas = new PictureBox();
-            ExtendedLine = new ExtendedForLine();
-            ExtendedFigure = new ExtendedForFigure();
+            LineProperty = new LineProperty();
+            FillProperty = new FillProperty();
         }
         /// <summary>
         /// Класс Отрисовки многоугольника
@@ -45,12 +45,12 @@ namespace GRPO
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
         public DrawFigurePolygon(List<Point> points, PictureBox canvas,
-            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure)
+            LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Polygon = new FigurePolygon(points);
             Canvas = canvas;
-            ExtendedLine = extendedForLine;
-            ExtendedFigure = extendedForFigure;
+            LineProperty = extendedForLine;
+            FillProperty = extendedForFigure;
         }
         /// <summary>
         /// Класс Отрисовки многоугольника
@@ -64,12 +64,12 @@ namespace GRPO
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
         public DrawFigurePolygon(Point position, int width, int height, int countAngle, int phase, PictureBox canvas, 
-            ExtendedForLine extendedForLine, ExtendedForFigure extendedForFigure)
+            LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Polygon = new FigurePolygon(position, width, height, countAngle, phase);
             Canvas = canvas;
-            ExtendedLine = extendedForLine;
-            ExtendedFigure = extendedForFigure;
+            LineProperty = extendedForLine;
+            FillProperty = extendedForFigure;
         }
         /// <summary>
         /// Векторный объект многоугольника
@@ -98,29 +98,29 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        public ExtendedForLine ExtendedLine
+        public LineProperty LineProperty
         {
             get
             {
-                return _extendedForLine;
+                return _lineProperty;
             }
             set
             {
-                _extendedForLine = value;
+                _lineProperty = value;
             }
         }
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
-        public ExtendedForFigure ExtendedFigure
+        public FillProperty FillProperty
         {
             get
             {
-                return _extendedForFigure;
+                return _fillProperty;
             }
             set
             {
-                _extendedForFigure = value;
+                _fillProperty = value;
             }
         }
         /// <summary>
@@ -133,9 +133,9 @@ namespace GRPO
                 if (Polygon.Points.Count > 2)
                 {
                     Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                    Pen pen = new Pen(ExtendedLine.LineColor, ExtendedLine.LineThickness);
-                    pen.DashStyle = ExtendedLine.LineType;
-                    graphics.FillPolygon(new SolidBrush(ExtendedFigure.FillColor), Polygon.Points.ToArray());
+                    Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
+                    pen.DashStyle = LineProperty.LineType;
+                    graphics.FillPolygon(new SolidBrush(FillProperty.FillColor), Polygon.Points.ToArray());
                     for (int i = 1; i < Polygon.Points.Count; i++)
                     {
                         graphics.DrawLine(pen, Polygon.Points[i - 1].X, Polygon.Points[i - 1].Y, Polygon.Points[i].X, Polygon.Points[i].Y);
@@ -216,7 +216,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolygon(GetPoints(), _pictureBox, ExtendedLine, ExtendedFigure);
+            return new DrawFigurePolygon(GetPoints(), _pictureBox, LineProperty, FillProperty);
         }
     }
 }

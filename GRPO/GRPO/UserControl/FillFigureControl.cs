@@ -12,18 +12,23 @@ namespace GRPO
 {
     public partial class FillFigureControl : UserControl
     {
+        public delegate void FillPropertyEventHandler();
+        public event FillPropertyEventHandler FillPropertyChanged;
+
         public FillFigureControl()
         {
             InitializeComponent();
+
+            buttonSelectColorFill.BackColorChanged += buttonSelectColorFill_BackColor;
         }
         /// <summary>
         /// Свойство заливки
         /// </summary>
-        public ExtendedForFigure Extended
+        public FillProperty FillProperty
         {
             get
             {
-                return new ExtendedForFigure(buttonSelectColorFill.BackColor);
+                return new FillProperty(buttonSelectColorFill.BackColor);
             }
             set
             {
@@ -53,6 +58,11 @@ namespace GRPO
             {
                 buttonSelectColorFill.BackColor = MyDialog.Color;
             }
+        }
+
+        private void buttonSelectColorFill_BackColor(object sender, EventArgs e)
+        {
+            FillPropertyChanged();
         }
     }
 }

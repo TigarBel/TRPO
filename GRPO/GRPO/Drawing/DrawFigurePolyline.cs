@@ -22,7 +22,7 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        private ExtendedForLine _extendedForLine;
+        private LineProperty _lineProperty;
         /// <summary>
         /// Псутой класс Отрисовки полилинии
         /// </summary>
@@ -30,7 +30,7 @@ namespace GRPO
         {
             Polyline = new FigurePolyline();
             Canvas = new PictureBox();
-            Extended = new ExtendedForLine();
+            LineProperty = new LineProperty();
         }
         /// <summary>
         /// Класс Отрисовки полилинии
@@ -39,11 +39,11 @@ namespace GRPO
         /// <param name="circular">Тип полилинии</param>
         /// <param name="pictureBox">Полотно на котором рисуем</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox, ExtendedForLine extended)
+        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox, LineProperty extended)
         {
             Polyline = new FigurePolyline(points, circular);
             Canvas = pictureBox;
-            Extended = extended;
+            LineProperty = extended;
         }
         /// <summary>
         /// Векторный объект полилинии
@@ -72,15 +72,15 @@ namespace GRPO
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
-        public ExtendedForLine Extended
+        public LineProperty LineProperty
         {
             get
             {
-                return _extendedForLine;
+                return _lineProperty;
             }
             set
             {
-                _extendedForLine = value;
+                _lineProperty = value;
             }
         }
         /// <summary>
@@ -95,8 +95,8 @@ namespace GRPO
                     for (int i = 0; i < Polyline.Points.Count - 1; i++)
                     {
                         Graphics graphics = Graphics.FromImage(_pictureBox.Image);
-                        Pen pen = new Pen(Extended.LineColor, Extended.LineThickness);
-                        pen.DashStyle = Extended.LineType;
+                        Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
+                        pen.DashStyle = LineProperty.LineType;
                         graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
                         graphics.Dispose();
                         _pictureBox.Invalidate();
@@ -173,7 +173,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolyline(GetPoints(), Polyline.Circular, _pictureBox, Extended);
+            return new DrawFigurePolyline(GetPoints(), Polyline.Circular, _pictureBox, LineProperty);
         }
     }
 }
