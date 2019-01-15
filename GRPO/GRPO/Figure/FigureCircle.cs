@@ -48,6 +48,8 @@ namespace GRPO
             }
             set
             {
+                Width = value * 2;
+                Height = value * 2;
                 _radius = value;
             }
         }
@@ -77,7 +79,7 @@ namespace GRPO
             }
             set
             {
-                if (value > 10)
+                if (value > 5)
                 {
                     Width = value;
                     Height = value;
@@ -95,7 +97,7 @@ namespace GRPO
             }
             set
             {
-                if (value > 10)
+                if (value > 5)
                 {
                     Width = value;
                     Height = value;

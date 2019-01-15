@@ -57,7 +57,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1017, 65);
+            this.button2.Location = new System.Drawing.Point(882, 65);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 90);
             this.button2.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1017, 161);
+            this.button3.Location = new System.Drawing.Point(882, 161);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(109, 90);
             this.button3.TabIndex = 3;
@@ -81,7 +81,7 @@
             this.groupBoxSelect.Controls.Add(this.button1);
             this.groupBoxSelect.Location = new System.Drawing.Point(12, 65);
             this.groupBoxSelect.Name = "groupBoxSelect";
-            this.groupBoxSelect.Size = new System.Drawing.Size(299, 480);
+            this.groupBoxSelect.Size = new System.Drawing.Size(218, 480);
             this.groupBoxSelect.TabIndex = 4;
             this.groupBoxSelect.TabStop = false;
             this.groupBoxSelect.Text = "Уструменты";
@@ -142,7 +142,7 @@
             lineProperty2.LineThickness = 1F;
             lineProperty2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
             this._canvasControl.LineProperty = lineProperty2;
-            this._canvasControl.Location = new System.Drawing.Point(371, 65);
+            this._canvasControl.Location = new System.Drawing.Point(236, 65);
             this._canvasControl.Name = "_canvasControl";
             this._canvasControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
             this._canvasControl.Size = new System.Drawing.Size(640, 480);
@@ -152,7 +152,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1193, 610);
+            this.ClientSize = new System.Drawing.Size(1006, 605);
             this.Controls.Add(this._canvasControl);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);

@@ -136,8 +136,8 @@ namespace GRPO
                     }
                 case "DrawFigureRectangle":
                     {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigurePolygon)drawable).LineProperty;
-                        _toolsWithPropertyControl.FillProperty = ((DrawFigurePolygon)drawable).FillProperty;
+                        _toolsWithPropertyControl.LineProperty = ((DrawFigureRectangle)drawable).LineProperty;
+                        _toolsWithPropertyControl.FillProperty = ((DrawFigureRectangle)drawable).FillProperty;
                         break;
                     }
                 case "DrawFigureCircle":
