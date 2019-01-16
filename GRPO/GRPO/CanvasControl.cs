@@ -26,7 +26,7 @@ namespace GRPO
         private FillProperty _fillProperty = new FillProperty();
 
 
-        public Interaction interaction;
+        public Interaction _interaction;
 
         public delegate void Drag(IDrawable drawable);
         public event Drag DragProperty;
@@ -131,50 +131,49 @@ namespace GRPO
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             _flagMouseDown = true;
+            _pointA = new Point(e.X, e.Y);
 
-            if (SelectTool != DrawingTools.CursorSelect && _flagPolyline != true)
+            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagPolyline != true)
             {
-                _pointA = new Point(e.X, e.Y);
                 _backStep = new Bitmap(canvas.Image);
             }
-            if (SelectTool == DrawingTools.CursorSelect && interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && _interaction != null)
             {
-                _pointA = new Point(e.X, e.Y);
-                interaction.SelectPoint = _pointA;
+                _interaction.SelectPoint = _pointA;
                 if (e.Button == MouseButtons.Left)
                 {
-                    interaction.EnablePoints = false;
+                    _interaction.EnablePoints = false;
                 }
                 if (e.Button == MouseButtons.Right)
                 {
-                    interaction.EnablePoints = true;
+                    _interaction.EnablePoints = true;
                 }
             }
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (SelectTool != DrawingTools.CursorSelect && _flagMouseDown)
+            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
             {
                 _pointB = new Point(e.X, e.Y);
                 canvas.Image = new Bitmap(_backStep);
                 DrawFigure(_pointA, _pointB).Draw();
             }
-            if (SelectTool == DrawingTools.CursorSelect && _flagMouseDown && interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && _flagMouseDown && _interaction != null)
             {
-                if (interaction.EnablePoints)
+                if (_interaction.EnablePoints)
                 {
                     _pointB = new Point(e.X, e.Y);
-                    interaction.ChangePoint(_pointB);
+                    _interaction.ChangePoint(_pointB);
                     RefreshCanvas();
                     _pointA = new Point(e.X, e.Y);
                 }
                 else
                 {
                     _pointB = new Point(e.X, e.Y);
-                    int x = interaction.DrawableFigure.Position.X;
-                    int y = interaction.DrawableFigure.Position.Y;
-                    interaction.DrawableFigure.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
+                    int x = _interaction.DrawableFigure.Position.X;
+                    int y = _interaction.DrawableFigure.Position.Y;
+                    _interaction.DrawableFigure.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
                     RefreshCanvas();
                     _pointA = new Point(e.X, e.Y);
                 }
@@ -183,7 +182,9 @@ namespace GRPO
 
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
-            if (SelectTool != DrawingTools.CursorSelect && _flagMouseDown)
+            _pointB = new Point(e.X, e.Y);
+
+            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
             {
                 _pointB = new Point(e.X, e.Y);
                 canvas.Image = new Bitmap(_backStep);
@@ -217,7 +218,7 @@ namespace GRPO
         {
             if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
             {
-                interaction = null;
+                _interaction = null;
                 canvas.Image = new Bitmap(_backStep);
                 _pointA = new Point(e.X, e.Y);
                 if (DragProperty != null) DragProperty(null);
@@ -232,13 +233,28 @@ namespace GRPO
                         if (DragProperty != null) DragProperty(_draws[i]);
                         if (e.Button == MouseButtons.Left)
                         {
-                            interaction = new Interaction(_draws[i], canvas, false);
+                            _interaction = new Interaction(_draws[i], canvas, false);
                         }
                         if (e.Button == MouseButtons.Right)
                         {
-                            interaction = new Interaction(_draws[i], canvas, true);
+                            _interaction = new Interaction(_draws[i], canvas, true);
                         }
                         break;
+                    }
+                }
+            }
+            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0)
+            {
+                canvas.Image = new Bitmap(_backStep);
+                for (int i = _draws.Count - 1; i >= 0; i--)
+                {
+                    int X = _draws[i].GetPoints().Max(point => point.X) -
+                        (_draws[i].GetPoints().Max(point => point.X) - _draws[i].GetPoints().Min(point => point.X)) / 2;
+                    int Y = _draws[i].GetPoints().Max(point => point.Y) -
+                        (_draws[i].GetPoints().Max(point => point.Y) - _draws[i].GetPoints().Min(point => point.Y)) / 2;
+                    if (X >= _pointA.X && X <= _pointB.X && Y >= _pointA.Y && Y <= _pointB.Y)
+                    {
+                        Interaction interaction = new Interaction(_draws[i], canvas, false);
                     }
                 }
             }
@@ -293,9 +309,9 @@ namespace GRPO
         
         public void Copy()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
             {
-                _buferDraw = interaction.DrawableFigure.Clone();
+                _buferDraw = _interaction.DrawableFigure.Clone();
             }
         }
 
@@ -313,33 +329,33 @@ namespace GRPO
 
         public void Delete()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
             {
-                _draws.Remove(interaction.DrawableFigure);
+                _draws.Remove(_interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
                 foreach(IDrawable drawable in _draws)
                 {
                     drawable.Draw();
                 }
                 _backStep = new Bitmap(canvas.Image);
-                interaction = null;
+                _interaction = null;
                 if (DragProperty != null) DragProperty(null);
             }
         }
 
         public void Cut()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
             {
-                _buferDraw = interaction.DrawableFigure.Clone();
-                _draws.Remove(interaction.DrawableFigure);
+                _buferDraw = _interaction.DrawableFigure.Clone();
+                _draws.Remove(_interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
                 foreach (IDrawable drawable in _draws)
                 {
                     drawable.Draw();
                 }
                 _backStep = new Bitmap(canvas.Image);
-                interaction = null;
+                _interaction = null;
                 if (DragProperty != null) DragProperty(null);
             }
         }

@@ -76,18 +76,18 @@ namespace GRPO
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
             if(_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
             {
-                if (_canvasControl.interaction != null)
+                if (_canvasControl._interaction != null)
                 {
-                    if(_canvasControl.interaction.DrawableFigure is ILinePropertyble figureWithLineProperty)
+                    if(_canvasControl._interaction.DrawableFigure is ILinePropertyble figureWithLineProperty)
                     {
                         figureWithLineProperty.LineProperty = _toolsWithPropertyControl.LineProperty;
                     }
-                    if(_canvasControl.interaction.DrawableFigure is IFillPropertyble figureWithFillProperty)
+                    if(_canvasControl._interaction.DrawableFigure is IFillPropertyble figureWithFillProperty)
                     {
                         figureWithFillProperty.FillProperty = _toolsWithPropertyControl.FillProperty;
                     }
                     _canvasControl.RefreshCanvas();
-                    _canvasControl.interaction.EnablePoints = false;
+                    _canvasControl._interaction.EnablePoints = false;
                 }
             }
         }
