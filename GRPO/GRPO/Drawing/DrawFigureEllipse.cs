@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureEllipse : IDrawable
+    class DrawFigureEllipse : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
         /// Объект эллипса

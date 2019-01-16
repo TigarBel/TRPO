@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureCircle : IDrawable
+    class DrawFigureCircle : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
         /// Объект круга

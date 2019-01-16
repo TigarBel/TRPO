@@ -140,6 +140,15 @@ namespace GRPO
             if (SelectTool == DrawingTools.CursorSelect && interaction != null)
             {
                 _pointA = new Point(e.X, e.Y);
+                interaction.SelectPoint = _pointA;
+                if (e.Button == MouseButtons.Left)
+                {
+                    interaction.EnablePoints = false;
+                }
+                if (e.Button == MouseButtons.Right)
+                {
+                    interaction.EnablePoints = true;
+                }
             }
         }
 
@@ -156,7 +165,7 @@ namespace GRPO
                 if (interaction.EnablePoints)
                 {
                     _pointB = new Point(e.X, e.Y);
-                    interaction.ChangeSizePoint(_pointA, _pointB);
+                    interaction.ChangePoint(_pointB);
                     RefreshCanvas();
                     _pointA = new Point(e.X, e.Y);
                 }
@@ -314,6 +323,7 @@ namespace GRPO
                 }
                 _backStep = new Bitmap(canvas.Image);
                 interaction = null;
+                if (DragProperty != null) DragProperty(null);
             }
         }
 
@@ -330,6 +340,7 @@ namespace GRPO
                 }
                 _backStep = new Bitmap(canvas.Image);
                 interaction = null;
+                if (DragProperty != null) DragProperty(null);
             }
         }
         

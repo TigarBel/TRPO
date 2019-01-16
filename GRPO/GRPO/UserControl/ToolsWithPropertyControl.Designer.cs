@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            GRPO.FillProperty extendedForFigure2 = new GRPO.FillProperty();
-            GRPO.LineProperty extendedForLine2 = new GRPO.LineProperty();
+            GRPO.FillProperty fillProperty1 = new GRPO.FillProperty();
+            GRPO.LineProperty lineProperty1 = new GRPO.LineProperty();
             this._toolsControl = new GRPO.ToolsControl();
             this._fillFigureControl = new GRPO.FillFigureControl();
             this._propertyLineControl = new GRPO.PropertyLineControl();
@@ -40,13 +40,13 @@
             this._toolsControl.Location = new System.Drawing.Point(3, 3);
             this._toolsControl.Name = "_toolsControl";
             this._toolsControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
-            this._toolsControl.Size = new System.Drawing.Size(125, 84);
+            this._toolsControl.Size = new System.Drawing.Size(201, 84);
             this._toolsControl.TabIndex = 3;
             // 
             // _fillFigureControl
             // 
-            extendedForFigure2.FillColor = System.Drawing.Color.White;
-            this._fillFigureControl.FillProperty = extendedForFigure2;
+            fillProperty1.FillColor = System.Drawing.Color.White;
+            this._fillFigureControl.FillProperty = fillProperty1;
             this._fillFigureControl.Location = new System.Drawing.Point(3, 245);
             this._fillFigureControl.Name = "_fillFigureControl";
             this._fillFigureControl.Size = new System.Drawing.Size(182, 81);
@@ -55,10 +55,10 @@
             // 
             // _propertyLineControl
             // 
-            extendedForLine2.LineColor = System.Drawing.Color.Black;
-            extendedForLine2.LineThickness = 1F;
-            extendedForLine2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
-            this._propertyLineControl.LineProperty = extendedForLine2;
+            lineProperty1.LineColor = System.Drawing.Color.Black;
+            lineProperty1.LineThickness = 1F;
+            lineProperty1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._propertyLineControl.LineProperty = lineProperty1;
             this._propertyLineControl.Location = new System.Drawing.Point(3, 93);
             this._propertyLineControl.Name = "_propertyLineControl";
             this._propertyLineControl.Size = new System.Drawing.Size(190, 146);

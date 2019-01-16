@@ -58,7 +58,7 @@ namespace GRPO
             }
             set
             {
-                if (value > 10)
+                if (value > 5)
                 {
                     Width = value;
                 }
@@ -75,7 +75,7 @@ namespace GRPO
             }
             set
             {
-                if (value > 10)
+                if (value > 5)
                 {
                     Height = value;
                 }

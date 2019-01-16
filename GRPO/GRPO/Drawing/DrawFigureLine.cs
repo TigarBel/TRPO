@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigureLine : IDrawable
+    class DrawFigureLine : IDrawable, ILinePropertyble
     {
         /// <summary>
         /// Объект класса линии

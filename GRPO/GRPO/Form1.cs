@@ -78,36 +78,13 @@ namespace GRPO
             {
                 if (_canvasControl.interaction != null)
                 {
-                    switch (_canvasControl.interaction.DrawableFigure.GetType().Name)
+                    if(_canvasControl.interaction.DrawableFigure is ILinePropertyble figureWithLineProperty)
                     {
-                        case "DrawFigureLine":
-                            {
-                                ((DrawFigureLine)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
-                                break;
-                            }
-                        case "DrawFigurePolyline":
-                            {
-                                ((DrawFigurePolyline)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
-                                break;
-                            }
-                        case "DrawFigureRectangle":
-                            {
-                                ((DrawFigureRectangle)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
-                                ((DrawFigureRectangle)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
-                                break;
-                            }
-                        case "DrawFigureCircle":
-                            {
-                                ((DrawFigureCircle)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
-                                ((DrawFigureCircle)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
-                                break;
-                            }
-                        case "DrawFigureEllipse":
-                            {
-                                ((DrawFigureEllipse)_canvasControl.interaction.DrawableFigure).LineProperty = _toolsWithPropertyControl.LineProperty;
-                                ((DrawFigureEllipse)_canvasControl.interaction.DrawableFigure).FillProperty = _toolsWithPropertyControl.FillProperty;
-                                break;
-                            }
+                        figureWithLineProperty.LineProperty = _toolsWithPropertyControl.LineProperty;
+                    }
+                    if(_canvasControl.interaction.DrawableFigure is IFillPropertyble figureWithFillProperty)
+                    {
+                        figureWithFillProperty.FillProperty = _toolsWithPropertyControl.FillProperty;
                     }
                     _canvasControl.RefreshCanvas();
                     _canvasControl.interaction.EnablePoints = false;
@@ -122,36 +99,13 @@ namespace GRPO
                 _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
                 return;
             }
-            switch (drawable.GetType().Name)
+            if(drawable is ILinePropertyble figureWithLineProperty)
             {
-                case "DrawFigureLine":
-                    {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigureLine)drawable).LineProperty;
-                        break;
-                    }
-                case "DrawFigurePolyline":
-                    {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigurePolyline)drawable).LineProperty;
-                        break;
-                    }
-                case "DrawFigureRectangle":
-                    {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigureRectangle)drawable).LineProperty;
-                        _toolsWithPropertyControl.FillProperty = ((DrawFigureRectangle)drawable).FillProperty;
-                        break;
-                    }
-                case "DrawFigureCircle":
-                    {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigureCircle)drawable).LineProperty;
-                        _toolsWithPropertyControl.FillProperty = ((DrawFigureCircle)drawable).FillProperty;
-                        break;
-                    }
-                case "DrawFigureEllipse":
-                    {
-                        _toolsWithPropertyControl.LineProperty = ((DrawFigureEllipse)drawable).LineProperty;
-                        _toolsWithPropertyControl.FillProperty = ((DrawFigureEllipse)drawable).FillProperty;
-                        break;
-                    }
+                _toolsWithPropertyControl.LineProperty = figureWithLineProperty.LineProperty;
+            }
+            if (drawable is IFillPropertyble figureWithFillProperty)
+            {
+                _toolsWithPropertyControl.FillProperty = figureWithFillProperty.FillProperty;
             }
         }
     }

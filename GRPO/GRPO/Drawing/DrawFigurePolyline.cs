@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigurePolyline : IDrawable
+    class DrawFigurePolyline : IDrawable, ILinePropertyble
     {
         /// <summary>
         /// Объект полилинии

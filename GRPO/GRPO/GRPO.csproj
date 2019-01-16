@@ -60,12 +60,15 @@
     <Compile Include="Drawing\DrawFigureLine.cs" />
     <Compile Include="Drawing\LineProperty.cs" />
     <Compile Include="Drawing\FillProperty.cs" />
+    <Compile Include="Figure\FigureRectangle.cs" />
     <Compile Include="Figure\Figure.cs" />
     <Compile Include="Figure\FigureCircle.cs" />
     <Compile Include="Figure\FigureEllipse.cs" />
     <Compile Include="Figure\FigureLine.cs" />
     <Compile Include="Figure\FigurePolygon.cs" />
     <Compile Include="Figure\FigurePolyline.cs" />
+    <Compile Include="Drawing\IFillPropertyble.cs" />
+    <Compile Include="Drawing\ILinePropertyble.cs" />
     <Compile Include="Interaction\Interaction.cs" />
     <Compile Include="UserControl\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
@@ -159,6 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cursor.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mass select.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

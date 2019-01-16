@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-    class DrawFigurePolygon : IDrawable
+    class DrawFigurePolygon : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
         /// Объект многоугольника
@@ -138,10 +138,9 @@ namespace GRPO
                     graphics.FillPolygon(new SolidBrush(FillProperty.FillColor), Polygon.Points.ToArray());
                     for (int i = 1; i < Polygon.Points.Count; i++)
                     {
-                        graphics.DrawLine(pen, Polygon.Points[i - 1].X, Polygon.Points[i - 1].Y, Polygon.Points[i].X, Polygon.Points[i].Y);
+                        graphics.DrawLine(pen, Polygon.Points[i - 1], Polygon.Points[i]);
                     }
-                    graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1].X, Polygon.Points[Polygon.Points.Count - 1].Y,
-                        Polygon.Points[0].X, Polygon.Points[0].Y);
+                    graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1], Polygon.Points[0]);
                     graphics.Dispose();
                     _pictureBox.Invalidate();
                 }

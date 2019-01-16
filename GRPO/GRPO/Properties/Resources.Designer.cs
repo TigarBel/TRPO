@@ -103,6 +103,16 @@ namespace GRPO.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap mass_select {
+            get {
+                object obj = ResourceManager.GetObject("mass select", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap polyline {
             get {
                 object obj = ResourceManager.GetObject("polyline", resourceCulture);

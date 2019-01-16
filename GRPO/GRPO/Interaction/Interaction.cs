@@ -27,6 +27,10 @@ namespace GRPO
         /// </summary>
         private bool _enablePoints;
         /// <summary>
+        /// Индекс выбранной габоритной точки
+        /// </summary>
+        private int _indexSelectPoint;
+        /// <summary>
         /// Пустой класс взаимодействия
         /// </summary>
         public Interaction()
@@ -99,7 +103,7 @@ namespace GRPO
         private void DrawInteraction()
         {
             DrawSquare();
-            DrawPointsSquare();
+            DrawPointsSize();
         }
         /// <summary>
         /// Отрисовка квадрата границ объекта
@@ -122,6 +126,25 @@ namespace GRPO
                 DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new LineProperty(), new FillProperty());
                 drawFigure.Draw();
             }
+        }
+        /// <summary>
+        /// Точки размера объекта
+        /// </summary>
+        private void DrawPointsSize()
+        {
+            List<Point> points = GetBorderPoints();
+            DrawFigureCircle drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y),
+                3, _canvas, new LineProperty(), new FillProperty());
+            drawFigure.Draw();
+            drawFigure = new DrawFigureCircle(new Point(points[1].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
+                3, _canvas, new LineProperty(), new FillProperty());
+            drawFigure.Draw();
+            drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[2].Y),
+                3, _canvas, new LineProperty(), new FillProperty());
+            drawFigure.Draw();
+            drawFigure = new DrawFigureCircle(new Point(points[0].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
+                3, _canvas, new LineProperty(), new FillProperty());
+            drawFigure.Draw();
         }
         /// <summary>
         /// Функция возвращающая список угловыч точек
@@ -168,15 +191,14 @@ namespace GRPO
         /// <summary>
         /// Изменить габаритную точку
         /// </summary>
-        /// <param name="point">Выбранная точка</param>
         /// <param name="pointDeviation">Подредактированная точка</param>
-        public void ChangeSizePoint(Point point, Point pointDeviation)
+        public void ChangePoint(Point pointDeviation)
         {
             switch (DrawableFigure.GetType().Name)
             {
                 case "DrawFigureLine":
                     {
-                        if (GetNumberPoint(point) == 0)
+                        if (GetNumberPoint(SelectPoint) == 0)
                         {
                             ((DrawFigureLine)DrawableFigure).Line.A = new Point(pointDeviation.X, pointDeviation.Y);
                         }
@@ -188,43 +210,95 @@ namespace GRPO
                     }
                 case "DrawFigurePolyline":
                     {
-                        ((DrawFigurePolyline)DrawableFigure).Polyline.Points[GetNumberPoint(point)] = new Point(pointDeviation.X, pointDeviation.Y);
+                        ((DrawFigurePolyline)DrawableFigure).Polyline.Points[GetNumberPoint(SelectPoint)] = new Point(pointDeviation.X, pointDeviation.Y);
                         break;
                     }
                 case "DrawFigureRectangle":
                     {
-                        ((DrawFigureRectangle)DrawableFigure).Polygon.Points[GetNumberPoint(point)] = new Point(pointDeviation.X, pointDeviation.Y);
+                        switch (GetNumberPoint(SelectPoint))
+                        {
+                            case 0:
+                                {
+                                    ((DrawFigureRectangle)DrawableFigure).Rectangle.PointLeftUp = new Point(pointDeviation.X, pointDeviation.Y);
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    ((DrawFigureRectangle)DrawableFigure).Rectangle.PointRightUp = new Point(pointDeviation.X, pointDeviation.Y);
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    ((DrawFigureRectangle)DrawableFigure).Rectangle.PointRightDown = new Point(pointDeviation.X, pointDeviation.Y);
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    ((DrawFigureRectangle)DrawableFigure).Rectangle.PointLeftDown = new Point(pointDeviation.X, pointDeviation.Y);
+                                    break;
+                                }
+                        }
                         break;
                     }
                 case "DrawFigureCircle":
                     {
-                        if (GetNumberPoint(point) == 0)
-                        {
-                            /*Point localPoint = new Point(((DrawFigureCircle)DrawableFigure).GetPoints()[2].X,
-                                ((DrawFigureCircle)DrawableFigure).GetPoints()[2].Y);
-                            int result = (((DrawFigureCircle)DrawableFigure).GetPoints()[2].X - pointDeviation.X) / 2;
-                            ((DrawFigureCircle)DrawableFigure).Position = new Point(pointDeviation.X, pointDeviation.Y);
-                            ((DrawFigureCircle)DrawableFigure).Circle.Radius = result;*/
-                        }
-                        /*if (GetNumberPoint(point) == 1)
-                        {
-
-                        }
-                        if (GetNumberPoint(point) == 2)
-                        {
-
-                        }
-                        if (GetNumberPoint(point) == 3)
-                        {
-
-                        }*/
+                        ((DrawFigureCircle)DrawableFigure).Circle.Radius = (pointDeviation.X - ((DrawFigureCircle)DrawableFigure).Position.X) / 2;
                         break;
                     }
-                /*case "DrawFigureEllipse":
+                case "DrawFigureEllipse":
                     {
-                        ((DrawFigureEllipse)DrawableFigure).Ellipse.Points[GetNumberPoint(point)] = new Point(pointDeviation.X, pointDeviation.Y);
+                        switch(GetNumberPoint(SelectPoint))
+                        {
+                            case 0:
+                                {
+                                    ((DrawFigureEllipse)DrawableFigure).Width = ((DrawFigureEllipse)DrawableFigure).Width -
+                                        (pointDeviation.X - ((DrawFigureEllipse)DrawableFigure).Position.X);
+                                    ((DrawFigureEllipse)DrawableFigure).Height = ((DrawFigureEllipse)DrawableFigure).Height -
+                                        (pointDeviation.Y - ((DrawFigureEllipse)DrawableFigure).Position.Y);
+                                    ((DrawFigureEllipse)DrawableFigure).Position = new Point(pointDeviation.X,pointDeviation.Y);
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    ((DrawFigureEllipse)DrawableFigure).Width = pointDeviation.X - ((DrawFigureEllipse)DrawableFigure).Position.X;
+                                    ((DrawFigureEllipse)DrawableFigure).Height = ((DrawFigureEllipse)DrawableFigure).Height -
+                                        (pointDeviation.Y - ((DrawFigureEllipse)DrawableFigure).Position.Y);
+                                    ((DrawFigureEllipse)DrawableFigure).Position = 
+                                        new Point(((DrawFigureEllipse)DrawableFigure).Position.X, pointDeviation.Y);
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    ((DrawFigureEllipse)DrawableFigure).Width = pointDeviation.X - ((DrawFigureEllipse)DrawableFigure).Position.X;
+                                    ((DrawFigureEllipse)DrawableFigure).Height = pointDeviation.Y - ((DrawFigureEllipse)DrawableFigure).Position.Y;
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    ((DrawFigureEllipse)DrawableFigure).Width = ((DrawFigureEllipse)DrawableFigure).Width -
+                                        (pointDeviation.X - ((DrawFigureEllipse)DrawableFigure).Position.X);
+                                    ((DrawFigureEllipse)DrawableFigure).Height = pointDeviation.Y - ((DrawFigureEllipse)DrawableFigure).Position.Y;
+                                    ((DrawFigureEllipse)DrawableFigure).Position =
+                                        new Point(pointDeviation.X, ((DrawFigureEllipse)DrawableFigure).Position.Y);
+                                    break;
+                                }
+                        }
                         break;
-                    }*/
+                    }
+            }
+        }
+        /// <summary>
+        /// Выбранная габаритная точка
+        /// </summary>
+        public Point SelectPoint
+        {
+            get
+            {
+                return DrawableFigure.GetPoints()[_indexSelectPoint];
+            }
+            set
+            {
+                _indexSelectPoint = GetNumberPoint(new Point(value.X, value.Y));
             }
         }
     }

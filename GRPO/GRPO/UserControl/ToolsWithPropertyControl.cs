@@ -31,6 +31,12 @@ namespace GRPO
         {
             switch (_toolsControl.SelectTool)
             {
+                case DrawingTools.CursorSelect:
+                    {
+                        _propertyLineControl.Visible = false;
+                        _fillFigureControl.Visible = false;
+                        break;
+                    }
                 case DrawingTools.DrawFigureLine:
                     {
                         _propertyLineControl.Visible = true;
@@ -40,12 +46,6 @@ namespace GRPO
                 case DrawingTools.DrawFigurePolyline:
                     {
                         _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = false;
-                        break;
-                    }
-                case DrawingTools.CursorSelect:
-                    {
-                        _propertyLineControl.Visible = false;
                         _fillFigureControl.Visible = false;
                         break;
                     }

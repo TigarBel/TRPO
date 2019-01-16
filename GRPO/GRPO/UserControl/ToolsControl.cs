@@ -12,9 +12,10 @@ namespace GRPO
 {
     public enum DrawingTools
     {
-        DrawFigureLine = 0,
+        CursorSelect = 0,
+        MassSelect,
+        DrawFigureLine,
         DrawFigurePolyline,
-        CursorSelect,
         DrawFigureRectangle,
         DrawFigureCircle,
         DrawFigureEllipse,
@@ -33,9 +34,10 @@ namespace GRPO
         {
             InitializeComponent();
             SelectTool = DrawingTools.DrawFigureLine;
+            _buttons.Add(buttonCursorSelect);
+            _buttons.Add(buttonMassSelect);
             _buttons.Add(buttonFigureLine);
             _buttons.Add(buttonFigurePolyline);
-            _buttons.Add(buttonCursorSelect);
             _buttons.Add(buttonFigureRectangle);
             _buttons.Add(buttonFigureCircle);
             _buttons.Add(buttonFigureEllips);
@@ -49,6 +51,20 @@ namespace GRPO
             }
         }
 
+        private void buttonCursorSelect_Click(object sender, EventArgs e)
+        {
+            AllButtonBackColorWhite();
+            SelectTool = DrawingTools.CursorSelect;
+            ((Button)sender).BackColor = Color.Black;
+        }
+
+        private void buttonMassSelect_Click(object sender, EventArgs e)
+        {
+            AllButtonBackColorWhite();
+            SelectTool = DrawingTools.MassSelect;
+            ((Button)sender).BackColor = Color.Black;
+        }
+
         private void buttonFigureLine_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
@@ -60,13 +76,6 @@ namespace GRPO
         {
             AllButtonBackColorWhite();
             SelectTool = DrawingTools.DrawFigurePolyline;
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonCursorSelect_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = DrawingTools.CursorSelect;
             ((Button)sender).BackColor = Color.Black;
         }
 
