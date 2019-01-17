@@ -11,6 +11,9 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Пользовательский интерфейс полотна для рисования
+    /// </summary>
     public partial class CanvasControl : UserControl
     {
         private Point _pointA;
@@ -27,10 +30,13 @@ namespace GRPO
 
 
         public Interaction _interaction;
+        public MassSelect _massSelect;
 
         public delegate void Drag(IDrawable drawable);
         public event Drag DragProperty;
-
+        /// <summary>
+        /// Инициализация пользовательского интерфейса полотна для рисования
+        /// </summary>
         public CanvasControl()
         {
             InitializeComponent();
@@ -87,6 +93,10 @@ namespace GRPO
                     _flagMouseDown = false;
                     _flagPolyline = false;
                     canvas.Image = new Bitmap(_backStep);
+                }
+                if(_selectTool != DrawingTools.CursorSelect)
+                {
+                    _interaction = null;
                 }
             }
         }
@@ -149,33 +159,69 @@ namespace GRPO
                     _interaction.EnablePoints = true;
                 }
             }
+
+            if (SelectTool == DrawingTools.MassSelect)
+            {
+                if (_massSelect != null)
+                {
+                    if (_pointA.X < _massSelect.PointsSize.Min(point => point.X) &&
+                        _pointA.X > _massSelect.PointsSize.Max(point => point.X) &&
+                        _pointA.Y < _massSelect.PointsSize.Min(point => point.Y) &&
+                        _pointA.Y > _massSelect.PointsSize.Min(point => point.Y))
+                    {
+                        _massSelect = null;
+                    }
+                }
+            }
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            _pointB = new Point(e.X, e.Y);
+
             if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
             {
-                _pointB = new Point(e.X, e.Y);
                 canvas.Image = new Bitmap(_backStep);
-                DrawFigure(_pointA, _pointB).Draw();
+                DrawFigure(_pointA, _pointB, SelectTool).Draw();
             }
             if (SelectTool == DrawingTools.CursorSelect && _flagMouseDown && _interaction != null)
             {
                 if (_interaction.EnablePoints)
                 {
-                    _pointB = new Point(e.X, e.Y);
                     _interaction.ChangePoint(_pointB);
                     RefreshCanvas();
                     _pointA = new Point(e.X, e.Y);
                 }
                 else
                 {
-                    _pointB = new Point(e.X, e.Y);
                     int x = _interaction.DrawableFigure.Position.X;
                     int y = _interaction.DrawableFigure.Position.Y;
                     _interaction.DrawableFigure.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
                     RefreshCanvas();
                     _pointA = new Point(e.X, e.Y);
+                }
+            }
+
+
+            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0 && _flagMouseDown)
+            {
+                if (_massSelect == null)
+                {
+                    canvas.Image = new Bitmap(_backStep);
+                    DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB, canvas,
+                        new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
+                    drawFigureRectangle.Draw();
+                }
+                else
+                {
+                    foreach (IDrawable drawable in _massSelect.Drawables)
+                    {
+                        int x = drawable.Position.X;
+                        int y = drawable.Position.Y;
+                        drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
+                        RefreshCanvas();
+                        _pointA = new Point(e.X, e.Y);
+                    }
                 }
             }
         }
@@ -186,10 +232,10 @@ namespace GRPO
 
             if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
             {
-                _pointB = new Point(e.X, e.Y);
+                //_pointB = new Point(e.X, e.Y);
                 canvas.Image = new Bitmap(_backStep);
-                DrawFigure(_pointA, _pointB).Draw();
-                _draws.Add(DrawFigure(_pointA, _pointB));
+                DrawFigure(_pointA, _pointB, SelectTool).Draw();
+                _draws.Add(DrawFigure(_pointA, _pointB, SelectTool));
                 _backStep = new Bitmap(canvas.Image);
             }
 
@@ -210,6 +256,23 @@ namespace GRPO
                 else
                 {
                     _flagPolyline = false;
+                }
+            }
+
+            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0)
+            {
+                if(_massSelect == null)
+                {
+                    canvas.Image = new Bitmap(_backStep);
+                    _massSelect = new MassSelect(_pointA, _pointB, _draws, canvas);
+                    if (_massSelect.Drawables.Count > 0)
+                    {
+                        _massSelect.DrawInteraction();
+                    }
+                    else
+                    {
+                        _massSelect = null;
+                    }
                 }
             }
         }
@@ -243,30 +306,21 @@ namespace GRPO
                     }
                 }
             }
-            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0)
-            {
-                canvas.Image = new Bitmap(_backStep);
-                for (int i = _draws.Count - 1; i >= 0; i--)
-                {
-                    int X = _draws[i].GetPoints().Max(point => point.X) -
-                        (_draws[i].GetPoints().Max(point => point.X) - _draws[i].GetPoints().Min(point => point.X)) / 2;
-                    int Y = _draws[i].GetPoints().Max(point => point.Y) -
-                        (_draws[i].GetPoints().Max(point => point.Y) - _draws[i].GetPoints().Min(point => point.Y)) / 2;
-                    if (X >= _pointA.X && X <= _pointB.X && Y >= _pointA.Y && Y <= _pointB.Y)
-                    {
-                        Interaction interaction = new Interaction(_draws[i], canvas, false);
-                    }
-                }
-            }
         }
-
-        private IDrawable DrawFigure(Point pointA, Point pointB)
+        /// <summary>
+        /// Создать фигуру
+        /// </summary>
+        /// <param name="pointA">Начальная точка</param>
+        /// <param name="pointB">Конечная точка</param>
+        /// <param name="selectTool">Иструмент(тип) выбранно фигуры</param>
+        /// <returns></returns>
+        private IDrawable DrawFigure(Point pointA, Point pointB, DrawingTools selectTool)
         {
-            switch (_selectTool)
+            switch (selectTool)
             {
                 case DrawingTools.DrawFigureLine:
                     {
-                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _lineProperty);
+                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, LineProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigurePolyline:
@@ -276,7 +330,7 @@ namespace GRPO
                             List<Point> points;
                             points = _draws[_draws.Count - 1].GetPoints();
                             points.Add(pointB);
-                            DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, _lineProperty);
+                            DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, LineProperty);
                             return drawFigure;
                         }
                         else
@@ -287,26 +341,28 @@ namespace GRPO
                     }
                 case DrawingTools.DrawFigureRectangle:
                     {
-                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, canvas, _lineProperty, _fillProperty);
+                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, canvas, LineProperty, FillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureCircle:
                     {
                         DrawFigureCircle drawFigure = new DrawFigureCircle(pointA,
-                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((_pointB.X - _pointA.X), 2) + Math.Pow((_pointB.Y - _pointA.Y), 2)))),/******/
-                        canvas, _lineProperty, _fillProperty);
+                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((pointB.X - pointA.X), 2) + Math.Pow((pointB.Y - pointA.Y), 2)))),/******/
+                        canvas, LineProperty, FillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureEllipse:
                     {
-                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, _lineProperty,
-                            _fillProperty);
+                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, LineProperty,
+                            FillProperty);
                         return drawFigure;
                     }
             }
             return null;
         }
-        
+        /// <summary>
+        /// Скопировать фигуру(ы) в буфер
+        /// </summary>
         public void Copy()
         {
             if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
@@ -314,7 +370,9 @@ namespace GRPO
                 _buferDraw = _interaction.DrawableFigure.Clone();
             }
         }
-
+        /// <summary>
+        /// Вставить фигуру(ы)
+        /// </summary>
         public void Paste()
         {
             if (SelectTool == DrawingTools.CursorSelect && _buferDraw != null)
@@ -326,7 +384,9 @@ namespace GRPO
                 _backStep = new Bitmap(canvas.Image);
             }
         }
-
+        /// <summary>
+        /// Удалить фигуру(ы)
+        /// </summary>
         public void Delete()
         {
             if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
@@ -342,7 +402,9 @@ namespace GRPO
                 if (DragProperty != null) DragProperty(null);
             }
         }
-
+        /// <summary>
+        /// Вырезать фигуру(ы)
+        /// </summary>
         public void Cut()
         {
             if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
@@ -359,7 +421,9 @@ namespace GRPO
                 if (DragProperty != null) DragProperty(null);
             }
         }
-        
+        /// <summary>
+        /// Перерисовать фигуры из списка
+        /// </summary>
         public void RefreshCanvas()
         {
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);

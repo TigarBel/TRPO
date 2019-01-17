@@ -58,8 +58,8 @@
     <Compile Include="Drawing\DrawFigurePolygon.cs" />
     <Compile Include="Drawing\DrawFigurePolyline.cs" />
     <Compile Include="Drawing\DrawFigureLine.cs" />
-    <Compile Include="Drawing\LineProperty.cs" />
-    <Compile Include="Drawing\FillProperty.cs" />
+    <Compile Include="Drawing\Property\LineProperty.cs" />
+    <Compile Include="Drawing\Property\FillProperty.cs" />
     <Compile Include="Figure\FigureRectangle.cs" />
     <Compile Include="Figure\Figure.cs" />
     <Compile Include="Figure\FigureCircle.cs" />
@@ -67,9 +67,11 @@
     <Compile Include="Figure\FigureLine.cs" />
     <Compile Include="Figure\FigurePolygon.cs" />
     <Compile Include="Figure\FigurePolyline.cs" />
-    <Compile Include="Drawing\IFillPropertyble.cs" />
-    <Compile Include="Drawing\ILinePropertyble.cs" />
+    <Compile Include="Drawing\Interface\IFillPropertyble.cs" />
+    <Compile Include="Drawing\Interface\ILinePropertyble.cs" />
     <Compile Include="Interaction\Interaction.cs" />
+    <Compile Include="Interaction\MassSelect.cs" />
+    <Compile Include="Interaction\PointSorter.cs" />
     <Compile Include="UserControl\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -94,7 +96,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drawing\IDrawable.cs" />
+    <Compile Include="Drawing\Interface\IDrawable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControl\PropertyLineControl.cs">

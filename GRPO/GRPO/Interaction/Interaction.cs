@@ -35,7 +35,7 @@ namespace GRPO
         /// </summary>
         public Interaction()
         {
-            DrawableFigure = new DrawFigureLine();
+            DrawableFigure = null;
             Canvas = new PictureBox();
             EnablePoints = false;
         }
@@ -116,18 +116,6 @@ namespace GRPO
             drawFigure.Draw();
         }
         /// <summary>
-        /// Отрисовка угловых точек
-        /// </summary>
-        private void DrawPointsSquare()
-        {
-            List<Point> points = GetBorderPoints();
-            for (int i = 0; i < 4; i++)
-            {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new LineProperty(), new FillProperty());
-                drawFigure.Draw();
-            }
-        }
-        /// <summary>
         /// Точки размера объекта
         /// </summary>
         private void DrawPointsSize()
@@ -145,6 +133,18 @@ namespace GRPO
             drawFigure = new DrawFigureCircle(new Point(points[0].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
                 3, _canvas, new LineProperty(), new FillProperty());
             drawFigure.Draw();
+        }
+        /// <summary>
+        /// Отрисовка угловых точек
+        /// </summary>
+        private void DrawPointsSquare()
+        {
+            List<Point> points = GetBorderPoints();
+            for (int i = 0; i < 4; i++)
+            {
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], 3, _canvas, new LineProperty(), new FillProperty());
+                drawFigure.Draw();
+            }
         }
         /// <summary>
         /// Функция возвращающая список угловыч точек
