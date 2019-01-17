@@ -19,9 +19,9 @@ namespace GRPO
         private Point _pointA;
         private Point _pointB;
         private bool _flagMouseDown;
-        private bool _flagPolyline;
+        private bool _flagPolyFigure;
+
         private IDrawable _buferDraw;
-        private List<Bitmap> _bitmaps = new List<Bitmap>();
 
         private List<IDrawable> _draws = new List<IDrawable>();
         private DrawingTools _selectTool = DrawingTools.DrawFigureLine;
@@ -110,7 +110,7 @@ namespace GRPO
         {
             get
             {
-                return canvas.Image;
+                return new Bitmap(canvas.Image);
             }
             set
             {
@@ -167,7 +167,43 @@ namespace GRPO
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
-            Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool));
+            if(SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+            {
+                Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool));
+            }
+
+            if (SelectTool == DrawingTools.DrawFigurePolyline)
+            {
+                if (_flagPolyFigure)
+                {
+                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    points.RemoveAt(points.Count - 1);
+                    points.Add(_pointA);
+
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    RefreshCanvas();
+                }
+                if (!_flagPolyFigure)
+                {
+                    List<Point> points = new List<Point>() { new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y) };
+                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+
+                    _flagPolyFigure = true;
+                }
+                if (e.Button == MouseButtons.Right && _flagPolyFigure)
+                {
+                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    points.RemoveAt(points.Count - 1);
+                    points.Add(_pointA);
+
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    RefreshCanvas();
+
+                    _flagPolyFigure = false;
+                }
+            }
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
@@ -176,56 +212,59 @@ namespace GRPO
 
             if (_flagMouseDown)
             {
-                Drawables.Remove(Drawables[Drawables.Count - 1]);
-                Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
-                RefreshCanvas();
+                if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+                {
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                    RefreshCanvas();
+                }
+            }
+
+            if(_flagPolyFigure)
+            {
+                if (SelectTool == DrawingTools.DrawFigurePolyline)
+                {
+                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    points.RemoveAt(points.Count - 1);
+                    points.Add(_pointB);
+
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    RefreshCanvas();
+                }
             }
         }
 
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
+
             if (_flagMouseDown)
             {
-                Drawables.Remove(Drawables[Drawables.Count - 1]);
-                Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
-                RefreshCanvas();
+                if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+                {
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                    RefreshCanvas();
+                }
+
+                if (SelectTool == DrawingTools.DrawFigurePolyline)
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                        points.Add(_pointB);
+                        Drawables.RemoveAt(Drawables.Count - 1);
+                        Drawables.Add(DrawPolyFigure(points, SelectTool));
+                        RefreshCanvas();
+                    }
+                }
+
                 _flagMouseDown = false;
             }
         }
-
-        private void canvas_MouseClick(object sender, MouseEventArgs e)
-        {
-            /*if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
-            {
-                _interaction = null;
-                canvas.Image = new Bitmap(_backStep);
-                _pointA = new Point(e.X, e.Y);
-                if (DragProperty != null) DragProperty(null);
-                for (int i = _draws.Count - 1; i >= 0; i--)
-                {
-                    int minX = _draws[i].GetPoints().Min(point => point.X);
-                    int maxX = _draws[i].GetPoints().Max(point => point.X);
-                    int minY = _draws[i].GetPoints().Min(point => point.Y);
-                    int maxY = _draws[i].GetPoints().Max(point => point.Y);
-                    if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
-                    {
-                        if (DragProperty != null) DragProperty(_draws[i]);
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            _interaction = new Interaction(_draws[i], canvas, false);
-                        }
-                        if (e.Button == MouseButtons.Right)
-                        {
-                            _interaction = new Interaction(_draws[i], canvas, true);
-                        }
-                        break;
-                    }
-                }
-            }*/
-        }
         /// <summary>
-        /// Создать фигуру
+        /// Создать простую фигуру из двух точек
         /// </summary>
         /// <param name="pointA">Начальная точка</param>
         /// <param name="pointB">Конечная точка</param>
@@ -239,22 +278,6 @@ namespace GRPO
                     {
                         DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, LineProperty);
                         return drawFigure;
-                    }
-                case DrawingTools.DrawFigurePolyline:
-                    {
-                        if (_flagPolyline)
-                        {
-                            List<Point> points;
-                            points = Drawables[Drawables.Count - 1].GetPoints();
-                            points.Add(pointB);
-                            DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, LineProperty);
-                            return drawFigure;
-                        }
-                        else
-                        {
-                            DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, _lineProperty);
-                            return drawFigure;
-                        }
                     }
                 case DrawingTools.DrawFigureRectangle:
                     {
@@ -272,6 +295,24 @@ namespace GRPO
                     {
                         DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, LineProperty,
                             FillProperty);
+                        return drawFigure;
+                    }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Создать сложную фигуру из нескольких точек
+        /// </summary>
+        /// <param name="points">Список точек</param>
+        /// <param name="selectTool">Иструмент(тип) выбранно фигуры</param>
+        /// <returns></returns>
+        private IDrawable DrawPolyFigure(List<Point> points, DrawingTools selectTool)
+        {
+            switch(selectTool)
+            {
+                case DrawingTools.DrawFigurePolyline:
+                    {
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, LineProperty);
                         return drawFigure;
                     }
             }
