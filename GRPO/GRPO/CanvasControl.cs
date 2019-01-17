@@ -20,10 +20,10 @@ namespace GRPO
         private Point _pointB;
         private bool _flagMouseDown;
         private bool _flagPolyline;
-        private List<IDrawable> _draws = new List<IDrawable>();
         private IDrawable _buferDraw;
         private List<Bitmap> _bitmaps = new List<Bitmap>();
-        private Image _backStep;
+
+        private List<IDrawable> _draws = new List<IDrawable>();
         private DrawingTools _selectTool = DrawingTools.DrawFigureLine;
         private LineProperty _lineProperty = new LineProperty();
         private FillProperty _fillProperty = new FillProperty();
@@ -42,40 +42,20 @@ namespace GRPO
             InitializeComponent();
             SetSizeCanvas(100, 50);
         }
-
         /// <summary>
-        /// Задать размер полотна
+        /// Список фигур
         /// </summary>
-        /// <param name="width">Ширина полотна</param>
-        /// <param name="height">Высота полотна</param>
-        public void SetSizeCanvas(int width, int height)
+        public List<IDrawable> Drawables
         {
-            if (width <= 0)
+            get
             {
-                throw new ArgumentException("Ширина полотна не может быть меньше 1!");
+                return _draws;
             }
-            if (height <= 0)
+            set
             {
-                throw new ArgumentException("Высота полотна не может быть меньше 1!");
-            }
-            canvas.Size = new Size(width, height);
-            canvas.Image = new Bitmap(width, height);
-            if(_draws.Count > 0)
-            {
-                foreach(IDrawable draw in _draws)
-                {
-                    draw.Draw();
-                }
+                _draws = value;
             }
         }
-        /// <summary>
-        /// Взять список фигур
-        /// </summary>
-        public List<IDrawable> GetDrawables() { return _draws; }
-        /// <summary>
-        /// Вложить список фигур
-        /// </summary>
-        public void SetDrawables(List<IDrawable> drawables) { _draws = drawables; }
         /// <summary>
         /// Выбранный тип класса IDrawable
         /// </summary>
@@ -88,26 +68,12 @@ namespace GRPO
             set
             {
                 _selectTool = value;
-                if (_backStep != null)
-                {
-                    _flagMouseDown = false;
-                    _flagPolyline = false;
-                    canvas.Image = new Bitmap(_backStep);
-                }
-                if(_selectTool != DrawingTools.CursorSelect)
+
+                if (_selectTool != DrawingTools.CursorSelect)
                 {
                     _interaction = null;
                 }
             }
-        }
-        /// <summary>
-        /// Очистка холста
-        /// </summary>
-        public void ClearCanvas()
-        {
-            _draws.Clear();
-            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-            _backStep = new Bitmap(canvas.Image);
         }
         /// <summary>
         /// Свойство линии
@@ -137,149 +103,100 @@ namespace GRPO
                 _fillProperty = value;
             }
         }
+        /// <summary>
+        /// Картинка с холста
+        /// </summary>
+        public Image Image
+        {
+            get
+            {
+                return canvas.Image;
+            }
+            set
+            {
+                canvas.Image = new Bitmap(value);
+            }
+        }
+        /// <summary>
+        /// Задать размер полотна
+        /// </summary>
+        /// <param name="width">Ширина полотна</param>
+        /// <param name="height">Высота полотна</param>
+        public void SetSizeCanvas(int width, int height)
+        {
+            if (width <= 0)
+            {
+                throw new ArgumentException("Ширина полотна не может быть меньше 1!");
+            }
+            if (height <= 0)
+            {
+                throw new ArgumentException("Высота полотна не может быть меньше 1!");
+            }
+            canvas.Size = new Size(width, height);
+            canvas.Image = new Bitmap(width, height);
+            if(Drawables.Count > 0)
+            {
+                foreach(IDrawable draw in Drawables)
+                {
+                    draw.Draw();
+                }
+            }
+        }
+        /// <summary>
+        /// Перерисовать фигуры из списка
+        /// </summary>
+        public void RefreshCanvas()
+        {
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            foreach (IDrawable drawable in Drawables)
+            {
+                drawable.Draw();
+            }
+        }
+        /// <summary>
+        /// Очистка холста
+        /// </summary>
+        public void ClearCanvas()
+        {
+            Drawables.Clear();
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+        }
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
-            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagPolyline != true)
-            {
-                _backStep = new Bitmap(canvas.Image);
-            }
-            if (SelectTool == DrawingTools.CursorSelect && _interaction != null)
-            {
-                _interaction.SelectPoint = _pointA;
-                if (e.Button == MouseButtons.Left)
-                {
-                    _interaction.EnablePoints = false;
-                }
-                if (e.Button == MouseButtons.Right)
-                {
-                    _interaction.EnablePoints = true;
-                }
-            }
-
-            if (SelectTool == DrawingTools.MassSelect)
-            {
-                if (_massSelect != null)
-                {
-                    if (_pointA.X < _massSelect.PointsSize.Min(point => point.X) &&
-                        _pointA.X > _massSelect.PointsSize.Max(point => point.X) &&
-                        _pointA.Y < _massSelect.PointsSize.Min(point => point.Y) &&
-                        _pointA.Y > _massSelect.PointsSize.Min(point => point.Y))
-                    {
-                        _massSelect = null;
-                    }
-                }
-            }
+            Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool));
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
 
-            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
+            if (_flagMouseDown)
             {
-                canvas.Image = new Bitmap(_backStep);
-                DrawFigure(_pointA, _pointB, SelectTool).Draw();
-            }
-            if (SelectTool == DrawingTools.CursorSelect && _flagMouseDown && _interaction != null)
-            {
-                if (_interaction.EnablePoints)
-                {
-                    _interaction.ChangePoint(_pointB);
-                    RefreshCanvas();
-                    _pointA = new Point(e.X, e.Y);
-                }
-                else
-                {
-                    int x = _interaction.DrawableFigure.Position.X;
-                    int y = _interaction.DrawableFigure.Position.Y;
-                    _interaction.DrawableFigure.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
-                    RefreshCanvas();
-                    _pointA = new Point(e.X, e.Y);
-                }
-            }
-
-
-            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0 && _flagMouseDown)
-            {
-                if (_massSelect == null)
-                {
-                    canvas.Image = new Bitmap(_backStep);
-                    DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB, canvas,
-                        new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
-                    drawFigureRectangle.Draw();
-                }
-                else
-                {
-                    foreach (IDrawable drawable in _massSelect.Drawables)
-                    {
-                        int x = drawable.Position.X;
-                        int y = drawable.Position.Y;
-                        drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
-                        RefreshCanvas();
-                        _pointA = new Point(e.X, e.Y);
-                    }
-                }
+                Drawables.Remove(Drawables[Drawables.Count - 1]);
+                Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                RefreshCanvas();
             }
         }
 
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
-
-            if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && _flagMouseDown)
+            if (_flagMouseDown)
             {
-                //_pointB = new Point(e.X, e.Y);
-                canvas.Image = new Bitmap(_backStep);
-                DrawFigure(_pointA, _pointB, SelectTool).Draw();
-                _draws.Add(DrawFigure(_pointA, _pointB, SelectTool));
-                _backStep = new Bitmap(canvas.Image);
-            }
-
-            _flagMouseDown = false;
-
-            if (SelectTool == DrawingTools.DrawFigurePolyline)
-            {
-                if(_flagPolyline)
-                {
-                    _draws.Remove(_draws[_draws.Count - 2]);
-                }
-                if(e.Button == MouseButtons.Left)
-                {
-                    _flagMouseDown = true;
-                    _flagPolyline = true;
-                    _pointA = new Point(e.X, e.Y);
-                }
-                else
-                {
-                    _flagPolyline = false;
-                }
-            }
-
-            if (SelectTool == DrawingTools.MassSelect && _draws.Count > 0)
-            {
-                if(_massSelect == null)
-                {
-                    canvas.Image = new Bitmap(_backStep);
-                    _massSelect = new MassSelect(_pointA, _pointB, _draws, canvas);
-                    if (_massSelect.Drawables.Count > 0)
-                    {
-                        _massSelect.DrawInteraction();
-                    }
-                    else
-                    {
-                        _massSelect = null;
-                    }
-                }
+                Drawables.Remove(Drawables[Drawables.Count - 1]);
+                Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                RefreshCanvas();
+                _flagMouseDown = false;
             }
         }
 
         private void canvas_MouseClick(object sender, MouseEventArgs e)
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
+            /*if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0)
             {
                 _interaction = null;
                 canvas.Image = new Bitmap(_backStep);
@@ -305,7 +222,7 @@ namespace GRPO
                         break;
                     }
                 }
-            }
+            }*/
         }
         /// <summary>
         /// Создать фигуру
@@ -328,7 +245,7 @@ namespace GRPO
                         if (_flagPolyline)
                         {
                             List<Point> points;
-                            points = _draws[_draws.Count - 1].GetPoints();
+                            points = Drawables[Drawables.Count - 1].GetPoints();
                             points.Add(pointB);
                             DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, LineProperty);
                             return drawFigure;
@@ -365,7 +282,7 @@ namespace GRPO
         /// </summary>
         public void Copy()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
             {
                 _buferDraw = _interaction.DrawableFigure.Clone();
             }
@@ -377,11 +294,10 @@ namespace GRPO
         {
             if (SelectTool == DrawingTools.CursorSelect && _buferDraw != null)
             {
-                canvas.Image = new Bitmap(_backStep);
                 _buferDraw.Position = new Point(10, 10);
-                _draws.Add(_buferDraw);
-                _draws[_draws.Count - 1].Draw();
-                _backStep = new Bitmap(canvas.Image);
+                Drawables.Add(_buferDraw);
+                Drawables[Drawables.Count - 1].Draw();
+                RefreshCanvas();
             }
         }
         /// <summary>
@@ -389,17 +305,17 @@ namespace GRPO
         /// </summary>
         public void Delete()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
             {
-                _draws.Remove(_interaction.DrawableFigure);
+                Drawables.Remove(_interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-                foreach(IDrawable drawable in _draws)
+                foreach(IDrawable drawable in Drawables)
                 {
                     drawable.Draw();
                 }
-                _backStep = new Bitmap(canvas.Image);
                 _interaction = null;
                 if (DragProperty != null) DragProperty(null);
+                RefreshCanvas();
             }
         }
         /// <summary>
@@ -407,31 +323,19 @@ namespace GRPO
         /// </summary>
         public void Cut()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _draws.Count > 0 && _interaction != null)
+            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
             {
                 _buferDraw = _interaction.DrawableFigure.Clone();
-                _draws.Remove(_interaction.DrawableFigure);
+                Drawables.Remove(_interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-                foreach (IDrawable drawable in _draws)
+                foreach (IDrawable drawable in Drawables)
                 {
                     drawable.Draw();
                 }
-                _backStep = new Bitmap(canvas.Image);
                 _interaction = null;
                 if (DragProperty != null) DragProperty(null);
+                RefreshCanvas();
             }
-        }
-        /// <summary>
-        /// Перерисовать фигуры из списка
-        /// </summary>
-        public void RefreshCanvas()
-        {
-            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-            foreach (IDrawable drawable in _draws)
-            {
-                drawable.Draw();
-            }
-            _backStep = new Bitmap(canvas.Image);
         }
     }
 }

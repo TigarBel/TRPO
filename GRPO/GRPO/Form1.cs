@@ -47,7 +47,11 @@ namespace GRPO
                 _canvasControl.SetSizeCanvas(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
             }
         }
-
+        /// <summary>
+        /// Функция по отлову нажатия клавиш клавиатуры
+        /// </summary>
+        /// <param name="sender">Объект кнопки</param>
+        /// <param name="e">Объект события</param>
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(e.KeyCode.ToString());
@@ -68,7 +72,9 @@ namespace GRPO
                 _canvasControl.Cut();
             }
         }
-        
+        /// <summary>
+        /// Функция по отлову изменения свойства фигуры
+        /// </summary>
         private void _toolsWithPropertyControl_FigurePropertyChanged()
         {
             _canvasControl.SelectTool = _toolsWithPropertyControl.SelectTool;
@@ -91,7 +97,10 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Функция по отлову свойств фигуры
+        /// </summary>
+        /// <param name="drawable">Фигура</param>
         public void SetProperty(IDrawable drawable)
         {
             if (drawable == null)
