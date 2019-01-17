@@ -39,7 +39,6 @@
             // 
             this._toolsControl.Location = new System.Drawing.Point(3, 3);
             this._toolsControl.Name = "_toolsControl";
-            this._toolsControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
             this._toolsControl.Size = new System.Drawing.Size(201, 84);
             this._toolsControl.TabIndex = 3;
             // 

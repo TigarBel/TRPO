@@ -24,9 +24,9 @@ namespace GRPO
         private IDrawable _buferDraw;
 
         private List<IDrawable> _draws = new List<IDrawable>();
-        private DrawingTools _selectTool = DrawingTools.DrawFigureLine;
-        private LineProperty _lineProperty = new LineProperty();
-        private FillProperty _fillProperty = new FillProperty();
+        private Tools _selectTool;
+        private LineProperty _lineProperty;
+        private FillProperty _fillProperty;
 
 
         public Interaction _interaction;
@@ -41,6 +41,9 @@ namespace GRPO
         {
             InitializeComponent();
             SetSizeCanvas(100, 50);
+            SelectTool = new Tools(DrawingTools.DrawFigureLine);
+            LineProperty = new LineProperty();
+            FillProperty = new FillProperty();
         }
         /// <summary>
         /// Список фигур
@@ -57,9 +60,9 @@ namespace GRPO
             }
         }
         /// <summary>
-        /// Выбранный тип класса IDrawable
+        /// Инструмент для рисования
         /// </summary>
-        public DrawingTools SelectTool
+        public Tools SelectTool
         {
             get
             {
@@ -69,10 +72,14 @@ namespace GRPO
             {
                 _selectTool = value;
 
-                if (_selectTool != DrawingTools.CursorSelect)
+                if (_selectTool.DrawingTools != DrawingTools.CursorSelect)
                 {
                     _interaction = null;
                 }
+
+                _flagMouseDown = false;
+                _flagPolyFigure = false;
+                RefreshCanvas();
             }
         }
         /// <summary>
@@ -167,12 +174,12 @@ namespace GRPO
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
-            if(SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+            if (SelectTool.TypeTools == TypeTools.SimpleFigure) 
             {
-                Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool));
+                Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool.DrawingTools));
             }
 
-            if (SelectTool == DrawingTools.DrawFigurePolyline)
+            if (SelectTool.TypeTools == TypeTools.PolyFigure)
             {
                 if (_flagPolyFigure)
                 {
@@ -181,13 +188,13 @@ namespace GRPO
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
                 if (!_flagPolyFigure)
                 {
                     List<Point> points = new List<Point>() { new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y) };
-                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
 
                     _flagPolyFigure = true;
                 }
@@ -198,11 +205,16 @@ namespace GRPO
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
                     RefreshCanvas();
 
                     _flagPolyFigure = false;
                 }
+            }
+
+            if (SelectTool.TypeTools == TypeTools.SelectFigure)
+            {
+                RefreshCanvas();
             }
         }
 
@@ -212,24 +224,24 @@ namespace GRPO
 
             if (_flagMouseDown)
             {
-                if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
             }
 
             if(_flagPolyFigure)
             {
-                if (SelectTool == DrawingTools.DrawFigurePolyline)
+                if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
                     List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointB);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool));
+                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
             }
@@ -241,22 +253,49 @@ namespace GRPO
 
             if (_flagMouseDown)
             {
-                if (SelectTool != DrawingTools.CursorSelect && SelectTool != DrawingTools.MassSelect && SelectTool != DrawingTools.DrawFigurePolyline)
+                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool));
+                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
 
-                if (SelectTool == DrawingTools.DrawFigurePolyline)
+                if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
                     if (e.Button == MouseButtons.Left)
                     {
                         List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
-                        Drawables.Add(DrawPolyFigure(points, SelectTool));
+                        Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
                         RefreshCanvas();
+                    }
+                }
+
+                if (SelectTool.TypeTools == TypeTools.SelectFigure) 
+                {
+                    _interaction = null;
+                    _pointA = new Point(e.X, e.Y);
+                    if (DragProperty != null) DragProperty(null);
+                    for (int i = _draws.Count - 1; i >= 0; i--)
+                    {
+                        int minX = _draws[i].GetPoints().Min(point => point.X);
+                        int maxX = _draws[i].GetPoints().Max(point => point.X);
+                        int minY = _draws[i].GetPoints().Min(point => point.Y);
+                        int maxY = _draws[i].GetPoints().Max(point => point.Y);
+                        if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
+                        {
+                            if (DragProperty != null) DragProperty(_draws[i]);
+                            if (e.Button == MouseButtons.Left)
+                            {
+                                _interaction = new Interaction(_draws[i], canvas, false);
+                            }
+                            if (e.Button == MouseButtons.Right)
+                            {
+                                _interaction = new Interaction(_draws[i], canvas, true);
+                            }
+                            break;
+                        }
                     }
                 }
 
@@ -323,7 +362,7 @@ namespace GRPO
         /// </summary>
         public void Copy()
         {
-            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
                 _buferDraw = _interaction.DrawableFigure.Clone();
             }
@@ -333,7 +372,7 @@ namespace GRPO
         /// </summary>
         public void Paste()
         {
-            if (SelectTool == DrawingTools.CursorSelect && _buferDraw != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && _buferDraw != null)
             {
                 _buferDraw.Position = new Point(10, 10);
                 Drawables.Add(_buferDraw);
@@ -346,7 +385,7 @@ namespace GRPO
         /// </summary>
         public void Delete()
         {
-            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
                 Drawables.Remove(_interaction.DrawableFigure);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
@@ -364,7 +403,7 @@ namespace GRPO
         /// </summary>
         public void Cut()
         {
-            if (SelectTool == DrawingTools.CursorSelect && Drawables.Count > 0 && _interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
                 _buferDraw = _interaction.DrawableFigure.Clone();
                 Drawables.Remove(_interaction.DrawableFigure);

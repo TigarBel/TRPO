@@ -29,7 +29,7 @@ namespace GRPO
 
         public void HidingUserControl()
         {
-            switch (_toolsControl.SelectTool)
+            switch (_toolsControl.SelectTool.DrawingTools)
             {
                 case DrawingTools.CursorSelect:
                     {
@@ -70,9 +70,9 @@ namespace GRPO
             }
         }
         /// <summary>
-        /// Выбранный тип класса IDrawable
+        /// Инструмент для рисования
         /// </summary>
-        public DrawingTools SelectTool
+        public Tools SelectTool
         {
             get
             {
@@ -113,7 +113,9 @@ namespace GRPO
                 _fillFigureControl.Visible = true;
             }
         }
-
+        /// <summary>
+        /// Событие при изменении любого свойства
+        /// </summary>
         private void ChangeProperty()
         {
             if (FigurePropertyChanged != null) FigurePropertyChanged();

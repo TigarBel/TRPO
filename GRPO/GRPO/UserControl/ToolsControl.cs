@@ -10,22 +10,13 @@ using System.Windows.Forms;
 
 namespace GRPO
 {
-    public enum DrawingTools
-    {
-        CursorSelect = 0,
-        MassSelect,
-        DrawFigureLine,
-        DrawFigurePolyline,
-        DrawFigureRectangle,
-        DrawFigureCircle,
-        DrawFigureEllipse,
-        DrawFigurePolygon
-    }
-
+    /// <summary>
+    /// Пользовательский интерфейс для выбора инструмента
+    /// </summary>
     public partial class ToolsControl : UserControl
     {
-        private DrawingTools _selectTool;
-        private List<Button> _buttons = new List<Button>();
+        private Tools _tools;
+        private List<Button> _buttons;
 
         public delegate void ButtonStateHandler();
         public event ButtonStateHandler ButtonClick;
@@ -33,7 +24,10 @@ namespace GRPO
         public ToolsControl()
         {
             InitializeComponent();
-            SelectTool = DrawingTools.DrawFigureLine;
+
+            SelectTool = new Tools(DrawingTools.DrawFigureLine);
+
+            _buttons = new List<Button>();
             _buttons.Add(buttonCursorSelect);
             _buttons.Add(buttonMassSelect);
             _buttons.Add(buttonFigureLine);
@@ -54,63 +48,63 @@ namespace GRPO
         private void buttonCursorSelect_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.CursorSelect;
+            SelectTool = new Tools(DrawingTools.CursorSelect);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonMassSelect_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.MassSelect;
+            SelectTool = new Tools(DrawingTools.MassSelect);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonFigureLine_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigureLine;
+            SelectTool = new Tools(DrawingTools.DrawFigureLine);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonFigurePolyline_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigurePolyline;
+            SelectTool = new Tools(DrawingTools.DrawFigurePolyline);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonFigureRectangle_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigureRectangle;
+            SelectTool = new Tools(DrawingTools.DrawFigureRectangle);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonFigureCircle_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigureCircle;
+            SelectTool = new Tools(DrawingTools.DrawFigureCircle);
             ((Button)sender).BackColor = Color.Black;
         }
 
         private void buttonFigureEllips_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
-            SelectTool = DrawingTools.DrawFigureEllipse;
+            SelectTool = new Tools(DrawingTools.DrawFigureEllipse);
             ((Button)sender).BackColor = Color.Black;
         }
         /// <summary>
         /// Выбранный тип класса IDrawable
         /// </summary>
-        public DrawingTools SelectTool
+        public Tools SelectTool
         {
             get
             {
-                return _selectTool;
+                return _tools;
             }
             set
             {
-                _selectTool = value;
+                _tools = value;
                 if (ButtonClick != null) ButtonClick();
             }
         }

@@ -38,7 +38,11 @@ namespace GRPO
         {
             //mainPictureBox.Image.Save("111lol.jpg");
         }
-
+        /// <summary>
+        /// Кнопка для изменения размера холста
+        /// </summary>
+        /// <param name="sender">Объект нопки</param>
+        /// <param name="e">Объект события</param>
         private void buttonAcceptSizePictureBox_Click(object sender, EventArgs e)
         {
             if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 640 &&
@@ -55,21 +59,24 @@ namespace GRPO
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(e.KeyCode.ToString());
-            if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.C)
+            if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
             {
-                _canvasControl.Copy();
-            }
-            else if (e.Control && e.KeyCode == Keys.V)
-            {
-                _canvasControl.Paste();
-            }
-            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.KeyCode == Keys.Delete)
-            {
-                _canvasControl.Delete();
-            }
-            else if (_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect && e.Control && e.KeyCode == Keys.X)
-            {
-                _canvasControl.Cut();
+                if (e.Control && e.KeyCode == Keys.C)
+                {
+                    _canvasControl.Copy();
+                }
+                else if (e.Control && e.KeyCode == Keys.V)
+                {
+                    _canvasControl.Paste();
+                }
+                else if (e.KeyCode == Keys.Delete)
+                {
+                    _canvasControl.Delete();
+                }
+                else if (e.Control && e.KeyCode == Keys.X)
+                {
+                    _canvasControl.Cut();
+                }
             }
         }
         /// <summary>
@@ -80,7 +87,7 @@ namespace GRPO
             _canvasControl.SelectTool = _toolsWithPropertyControl.SelectTool;
             _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
-            if(_toolsWithPropertyControl.SelectTool == DrawingTools.CursorSelect)
+            if(_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
             {
                 if (_canvasControl._interaction != null)
                 {
@@ -105,7 +112,7 @@ namespace GRPO
         {
             if (drawable == null)
             {
-                _toolsWithPropertyControl.SelectTool = DrawingTools.CursorSelect;
+                _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.CursorSelect);
                 return;
             }
             if(drawable is ILinePropertyble figureWithLineProperty)

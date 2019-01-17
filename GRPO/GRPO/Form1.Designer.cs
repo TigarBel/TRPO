@@ -96,7 +96,6 @@
             this._toolsWithPropertyControl.LineProperty = lineProperty1;
             this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
             this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
-            this._toolsWithPropertyControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
             this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
             this._toolsWithPropertyControl.TabIndex = 19;
             // 
@@ -144,7 +143,6 @@
             this._canvasControl.LineProperty = lineProperty2;
             this._canvasControl.Location = new System.Drawing.Point(236, 65);
             this._canvasControl.Name = "_canvasControl";
-            this._canvasControl.SelectTool = GRPO.DrawingTools.DrawFigureLine;
             this._canvasControl.Size = new System.Drawing.Size(640, 480);
             this._canvasControl.TabIndex = 9;
             // 
