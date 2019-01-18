@@ -57,7 +57,13 @@ namespace GRPO
             set
             {
                 _draws = value;
-                RefreshCanvas();
+                if (_draws != null)
+                {
+                    if (_draws.Count > 0)
+                    {
+                        RefreshCanvas();
+                    }
+                }
             }
         }
         /// <summary>
