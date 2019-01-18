@@ -57,6 +57,7 @@ namespace GRPO
             set
             {
                 _draws = value;
+                RefreshCanvas();
             }
         }
         /// <summary>
@@ -150,6 +151,22 @@ namespace GRPO
             }
         }
         /// <summary>
+        /// Получить ширину холста
+        /// </summary>
+        /// <returns>Ширину холста</returns>
+        public int GetWidthCanvas()
+        {
+            return canvas.Width;
+        }
+        /// <summary>
+        /// Получить высоту холста
+        /// </summary>
+        /// <returns>Высоту холста</returns>
+        public int GetHeightCanvas()
+        {
+            return canvas.Height;
+        }
+        /// <summary>
         /// Перерисовать фигуры из списка
         /// </summary>
         public void RefreshCanvas()
@@ -189,7 +206,7 @@ namespace GRPO
 
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
-                    RefreshCanvas();
+                    //RefreshCanvas();
                 }
                 if (!_flagPolyFigure)
                 {
@@ -206,7 +223,7 @@ namespace GRPO
 
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
-                    RefreshCanvas();
+                    //RefreshCanvas();
 
                     _flagPolyFigure = false;
                 }
@@ -214,7 +231,22 @@ namespace GRPO
 
             if (SelectTool.TypeTools == TypeTools.SelectFigure)
             {
-                RefreshCanvas();
+                if (_interaction != null)
+                {
+                    //if (_interaction.DrawableFigure.Position.X > _pointA.X ||
+                    //    _interaction.DrawableFigure.Position.Y > _pointA.Y ||
+                    //    _interaction.DrawableFigure.Position.X + _interaction.DrawableFigure.Width < _pointA.X ||
+                    //    _interaction.DrawableFigure.Position.Y + _interaction.DrawableFigure.Height < _pointA.Y)
+                    //{
+                    //    _interaction = null;
+                    //    RefreshCanvas();
+                    //}
+                    /*else */
+                    if (_interaction.EnablePoints)
+                    {
+                        _interaction.SelectPoint = _pointA;
+                    }
+                }
             }
         }
 
@@ -229,6 +261,27 @@ namespace GRPO
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
                     RefreshCanvas();
+                }
+
+                if (SelectTool.TypeTools == TypeTools.SelectFigure)
+                {
+                    if (_interaction != null)
+                    {
+                        if (_interaction.EnablePoints)
+                        {
+                            _interaction.ChangePoint(_pointB);
+                            RefreshCanvas();
+                            _pointA = new Point(e.X, e.Y);
+                        }
+                        else
+                        {
+                            int x = _interaction.DrawableFigures[0].Position.X;
+                            int y = _interaction.DrawableFigures[0].Position.Y;
+                            _interaction.DrawableFigures[0].Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
+                            RefreshCanvas();
+                            _pointA = new Point(e.X, e.Y);
+                        }
+                    }
                 }
             }
 
@@ -277,22 +330,22 @@ namespace GRPO
                     _interaction = null;
                     _pointA = new Point(e.X, e.Y);
                     if (DragProperty != null) DragProperty(null);
-                    for (int i = _draws.Count - 1; i >= 0; i--)
+                    for (int i = Drawables.Count - 1; i >= 0; i--)
                     {
-                        int minX = _draws[i].GetPoints().Min(point => point.X);
-                        int maxX = _draws[i].GetPoints().Max(point => point.X);
-                        int minY = _draws[i].GetPoints().Min(point => point.Y);
-                        int maxY = _draws[i].GetPoints().Max(point => point.Y);
+                        int minX = Drawables[i].GetPoints().Min(point => point.X);
+                        int maxX = Drawables[i].GetPoints().Max(point => point.X);
+                        int minY = Drawables[i].GetPoints().Min(point => point.Y);
+                        int maxY = Drawables[i].GetPoints().Max(point => point.Y);
                         if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
                         {
-                            if (DragProperty != null) DragProperty(_draws[i]);
+                            if (DragProperty != null) DragProperty(Drawables[i]);
                             if (e.Button == MouseButtons.Left)
                             {
-                                _interaction = new Interaction(_draws[i], canvas, false);
+                                _interaction = new Interaction(Drawables[i], canvas, false);
                             }
-                            if (e.Button == MouseButtons.Right)
+                            else if (e.Button == MouseButtons.Right)
                             {
-                                _interaction = new Interaction(_draws[i], canvas, true);
+                                _interaction = new Interaction(Drawables[i], canvas, true);
                             }
                             break;
                         }
@@ -364,7 +417,7 @@ namespace GRPO
         {
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
-                _buferDraw = _interaction.DrawableFigure.Clone();
+                _buferDraw = _interaction.DrawableFigures[0].Clone();
             }
         }
         /// <summary>
@@ -387,15 +440,11 @@ namespace GRPO
         {
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
-                Drawables.Remove(_interaction.DrawableFigure);
+                Drawables.Remove(_interaction.DrawableFigures[0]);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-                foreach(IDrawable drawable in Drawables)
-                {
-                    drawable.Draw();
-                }
+                RefreshCanvas();
                 _interaction = null;
                 if (DragProperty != null) DragProperty(null);
-                RefreshCanvas();
             }
         }
         /// <summary>
@@ -405,16 +454,12 @@ namespace GRPO
         {
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && _interaction != null)
             {
-                _buferDraw = _interaction.DrawableFigure.Clone();
-                Drawables.Remove(_interaction.DrawableFigure);
+                _buferDraw = _interaction.DrawableFigures[0].Clone();
+                Drawables.Remove(_interaction.DrawableFigures[0]);
                 canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-                foreach (IDrawable drawable in Drawables)
-                {
-                    drawable.Draw();
-                }
+                RefreshCanvas();
                 _interaction = null;
                 if (DragProperty != null) DragProperty(null);
-                RefreshCanvas();
             }
         }
     }

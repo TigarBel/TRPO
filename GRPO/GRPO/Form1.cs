@@ -21,7 +21,7 @@ namespace GRPO
             _canvasControl.SetSizeCanvas(640, 480);
             
             _toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
-            _canvasControl.DragProperty += SetProperty;
+            _canvasControl.DragProperty += _canvasControl_SetProperty;
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -89,13 +89,13 @@ namespace GRPO
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
             if(_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
             {
-                if (_canvasControl._interaction != null)
+                if (_canvasControl._interaction.DrawableFigures[0] != null)
                 {
-                    if(_canvasControl._interaction.DrawableFigure is ILinePropertyble figureWithLineProperty)
+                    if(_canvasControl._interaction.DrawableFigures[0] is ILinePropertyble figureWithLineProperty)
                     {
                         figureWithLineProperty.LineProperty = _toolsWithPropertyControl.LineProperty;
                     }
-                    if(_canvasControl._interaction.DrawableFigure is IFillPropertyble figureWithFillProperty)
+                    if(_canvasControl._interaction.DrawableFigures[0] is IFillPropertyble figureWithFillProperty)
                     {
                         figureWithFillProperty.FillProperty = _toolsWithPropertyControl.FillProperty;
                     }
@@ -108,7 +108,7 @@ namespace GRPO
         /// Функция по отлову свойств фигуры
         /// </summary>
         /// <param name="drawable">Фигура</param>
-        public void SetProperty(IDrawable drawable)
+        public void _canvasControl_SetProperty(IDrawable drawable)
         {
             if (drawable == null)
             {
