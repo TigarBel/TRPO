@@ -57,22 +57,6 @@ namespace GRPO
             Canvas = canvas;
             EnablePoints = enablePoints;
         }
-
-
-        ///// <summary>
-        ///// Рисуемый объект
-        ///// </summary>
-        //public IDrawable DrawableFigure
-        //{
-        //    get
-        //    {
-        //        return _drawable;
-        //    }
-        //    set
-        //    {
-        //        _drawable = value;
-        //    }
-        //}
         /// <summary>
         /// Рисуемые объекты
         /// </summary>
@@ -108,7 +92,7 @@ namespace GRPO
             }
             set
             {
-                if (value)
+                if (value && DrawableFigures.Count == 1)
                 {
                     DrawPoints();
                 }
@@ -233,11 +217,11 @@ namespace GRPO
                     {
                         if (_indexSelectPoint == 0)
                         {
-                            ((DrawFigureLine)DrawableFigures[0]).Line.A = new Point(pointDeviation.X, pointDeviation.Y);
+                            ((DrawFigureLine)DrawableFigures[0]).Line.PointA = new Point(pointDeviation.X, pointDeviation.Y);
                         }
                         else if (_indexSelectPoint == 1)
                         {
-                            ((DrawFigureLine)DrawableFigures[0]).Line.B = new Point(pointDeviation.X, pointDeviation.Y);
+                            ((DrawFigureLine)DrawableFigures[0]).Line.PointB = new Point(pointDeviation.X, pointDeviation.Y);
                         }
                         break;
                     }

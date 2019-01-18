@@ -239,19 +239,19 @@ namespace GRPO
             {
                 if (_interaction != null)
                 {
-                    //if (_interaction.DrawableFigure.Position.X > _pointA.X ||
-                    //    _interaction.DrawableFigure.Position.Y > _pointA.Y ||
-                    //    _interaction.DrawableFigure.Position.X + _interaction.DrawableFigure.Width < _pointA.X ||
-                    //    _interaction.DrawableFigure.Position.Y + _interaction.DrawableFigure.Height < _pointA.Y)
-                    //{
-                    //    _interaction = null;
-                    //    RefreshCanvas();
-                    //}
-                    /*else */
                     if (_interaction.EnablePoints)
                     {
                         _interaction.SelectPoint = _pointA;
                     }
+                    else if (_interaction.DrawableFigures[0].Position.X > _pointA.X ||
+                        _interaction.DrawableFigures[0].Position.Y > _pointA.Y ||
+                        _interaction.DrawableFigures[0].Position.X + _interaction.DrawableFigures[0].Width < _pointA.X ||
+                        _interaction.DrawableFigures[0].Position.Y + _interaction.DrawableFigures[0].Height < _pointA.Y)
+                    {
+                        _interaction = null;
+                        RefreshCanvas();
+                    }
+
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace GRPO
             if (SelectTool.TypeTools == TypeTools.SelectFigure && _buferDraw != null)
             {
                 _buferDraw.Position = new Point(10, 10);
-                Drawables.Add(_buferDraw);
+                Drawables.Add(_buferDraw.Clone());
                 Drawables[Drawables.Count - 1].Draw();
                 RefreshCanvas();
             }

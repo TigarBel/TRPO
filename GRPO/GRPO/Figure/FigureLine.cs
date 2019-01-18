@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace GRPO
 {
-    class FigureLine : Figure
+    class FigureLine
     {
         /// <summary>
         /// Первая точка линии
@@ -18,29 +18,30 @@ namespace GRPO
         /// </summary>
         private Point _pointB;
         /// <summary>
+        /// Точка расположения
+        /// </summary>
+        private Point _position;
+        /// <summary>
         /// Изменение параметров: расположения, ширины и высоты фигуры
         /// </summary>
         private void Init()
         {
             List<Point> points = new List<Point>();
-            points.Add(A);
-            points.Add(B);
-            X = points.Min(point => point.X);
-            Y = points.Min(point => point.Y);
-            Width = points.Max(point => point.X) - points.Min(point => point.X);
-            Height = points.Max(point => point.Y) - points.Min(point => point.Y);
+            points.Add(PointA);
+            points.Add(PointB);
+            _position.X = points.Min(point => point.X);
+            _position.Y = points.Min(point => point.Y);
         }
         /// <summary>
         /// Пустой класс фигуры Линия
         /// </summary>
         public FigureLine()
         {
-            X = 0;
-            Y = 0;
+            Position = new Point(0, 0);
             Width = 0;
             Height = 0;
-            A = new Point(X, Y);
-            B = new Point(X + Width, Y + Height);
+            PointA = new Point(Position.X, Position.Y);
+            PointB = new Point(Position.X + Width, Position.Y + Height);
         }
         /// <summary>
         /// Класс фигуры Линия
@@ -49,14 +50,14 @@ namespace GRPO
         /// <param name="b">Вторая точка линии</param>
         public FigureLine(Point a, Point b)
         {
-            A = a;
-            B = b;
+            PointA = a;
+            PointB = b;
             Init();
         }
         /// <summary>
         /// Первая точка линии
         /// </summary>
-        public Point A
+        public Point PointA
         {
             get
             {
@@ -65,12 +66,13 @@ namespace GRPO
             set
             {
                 _pointA = value;
+                Init();
             }
         }
         /// <summary>
         /// Вторая точка линии
         /// </summary>
-        public Point B
+        public Point PointB
         {
             get
             {
@@ -79,6 +81,7 @@ namespace GRPO
             set
             {
                 _pointB = value;
+                Init();
             }
         }
         /// <summary>
@@ -88,24 +91,23 @@ namespace GRPO
         {
             get
             {
-                return new Point(X, Y);
+                return _position;
             }
             set
             {
-                A = new Point(A.X - (X - value.X), A.Y - (Y - value.Y));
-                B = new Point(B.X - (X - value.X), B.Y - (Y - value.Y));
-                X = value.X;
-                Y = value.Y;
+                _pointA = new Point(PointA.X - (Position.X - value.X), PointA.Y - (Position.Y - value.Y));
+                _pointB = new Point(PointB.X - (Position.X - value.X), PointB.Y - (Position.Y - value.Y));
+                Init();
             }
         }
         /// <summary>
         /// Ширина фигуры
         /// </summary>
-        public int WidthLine
+        public int Width
         {
             get
             {
-                return Width;
+                return Math.Abs(PointA.X - PointB.X);
             }
             set
             {
@@ -113,9 +115,8 @@ namespace GRPO
                 {
                     if (Width != 0)
                     {
-                        A = new Point(X + Convert.ToInt32((float)(A.X - X) / (float)Width * (float)value), A.Y);
-                        B = new Point(X + Convert.ToInt32((float)(B.X - X) / (float)Width * (float)value), B.Y);
-                        Width = value;
+                        PointA = new Point(Position.X + Convert.ToInt32((float)(PointA.X - Position.X) / (float)Width * (float)value), PointA.Y);
+                        PointB = new Point(Position.X + Convert.ToInt32((float)(PointB.X - Position.X) / (float)Width * (float)value), PointB.Y);
                     }
                     else
                     {
@@ -127,11 +128,11 @@ namespace GRPO
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        public int HeightLine
+        public int Height
         {
             get
             {
-                return Height;
+                return Math.Abs(PointA.Y - PointB.Y);
             }
             set
             {
@@ -139,8 +140,8 @@ namespace GRPO
                 {
                     if (Height != 0)
                     {
-                        A = new Point(A.X, Y + Convert.ToInt32((float)(A.Y - Y) / (float)Height * (float)value));
-                        B = new Point(B.X, Y + Convert.ToInt32((float)(B.Y - Y) / (float)Height * (float)value));
+                        PointA = new Point(PointA.X, Position.Y + Convert.ToInt32((float)(PointA.Y - Position.Y) / (float)Height * (float)value));
+                        PointB = new Point(PointB.X, Position.Y + Convert.ToInt32((float)(PointB.Y - Position.Y) / (float)Height * (float)value));
                         Height = value;
                     }
                     else

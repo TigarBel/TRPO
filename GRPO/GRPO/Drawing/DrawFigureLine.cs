@@ -93,7 +93,7 @@ namespace GRPO
                 Graphics graphics = Graphics.FromImage(_pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
-                graphics.DrawLine(pen, Line.A.X, Line.A.Y, Line.B.X, Line.B.Y);
+                graphics.DrawLine(pen, Line.PointA.X, Line.PointA.Y, Line.PointB.X, Line.PointB.Y);
                 graphics.Dispose();
                 _pictureBox.Invalidate();
             }
@@ -109,8 +109,8 @@ namespace GRPO
         public List<Point> GetPoints()
         {
             List<Point> points = new List<Point>();
-            points.Add(Line.A);
-            points.Add(Line.B);
+            points.Add(Line.PointA);
+            points.Add(Line.PointB);
             return points;
         }
         /// <summary>
@@ -134,11 +134,11 @@ namespace GRPO
         {
             get
             {
-                return Line.WidthLine;
+                return Line.Width;
             }
             set
             {
-                Line.WidthLine = value;
+                Line.Width = value;
             }
         }
         /// <summary>
@@ -148,11 +148,11 @@ namespace GRPO
         {
             get
             {
-                return Line.HeightLine;
+                return Line.Height;
             }
             set
             {
-                Line.HeightLine = value;
+                Line.Height = value;
             }
         }
         /// <summary>
@@ -161,7 +161,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureLine(Line.A, Line.B, _pictureBox, LineProperty);
+            return new DrawFigureLine(Line.PointA, Line.PointB, _pictureBox, LineProperty);
         }
     }
 }

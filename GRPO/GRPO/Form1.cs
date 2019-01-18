@@ -89,7 +89,7 @@ namespace GRPO
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
             if(_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
             {
-                if (_canvasControl._interaction.DrawableFigures[0] != null)
+                if (_canvasControl._interaction != null)
                 {
                     if(_canvasControl._interaction.DrawableFigures[0] is ILinePropertyble figureWithLineProperty)
                     {
