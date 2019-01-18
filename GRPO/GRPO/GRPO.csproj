@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanvasControl.cs">
+    <Compile Include="UserControl\CanvasControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CanvasControl.Designer.cs">
+    <Compile Include="UserControl\CanvasControl.Designer.cs">
       <DependentUpon>CanvasControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Drawing\DrawFigureRectangle.cs" />
@@ -70,9 +70,10 @@
     <Compile Include="Drawing\Interface\IFillPropertyble.cs" />
     <Compile Include="Drawing\Interface\ILinePropertyble.cs" />
     <Compile Include="Interaction\Interaction.cs" />
-    <Compile Include="Interaction\MassSelect.cs" />
-    <Compile Include="Interaction\PointSorter.cs" />
     <Compile Include="Drawing\Tools.cs" />
+    <Compile Include="HistoryManager.cs" />
+    <Compile Include="HistoryManagerCanvasControl.cs" />
+    <Compile Include="HistoryManagerToolsControl.cs" />
     <Compile Include="UserControl\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -106,7 +107,7 @@
     <Compile Include="UserControl\PropertyLineControl.Designer.cs">
       <DependentUpon>PropertyLineControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CanvasControl.resx">
+    <EmbeddedResource Include="UserControl\CanvasControl.resx">
       <DependentUpon>CanvasControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\ToolsWithPropertyControl.resx">

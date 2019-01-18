@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,15 +14,35 @@ namespace GRPO
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        private HistoryManager _historyManager;
 
         public MainForm()
         {
             InitializeComponent();
-            
+
+            foreach (Control control in Controls)
+            {
+                typeof(Control).InvokeMember("DoubleBuffered",
+                    BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+                    null, control, new object[] { true });
+            }
+
             _canvasControl.SetSizeCanvas(640, 480);
             
             _toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
+
+            
+            _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+            _canvasControl.SaveStep += _historyManager_SaveStep;
+
+            HistoryManagerToolsControl historyManagerToolsControl = new HistoryManagerToolsControl(_toolsWithPropertyControl.SelectTool,
+                   _toolsWithPropertyControl.LineProperty, _toolsWithPropertyControl.FillProperty);
+
+            HistoryManagerCanvasControl historyManagerCanvasControl = new HistoryManagerCanvasControl(_canvasControl.BuferDraw, _canvasControl.Drawables,
+                _canvasControl.Image, _canvasControl.Interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
+
+            _historyManager = new HistoryManager(historyManagerToolsControl, historyManagerCanvasControl);
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -78,6 +99,22 @@ namespace GRPO
                     _canvasControl.Cut();
                 }
             }
+            else if (e.Control && e.KeyCode == Keys.Z)
+            {
+                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                _canvasControl.SaveStep -= _historyManager_SaveStep;
+                _historyManager_StepBack();
+                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                _canvasControl.SaveStep += _historyManager_SaveStep;
+            }
+            else if (e.Control && e.KeyCode == Keys.Y)
+            {
+                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                _canvasControl.SaveStep -= _historyManager_SaveStep;
+                _historyManager_StepForward();
+                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                _canvasControl.SaveStep += _historyManager_SaveStep;
+            }
         }
         /// <summary>
         /// Функция по отлову изменения свойства фигуры
@@ -87,7 +124,7 @@ namespace GRPO
             _canvasControl.SelectTool = _toolsWithPropertyControl.SelectTool;
             _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
-            if(_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
+            if(_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
             {
                 if (_canvasControl.Interaction != null)
                 {
@@ -108,7 +145,7 @@ namespace GRPO
         /// Функция по отлову свойств фигуры
         /// </summary>
         /// <param name="drawable">Фигура</param>
-        public void _canvasControl_SetProperty(IDrawable drawable)
+        private void _canvasControl_SetProperty(IDrawable drawable)
         {
             if (drawable == null)
             {
@@ -123,6 +160,45 @@ namespace GRPO
             {
                 _toolsWithPropertyControl.FillProperty = figureWithFillProperty.FillProperty;
             }
+        }
+        
+        private void _historyManager_SaveStep()
+        {
+
+            HistoryManagerToolsControl historyManagerToolsControl = new HistoryManagerToolsControl(_toolsWithPropertyControl.SelectTool,
+                   _toolsWithPropertyControl.LineProperty, _toolsWithPropertyControl.FillProperty);
+
+            HistoryManagerCanvasControl historyManagerCanvasControl = new HistoryManagerCanvasControl(_canvasControl.BuferDraw, _canvasControl.Drawables,
+                _canvasControl.Image, _canvasControl.Interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
+
+            _historyManager.SaveStep(historyManagerToolsControl, historyManagerCanvasControl);
+        }
+
+        private void _historyManager_Step()
+        {
+            _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
+            _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
+            _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
+
+            _canvasControl.BuferDraw = _historyManager.ManagerCanvasControl.BuferDraw;
+            _canvasControl.Image = _historyManager.ManagerCanvasControl.Image;
+            _canvasControl.Drawables = _historyManager.ManagerCanvasControl.Drawables;
+            _canvasControl.Interaction = _historyManager.ManagerCanvasControl.Interaction;
+            int X = _historyManager.ManagerCanvasControl.GetWidthCanvas();
+            int Y = _historyManager.ManagerCanvasControl.GetHeightCanvas();
+            _canvasControl.SetSizeCanvas(X, Y);
+        }
+
+        private void _historyManager_StepForward()
+        {
+            _historyManager.StepForward();
+            _historyManager_Step();
+        }
+
+        private void _historyManager_StepBack()
+        {
+            _historyManager.StepBack();
+            _historyManager_Step();
         }
     }
 }

@@ -16,22 +16,53 @@ namespace GRPO
     /// </summary>
     public partial class CanvasControl : UserControl
     {
-        private Point _pointA;
-        private Point _pointB;
-        private bool _flagMouseDown;
-        private bool _flagPolyFigure;
-
-        private List<IDrawable> _buferDraw = new List<IDrawable>();
-
-        private List<IDrawable> _draws = new List<IDrawable>();
-        private Tools _selectTool;
-        private LineProperty _lineProperty;
-        private FillProperty _fillProperty;
-
-        private Interaction _interaction;
 
         public delegate void Drag(IDrawable drawable);
         public event Drag DragProperty;
+
+        public delegate void CanvasControChanged();
+        public event CanvasControChanged SaveStep;
+
+        /// <summary>
+        /// Начальная точка / Точка в момент нажатия кнопки мыши
+        /// </summary>
+        private Point _pointA;
+        /// <summary>
+        /// Конечная точка / Точка в момент отжатия кнопки мыши
+        /// </summary>
+        private Point _pointB;
+        /// <summary>
+        /// Флаг устанавливаемый при зажатии кнопки мыши
+        /// </summary>
+        private bool _flagMouseDown;
+        /// <summary>
+        /// Флаг при создании полифигур
+        /// </summary>
+        private bool _flagPolyFigure;
+        /// <summary>
+        /// Список фигур хронящихся в памяти
+        /// </summary>
+        private List<IDrawable> _buferDraw = new List<IDrawable>();
+        /// <summary>
+        /// Список фигур
+        /// </summary>
+        private List<IDrawable> _drawables = new List<IDrawable>();
+        /// <summary>
+        /// Инструмент для рисования
+        /// </summary>
+        private Tools _selectTool;
+        /// <summary>
+        /// Свойство линии
+        /// </summary>
+        private LineProperty _lineProperty;
+        /// <summary>
+        /// Свойство заливки
+        /// </summary>
+        private FillProperty _fillProperty;
+        /// <summary>
+        /// Объект взаимодействия с нарисованными фигурами
+        /// </summary>
+        private Interaction _interaction;
         /// <summary>
         /// Инициализация пользовательского интерфейса полотна для рисования
         /// </summary>
@@ -50,14 +81,14 @@ namespace GRPO
         {
             get
             {
-                return _draws;
+                return _drawables;
             }
             set
             {
-                _draws = value;
-                if (_draws != null)
+                _drawables = value;
+                if (_drawables != null)
                 {
-                    if (_draws.Count > 0)
+                    if (_drawables.Count > 0)
                     {
                         RefreshCanvas();
                     }
@@ -77,7 +108,10 @@ namespace GRPO
             {
                 _selectTool = value;
 
-                Interaction = null;
+                if (value.DrawingTools != DrawingTools.CursorSelect)
+                {
+                    Interaction = null;
+                }
                 _flagMouseDown = false;
                 _flagPolyFigure = false;
                 RefreshCanvas();
@@ -199,7 +233,7 @@ namespace GRPO
         /// </summary>
         public void RefreshCanvas()
         {
-            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            canvas.Image = new Bitmap(canvas.Width,canvas.Height);
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw();
@@ -386,6 +420,7 @@ namespace GRPO
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
                     RefreshCanvas();
+                    if (SaveStep != null) SaveStep();
                 }
 
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
@@ -397,6 +432,7 @@ namespace GRPO
                         Drawables.RemoveAt(Drawables.Count - 1);
                         Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
                         RefreshCanvas();
+                        if (SaveStep != null) SaveStep();
                     }
                 }
 
@@ -419,10 +455,12 @@ namespace GRPO
                                 if (e.Button == MouseButtons.Left)
                                 {
                                     Interaction = new Interaction(Drawables[i], canvas, false);
+                                    if (SaveStep != null) SaveStep();
                                 }
                                 else if (e.Button == MouseButtons.Right)
                                 {
                                     Interaction = new Interaction(Drawables[i], canvas, true);
+                                    if (SaveStep != null) SaveStep();
                                 }
                                 break;
                             }
@@ -457,6 +495,7 @@ namespace GRPO
                             if (localDrawables.Count > 0)
                             {
                                 Interaction = new Interaction(localDrawables, canvas, false);
+                                if (SaveStep != null) SaveStep();
                             }
                         }
                         else
