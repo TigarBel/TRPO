@@ -14,10 +14,6 @@ namespace GRPO
     /// </summary>
     public class Interaction
     {
-        ///// <summary>
-        ///// Рисуемый объект
-        ///// </summary>
-        //private IDrawable _drawable;
         /// <summary>
         /// Рисуемые объекты
         /// </summary>
@@ -50,10 +46,23 @@ namespace GRPO
         /// Класс взаимодействия
         /// </summary>
         /// <param name="drawableFigure">Рисуемый объект</param>
+        /// <param name="canvas">Холст на котором расположена фигура</param>
         /// <param name="enablePoints">Разрашение измять опортные точки</param>
         public Interaction(IDrawable drawableFigure, PictureBox canvas, bool enablePoints)
         {
             DrawableFigures.Add(drawableFigure);
+            Canvas = canvas;
+            EnablePoints = enablePoints;
+        }
+        /// <summary>
+        /// Класс взаимодействия
+        /// </summary>
+        /// <param name="drawables">Список фигур</param>
+        /// <param name="canvas">Холст на котором расположены фигуры</param>
+        /// <param name="enablePoints">Разрашение измять опортные точки</param>
+        public Interaction(List<IDrawable> drawables, PictureBox canvas, bool enablePoints)
+        {
+            DrawableFigures = drawables;
             Canvas = canvas;
             EnablePoints = enablePoints;
         }
@@ -92,13 +101,30 @@ namespace GRPO
             }
             set
             {
-                if (value && DrawableFigures.Count == 1)
+                if (value)
                 {
-                    DrawPoints();
+                    if (DrawableFigures.Count == 1)
+                    {
+                        DrawPoints();
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Режим изменения опорных точек разрешен только при выдилении одной фигуры!");
+                    }
                 }
                 else
                 {
-                    DrawInteraction();
+                    if (DrawableFigures.Count == 1)
+                    {
+                        DrawInteraction();
+                    }
+                    else
+                    {
+                        foreach(IDrawable drawable in DrawableFigures)
+                        {
+                            DrawSquare(DrawableFigures.IndexOf(drawable));
+                        }
+                    }
                 }
                 _enablePoints = value;
             }
@@ -108,15 +134,16 @@ namespace GRPO
         /// </summary>
         private void DrawInteraction()
         {
-            DrawSquare();
-            DrawPointsSize();
+            DrawSquare(0);
+            DrawPointsSize(0);
         }
         /// <summary>
         /// Отрисовка квадрата границ объекта
         /// </summary>
-        private void DrawSquare()
+        /// <param name="index">Номер фигуры из списка фигур</param>
+        private void DrawSquare(int index)
         {
-            List<Point> points = GetBorderPoints();
+            List<Point> points = GetBorderPoints(index);
             DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, _canvas,
                 new LineProperty(1, Color.Black, DashStyle.Dash), new FillProperty(Color.Transparent));
             drawFigure.Draw();
@@ -124,9 +151,10 @@ namespace GRPO
         /// <summary>
         /// Точки размера объекта
         /// </summary>
-        private void DrawPointsSize()
+        /// <param name="index">Номер фигуры из списка фигур</param>
+        private void DrawPointsSize(int index)
         {
-            List<Point> points = GetBorderPoints();
+            List<Point> points = GetBorderPoints(index);
             DrawFigureCircle drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y),
                 _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
             drawFigure.Draw();
@@ -143,9 +171,10 @@ namespace GRPO
         /// <summary>
         /// Отрисовка угловых точек
         /// </summary>
-        private void DrawPointsSquare()
+        /// <param name="index">Номер фигуры из списка фигур</param>
+        private void DrawPointsSquare(int index)
         {
-            List<Point> points = GetBorderPoints();
+            List<Point> points = GetBorderPoints(index);
             for (int i = 0; i < 4; i++)
             {
                 DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
@@ -155,13 +184,14 @@ namespace GRPO
         /// <summary>
         /// Функция возвращающая список угловыч точек
         /// </summary>
+        /// <param name="index">Номер фигуры из списка фигур</param>
         /// <returns>Угловые точки</returns>
-        private List<Point> GetBorderPoints()
+        private List<Point> GetBorderPoints(int index)
         {
-            int minX = DrawableFigures[0].GetPoints().Min(point => point.X);
-            int maxX = DrawableFigures[0].GetPoints().Max(point => point.X);
-            int minY = DrawableFigures[0].GetPoints().Min(point => point.Y);
-            int maxY = DrawableFigures[0].GetPoints().Max(point => point.Y);
+            int minX = DrawableFigures[index].GetPoints().Min(point => point.X);
+            int maxX = DrawableFigures[index].GetPoints().Max(point => point.X);
+            int minY = DrawableFigures[index].GetPoints().Min(point => point.Y);
+            int maxY = DrawableFigures[index].GetPoints().Max(point => point.Y);
             return new List<Point>() { new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY) };
         }
         /// <summary>
@@ -307,6 +337,15 @@ namespace GRPO
                         break;
                     }
             }
+        }
+        /// <summary>
+        /// Добавление фигур в список выделяемых фигур
+        /// </summary>
+        /// <param name="drawable">Фигура</param>
+        public void AddDrawableFigure(IDrawable drawable)
+        {
+            DrawableFigures.Add(drawable);
+            EnablePoints = false;
         }
     }
 }

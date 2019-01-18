@@ -161,10 +161,6 @@ namespace GRPO
                 graphics.DrawLine(pen, Rectangle.PointRightUp, Rectangle.PointRightDown);
                 graphics.DrawLine(pen, Rectangle.PointRightDown, Rectangle.PointLeftDown);
                 graphics.DrawLine(pen, Rectangle.PointLeftDown, Rectangle.PointLeftUp);
-                /*graphics.DrawLine(pen, Rectangle.Points[0], Rectangle.Points[1]);
-                graphics.DrawLine(pen, Rectangle.Points[1], Rectangle.Points[2]);
-                graphics.DrawLine(pen, Rectangle.Points[2], Rectangle.Points[3]);
-                graphics.DrawLine(pen, Rectangle.Points[3], Rectangle.Points[0]);*/
 
                 graphics.Dispose();
                 _pictureBox.Invalidate();
@@ -193,7 +189,8 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureRectangle(new Point(Position.X, Position.Y), new Point(Width, Height), _pictureBox, LineProperty, FillProperty);
+            return new DrawFigureRectangle(new Point(Rectangle.PointLeftUp.X, Rectangle.PointLeftUp.Y), 
+                new Point(Rectangle.PointRightDown.X, Rectangle.PointRightDown.Y), _pictureBox, LineProperty, FillProperty);
         }
     }
 }

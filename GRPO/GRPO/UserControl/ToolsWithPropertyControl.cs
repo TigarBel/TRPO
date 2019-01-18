@@ -37,6 +37,12 @@ namespace GRPO
                         _fillFigureControl.Visible = false;
                         break;
                     }
+                case DrawingTools.MassSelect:
+                    {
+                        _propertyLineControl.Visible = false;
+                        _fillFigureControl.Visible = false;
+                        break;
+                    }
                 case DrawingTools.DrawFigureLine:
                     {
                         _propertyLineControl.Visible = true;
@@ -66,6 +72,10 @@ namespace GRPO
                         _propertyLineControl.Visible = true;
                         _fillFigureControl.Visible = true;
                         break;
+                    }
+                default:
+                    {
+                        throw new ArgumentException("Данный инструмент отсутсвует!");
                     }
             }
         }
