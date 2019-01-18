@@ -9,7 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
-
+    /// <summary>
+    /// Класс свойство линии фигуры
+    /// </summary>
+    [Serializable]
     public class LineProperty
     {
         /// <summary>

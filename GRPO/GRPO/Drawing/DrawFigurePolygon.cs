@@ -9,6 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс отрисовки фигуры - многоугольник
+    /// </summary>
+    [Serializable]
     class DrawFigurePolygon : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>

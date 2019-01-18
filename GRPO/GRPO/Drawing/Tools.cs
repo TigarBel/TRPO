@@ -34,6 +34,7 @@ namespace GRPO
     /// <summary>
     /// Класс инструмента(выбор инструмента и его тип)
     /// </summary>
+    [Serializable]
     public class Tools
     {
         /// <summary>

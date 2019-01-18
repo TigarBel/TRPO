@@ -9,6 +9,7 @@ namespace GRPO
     /// <summary>
     /// Класс отвечающий за историю ToolsControl
     /// </summary>
+    [Serializable]
     class HistoryManagerToolsControl
     {
         /// <summary>

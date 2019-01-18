@@ -9,6 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс отрисовки фигуры - линия
+    /// </summary>
+    [Serializable]
     class DrawFigureLine : IDrawable, ILinePropertyble
     {
         /// <summary>

@@ -8,6 +8,10 @@ using System.Windows.Forms;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс отрисовки фигуры - прямоугольник
+    /// </summary>
+    [Serializable]
     class DrawFigureRectangle : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>

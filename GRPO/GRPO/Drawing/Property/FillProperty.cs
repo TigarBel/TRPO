@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс свойства заливки фигуры
+    /// </summary>
+    [Serializable]
     public class FillProperty
     {
         /// <summary>

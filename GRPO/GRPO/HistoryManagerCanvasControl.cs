@@ -10,6 +10,7 @@ namespace GRPO
     /// <summary>
     /// Класс отвечающий за историю CanvasControl
     /// </summary>
+    [Serializable]
     class HistoryManagerCanvasControl
     {
         /// <summary>

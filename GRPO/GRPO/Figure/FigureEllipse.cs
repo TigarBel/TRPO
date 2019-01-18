@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры - эллипс
+    /// </summary>
+    [Serializable]
     class FigureEllipse : Figure
     {
         /// <summary>

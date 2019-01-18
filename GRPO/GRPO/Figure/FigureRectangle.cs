@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры - прямоугольник
+    /// </summary>
+    [Serializable]
     class FigureRectangle : FigurePolygon
     {
         /// <summary>

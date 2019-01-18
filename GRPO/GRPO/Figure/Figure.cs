@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры
+    /// </summary>
+    [Serializable]
     class Figure
     {
         /// <summary>

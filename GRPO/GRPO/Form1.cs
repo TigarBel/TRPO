@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,6 +44,8 @@ namespace GRPO
                 _canvasControl.Image, _canvasControl.Interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
 
             _historyManager = new HistoryManager(historyManagerToolsControl, historyManagerCanvasControl);
+
+            _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.DrawFigureLine);
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -50,9 +53,39 @@ namespace GRPO
             _canvasControl.ClearCanvas();
         }
 
+        private void FileSaveToolStripMenuItem_Click( object sender, System.EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "SimpleVectorEditor Project|*.sve",
+                FileName = _historyManager.FileName
+            };
+            if (saveFileDialog.ShowDialog() != DialogResult.Cancel)
+            {
+                using (var stream = saveFileDialog.OpenFile())
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(stream,_historyManager);
+                }
+            }
+
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-
+            var dialogResult = MessageBox.Show(
+                "Есть несохраненные изменения. Сохранить перед выходом!?",
+                "Внимание", MessageBoxButtons.YesNoCancel);
+            switch (dialogResult)
+            {
+                case DialogResult.Yes:
+                    FileSaveToolStripMenuItem_Click(this, new EventArgs());
+                    break;
+                case DialogResult.Cancel:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -99,21 +132,21 @@ namespace GRPO
                     _canvasControl.Cut();
                 }
             }
-            else if (e.Control && e.KeyCode == Keys.Z)
+            if (e.Control && e.KeyCode == Keys.Z)
             {
+                //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
-                _canvasControl.SaveStep -= _historyManager_SaveStep;
                 _historyManager_StepBack();
+                //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
-                _canvasControl.SaveStep += _historyManager_SaveStep;
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
+                //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
-                _canvasControl.SaveStep -= _historyManager_SaveStep;
                 _historyManager_StepForward();
+                //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
-                _canvasControl.SaveStep += _historyManager_SaveStep;
             }
         }
         /// <summary>
@@ -149,7 +182,11 @@ namespace GRPO
         {
             if (drawable == null)
             {
+                //Этот момент не подлежит сохранению
+                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
                 _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.CursorSelect);
+                //Востанавливаем сохранение на изменение инструментов
+                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
                 return;
             }
             if(drawable is ILinePropertyble figureWithLineProperty)

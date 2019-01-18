@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры - круг
+    /// </summary>
+    [Serializable]
     class FigureCircle : FigureEllipse
     {
         /// <summary>

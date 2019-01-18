@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры полилиния
+    /// </summary>
+    [Serializable]
     class FigurePolyline : Figure
     {
         /// <summary>

@@ -7,6 +7,10 @@ using System.Drawing;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс фигуры - линия
+    /// </summary>
+    [Serializable]
     class FigureLine
     {
         /// <summary>

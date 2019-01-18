@@ -14,8 +14,13 @@ namespace GRPO
     /// <summary>
     /// Класс отвечающий за историю команд
     /// </summary>
+    [Serializable]
     class HistoryManager
     {
+        /// <summary>
+        /// Называние файла для сохранения
+        /// </summary>
+        private string _fileName;
         /// <summary>
         /// Количество шагов
         /// </summary>
@@ -107,7 +112,7 @@ namespace GRPO
         {
             get
             {
-                return new HistoryManagerToolsControl(_managerToolsControls[StepsSelect].SelectTool, 
+                return /*_managerToolsControls[StepsSelect];*/new HistoryManagerToolsControl(_managerToolsControls[StepsSelect].SelectTool, 
                     _managerToolsControls[StepsSelect].LineProperty,
                     _managerToolsControls[StepsSelect].FillProperty);
             }
@@ -119,12 +124,26 @@ namespace GRPO
         {
             get
             {
-                return new HistoryManagerCanvasControl(_managerCanvasControls[StepsSelect].BuferDraw, 
+                return /*_managerCanvasControls[StepsSelect];*/new HistoryManagerCanvasControl(_managerCanvasControls[StepsSelect].BuferDraw, 
                     _managerCanvasControls[StepsSelect].Drawables,
                     _managerCanvasControls[StepsSelect].Image, 
                     _managerCanvasControls[StepsSelect].Interaction,
                     _managerCanvasControls[StepsSelect].GetWidthCanvas(), 
                     _managerCanvasControls[StepsSelect].GetHeightCanvas());
+            }
+        }
+        /// <summary>
+        /// Называние файла для сохранения
+        /// </summary>
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
+            }
+            set
+            {
+                _fileName = value;
             }
         }
     }

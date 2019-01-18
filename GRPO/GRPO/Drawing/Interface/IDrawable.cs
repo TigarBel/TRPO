@@ -25,7 +25,7 @@ namespace GRPO
         /// <summary>
         /// Нарисовать объект
         /// </summary>
-        void Draw();
+        void Draw(PictureBox pictureBox);
         /// <summary>
         /// Взять список точек
         /// </summary>

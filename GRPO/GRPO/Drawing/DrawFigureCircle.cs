@@ -9,16 +9,16 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс отрисовки фигуры - круг
+    /// </summary>
+    [Serializable]
     class DrawFigureCircle : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
         /// Объект круга
         /// </summary>
         private FigureCircle _figureCircle;
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
@@ -33,7 +33,6 @@ namespace GRPO
         public DrawFigureCircle()
         {
             Circle = new FigureCircle();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
@@ -42,14 +41,11 @@ namespace GRPO
         /// </summary>
         /// <param name="position">Расположение окружности</param>
         /// <param name="radius"> Радиус окружности</param>
-        /// <param name="canvas">Полотно на котором отрисовывается круг</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigureCircle(Point position, int radius, PictureBox canvas,
-            LineProperty extendedForLine, FillProperty extendedForFigure)
+        public DrawFigureCircle(Point position, int radius, LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Circle = new FigureCircle(position, radius);
-            Canvas = canvas;
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -65,16 +61,6 @@ namespace GRPO
             set
             {
                 _figureCircle = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -108,18 +94,18 @@ namespace GRPO
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
-        public void Draw()
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
-                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Graphics graphics = Graphics.FromImage(pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
                 graphics.FillEllipse(new SolidBrush(FillProperty.FillColor), 
                     Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
                 graphics.DrawEllipse(pen, Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
                 graphics.Dispose();
-                _pictureBox.Invalidate();
+                pictureBox.Invalidate();
             }
             else
             {
@@ -187,7 +173,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureCircle(Circle.Position, Circle.Radius, _pictureBox, LineProperty, FillProperty);
+            return new DrawFigureCircle(Circle.Position, Circle.Radius, LineProperty, FillProperty);
         }
     }
 }

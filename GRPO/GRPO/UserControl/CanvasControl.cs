@@ -268,7 +268,6 @@ namespace GRPO
 
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
-                    //RefreshCanvas();
                 }
                 if (!_flagPolyFigure)
                 {
@@ -285,7 +284,6 @@ namespace GRPO
 
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
-                    //RefreshCanvas();
 
                     _flagPolyFigure = false;
                 }
@@ -455,12 +453,12 @@ namespace GRPO
                                 if (e.Button == MouseButtons.Left)
                                 {
                                     Interaction = new Interaction(Drawables[i], canvas, false);
-                                    if (SaveStep != null) SaveStep();
+                                    //if (SaveStep != null) SaveStep();
                                 }
                                 else if (e.Button == MouseButtons.Right)
                                 {
                                     Interaction = new Interaction(Drawables[i], canvas, true);
-                                    if (SaveStep != null) SaveStep();
+                                    //if (SaveStep != null) SaveStep();
                                 }
                                 break;
                             }
@@ -495,7 +493,7 @@ namespace GRPO
                             if (localDrawables.Count > 0)
                             {
                                 Interaction = new Interaction(localDrawables, canvas, false);
-                                if (SaveStep != null) SaveStep();
+                                //if (SaveStep != null) SaveStep();
                             }
                         }
                         else
@@ -503,6 +501,7 @@ namespace GRPO
                             Interaction.EnablePoints = false;
                         }
                     }
+                    if (SaveStep != null) SaveStep();
                 }
 
                 _flagMouseDown = false;

@@ -12,6 +12,7 @@ namespace GRPO
     /// <summary>
     /// Класс взаимодействия с нарисованными фигурами
     /// </summary>
+    [Serializable]
     public class Interaction
     {
         /// <summary>

@@ -9,6 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Класс отрисовки фигуры - эллипс
+    /// </summary>
+    [Serializable]
     class DrawFigureEllipse : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
