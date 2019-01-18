@@ -53,11 +53,11 @@ namespace GRPO
             _canvasControl.ClearCanvas();
         }
 
-        private void FileSaveToolStripMenuItem_Click( object sender, System.EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "SimpleVectorEditor Project|*.sve",
+                Filter = "GraphicsPO Project|*.grpo",
                 FileName = _historyManager.FileName
             };
             if (saveFileDialog.ShowDialog() != DialogResult.Cancel)
@@ -65,32 +65,26 @@ namespace GRPO
                 using (var stream = saveFileDialog.OpenFile())
                 {
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(stream,_historyManager);
+                    binaryFormatter.Serialize(stream, _historyManager);
                 }
-            }
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var dialogResult = MessageBox.Show(
-                "Есть несохраненные изменения. Сохранить перед выходом!?",
-                "Внимание", MessageBoxButtons.YesNoCancel);
-            switch (dialogResult)
-            {
-                case DialogResult.Yes:
-                    FileSaveToolStripMenuItem_Click(this, new EventArgs());
-                    break;
-                case DialogResult.Cancel:
-                    break;
-                default:
-                    break;
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //mainPictureBox.Image.Save("111lol.jpg");
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "GraphicsPO Project|*.grpo";
+            if (openFileDialog.ShowDialog() != DialogResult.Cancel)
+            {
+                using (var stream = openFileDialog.OpenFile())
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    _historyManager = (HistoryManager)binaryFormatter.Deserialize(stream);
+                    _historyManager_Step();
+                    _canvasControl.RefreshCanvas();
+                }
+            }
         }
         /// <summary>
         /// Кнопка для изменения размера холста
@@ -213,9 +207,13 @@ namespace GRPO
 
         private void _historyManager_Step()
         {
+            //Этот момент не подлежит сохранению
+            _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
             _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
             _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
             _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
+            //Востанавливаем сохранение на изменение инструментов
+            _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
 
             _canvasControl.BuferDraw = _historyManager.ManagerCanvasControl.BuferDraw;
             _canvasControl.Image = _historyManager.ManagerCanvasControl.Image;

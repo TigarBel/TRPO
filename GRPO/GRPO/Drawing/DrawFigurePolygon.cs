@@ -20,10 +20,6 @@ namespace GRPO
         /// </summary>
         private FigurePolygon _figurePolygon;
         /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
-        /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
@@ -37,7 +33,6 @@ namespace GRPO
         public DrawFigurePolygon()
         {
             Polygon = new FigurePolygon();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
@@ -45,14 +40,11 @@ namespace GRPO
         /// Класс Отрисовки многоугольника
         /// </summary>
         /// <param name="points">Список существующих точек для многоугольника</param>
-        /// <param name="canvas">Полотно на котором отрисовывается многоугольник</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigurePolygon(List<Point> points, PictureBox canvas,
-            LineProperty extendedForLine, FillProperty extendedForFigure)
+        public DrawFigurePolygon(List<Point> points, LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Polygon = new FigurePolygon(points);
-            Canvas = canvas;
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -64,14 +56,12 @@ namespace GRPO
         /// <param name="height">Высота многоугольника</param>
         /// <param name="countAngle">Количество углов многоугольника</param>
         /// <param name="phase">Угол поворота многоугольника</param>
-        /// <param name="canvas">Полотно на котором отрисовывается многоугольник</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigurePolygon(Point position, int width, int height, int countAngle, int phase, PictureBox canvas, 
+        public DrawFigurePolygon(Point position, int width, int height, int countAngle, int phase, 
             LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Polygon = new FigurePolygon(position, width, height, countAngle, phase);
-            Canvas = canvas;
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -87,16 +77,6 @@ namespace GRPO
             set
             {
                 _figurePolygon = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -130,13 +110,14 @@ namespace GRPO
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
-        public void Draw()
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
                 if (Polygon.Points.Count > 2)
                 {
-                    Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                    Graphics graphics = Graphics.FromImage(pictureBox.Image);
                     Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                     pen.DashStyle = LineProperty.LineType;
                     graphics.FillPolygon(new SolidBrush(FillProperty.FillColor), Polygon.Points.ToArray());
@@ -146,7 +127,7 @@ namespace GRPO
                     }
                     graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1], Polygon.Points[0]);
                     graphics.Dispose();
-                    _pictureBox.Invalidate();
+                    pictureBox.Invalidate();
                 }
                 else
                 {
@@ -219,7 +200,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolygon(GetPoints(), _pictureBox, LineProperty, FillProperty);
+            return new DrawFigurePolygon(GetPoints(), LineProperty, FillProperty);
         }
     }
 }

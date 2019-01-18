@@ -20,10 +20,6 @@ namespace GRPO
         /// </summary>
         private List<IDrawable> _drawables = new List<IDrawable>();
         /// <summary>
-        /// Холст на котором рисуется объект
-        /// </summary>
-        private PictureBox _canvas;
-        /// <summary>
         /// Разрашение измять опортные точки
         /// </summary>
         private bool _enablePoints;
@@ -40,31 +36,26 @@ namespace GRPO
         /// </summary>
         public Interaction()
         {
-            Canvas = new PictureBox();
             EnablePoints = false;
         }
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
         /// <param name="drawableFigure">Рисуемый объект</param>
-        /// <param name="canvas">Холст на котором расположена фигура</param>
         /// <param name="enablePoints">Разрашение измять опортные точки</param>
-        public Interaction(IDrawable drawableFigure, PictureBox canvas, bool enablePoints)
+        public Interaction(IDrawable drawableFigure, bool enablePoints)
         {
             DrawableFigures.Add(drawableFigure);
-            Canvas = canvas;
             EnablePoints = enablePoints;
         }
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
         /// <param name="drawables">Список фигур</param>
-        /// <param name="canvas">Холст на котором расположены фигуры</param>
         /// <param name="enablePoints">Разрашение измять опортные точки</param>
-        public Interaction(List<IDrawable> drawables, PictureBox canvas, bool enablePoints)
+        public Interaction(List<IDrawable> drawables, bool enablePoints)
         {
             DrawableFigures = drawables;
-            Canvas = canvas;
             EnablePoints = enablePoints;
         }
         /// <summary>
@@ -82,16 +73,6 @@ namespace GRPO
             }
         }
         /// <summary>
-        /// Холст на котором рисуют объект
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _canvas = value;
-            }
-        }
-        /// <summary>
         /// Разрашение измять опортные точки
         /// </summary>
         public bool EnablePoints
@@ -102,84 +83,91 @@ namespace GRPO
             }
             set
             {
-                if (value)
+                _enablePoints = value;
+            }
+        }
+        /// <summary>
+        /// Отрисовка выделения
+        /// </summary>
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void DrawSelcet(PictureBox pictureBox)
+        {
+            if (this.EnablePoints)
+            {
+                if (DrawableFigures.Count == 1)
                 {
-                    if (DrawableFigures.Count == 1)
-                    {
-                        DrawPoints();
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Режим изменения опорных точек разрешен только при выдилении одной фигуры!");
-                    }
+                    DrawPoints(pictureBox);
                 }
                 else
                 {
-                    if (DrawableFigures.Count == 1)
+                    throw new ArgumentException("Режим изменения опорных точек разрешен только при выдилении одной фигуры!");
+                }
+            }
+            else
+            {
+                if (DrawableFigures.Count == 1)
+                {
+                    DrawInteraction(pictureBox);
+                }
+                else
+                {
+                    foreach (IDrawable drawable in DrawableFigures)
                     {
-                        DrawInteraction();
-                    }
-                    else
-                    {
-                        foreach(IDrawable drawable in DrawableFigures)
-                        {
-                            DrawSquare(DrawableFigures.IndexOf(drawable));
-                        }
+                        DrawSquare(DrawableFigures.IndexOf(drawable), pictureBox);
                     }
                 }
-                _enablePoints = value;
             }
         }
         /// <summary>
         /// Отрисовка интерактивного квадрата без опорных точек
         /// </summary>
-        private void DrawInteraction()
+        private void DrawInteraction(PictureBox pictureBox)
         {
-            DrawSquare(0);
-            DrawPointsSize(0);
+            DrawSquare(0, pictureBox);
+            DrawPointsSize(0, pictureBox);
         }
         /// <summary>
         /// Отрисовка квадрата границ объекта
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
-        private void DrawSquare(int index)
+        private void DrawSquare(int index , PictureBox pictureBox)
         {
             List<Point> points = GetBorderPoints(index);
-            DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, _canvas,
-                new LineProperty(1, Color.Black, DashStyle.Dash), new FillProperty(Color.Transparent));
-            drawFigure.Draw();
+            DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, new LineProperty(1, Color.Black, DashStyle.Dash), 
+                new FillProperty(Color.Transparent));
+            drawFigure.Draw(pictureBox);
         }
         /// <summary>
         /// Точки размера объекта
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
-        private void DrawPointsSize(int index)
+        private void DrawPointsSize(int index, PictureBox pictureBox)
         {
             List<Point> points = GetBorderPoints(index);
             DrawFigureCircle drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y),
-                _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
-            drawFigure.Draw();
+                _radiusDrawPoint, new LineProperty(), new FillProperty());
+            drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[1].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
-            drawFigure.Draw();
+                _radiusDrawPoint, new LineProperty(), new FillProperty());
+            drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[2].Y),
-                _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
-            drawFigure.Draw();
+                _radiusDrawPoint, new LineProperty(), new FillProperty());
+            drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[0].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
-            drawFigure.Draw();
+                _radiusDrawPoint, new LineProperty(), new FillProperty());
+            drawFigure.Draw(pictureBox);
         }
         /// <summary>
         /// Отрисовка угловых точек
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
-        private void DrawPointsSquare(int index)
+        private void DrawPointsSquare(int index, PictureBox pictureBox)
         {
             List<Point> points = GetBorderPoints(index);
             for (int i = 0; i < 4; i++)
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty());
-                drawFigure.Draw();
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, new LineProperty(), new FillProperty());
+                drawFigure.Draw(pictureBox);
             }
         }
         /// <summary>
@@ -198,13 +186,13 @@ namespace GRPO
         /// <summary>
         /// Отрисовка опорных точек
         /// </summary>
-        private void DrawPoints()
+        private void DrawPoints(PictureBox pictureBox)
         {
             List<Point> points = DrawableFigures[0].GetPoints();
             for (int i = 0; i < points.Count; i++) 
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, _canvas, new LineProperty(), new FillProperty(Color.Transparent));
-                drawFigure.Draw();
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, new LineProperty(), new FillProperty(Color.Transparent));
+                drawFigure.Draw(pictureBox);
             }
         }
         /// <summary>

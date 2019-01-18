@@ -94,6 +94,7 @@ namespace GRPO
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
+        /// <param name="pictureBox">Холст на котором рисуют</param>
         public void Draw(PictureBox pictureBox)
         {
             if (pictureBox.Image != null)

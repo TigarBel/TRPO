@@ -20,10 +20,6 @@ namespace GRPO
         /// </summary>
         private FigureEllipse _figureEllipse;
         /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
-        /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
@@ -37,7 +33,6 @@ namespace GRPO
         public DrawFigureEllipse()
         {
             Ellipse = new FigureEllipse();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
@@ -47,14 +42,11 @@ namespace GRPO
         /// <param name="position">Расположения эллипса</param>
         /// <param name="width">Ширина эллипса</param>
         /// <param name="height">Высота эллипса</param>
-        /// <param name="canvas">Полотно на котором отрисовывается эллипс</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigureEllipse(Point position, int width, int height, PictureBox canvas,
-            LineProperty extendedForLine, FillProperty extendedForFigure)
+        public DrawFigureEllipse(Point position, int width, int height, LineProperty extendedForLine, FillProperty extendedForFigure)
         {
             Ellipse = new FigureEllipse(position, width, height);
-            Canvas = canvas;
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -70,16 +62,6 @@ namespace GRPO
             set
             {
                 _figureEllipse = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -113,18 +95,19 @@ namespace GRPO
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
-        public void Draw()
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
-                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Graphics graphics = Graphics.FromImage(pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
                 graphics.FillEllipse(new SolidBrush(FillProperty.FillColor), 
                     Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
                 graphics.DrawEllipse(pen, Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
                 graphics.Dispose();
-                _pictureBox.Invalidate();
+                pictureBox.Invalidate();
             }
             else
             {
@@ -192,7 +175,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, _pictureBox, LineProperty, FillProperty);
+            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, LineProperty, FillProperty);
         }
     }
 }

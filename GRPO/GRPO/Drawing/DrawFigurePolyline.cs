@@ -20,10 +20,6 @@ namespace GRPO
         /// </summary>
         private FigurePolyline _figurePolyline;
         /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
-        /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
@@ -33,7 +29,6 @@ namespace GRPO
         public DrawFigurePolyline()
         {
             Polyline = new FigurePolyline();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
         }
         /// <summary>
@@ -41,12 +36,10 @@ namespace GRPO
         /// </summary>
         /// <param name="points">Список точек полилиинии</param>
         /// <param name="circular">Тип полилинии</param>
-        /// <param name="pictureBox">Полотно на котором рисуем</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigurePolyline(List<Point> points, bool circular, PictureBox pictureBox, LineProperty extended)
+        public DrawFigurePolyline(List<Point> points, bool circular, LineProperty extended)
         {
             Polyline = new FigurePolyline(points, circular);
-            Canvas = pictureBox;
             LineProperty = extended;
         }
         /// <summary>
@@ -61,16 +54,6 @@ namespace GRPO
             set
             {
                 _figurePolyline = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -90,20 +73,21 @@ namespace GRPO
         /// <summary>
         /// Отрисовка последнюю часть полилинии
         /// </summary>
-        public void Draw()
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
                 if (Polyline.Points.Count > 1)
                 {
                     for (int i = 0; i < Polyline.Points.Count - 1; i++)
                     {
-                        Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                        Graphics graphics = Graphics.FromImage(pictureBox.Image);
                         Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                         pen.DashStyle = LineProperty.LineType;
                         graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
                         graphics.Dispose();
-                        _pictureBox.Invalidate();
+                        pictureBox.Invalidate();
                     }
                 }
                 else
@@ -177,7 +161,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolyline(GetPoints(), Polyline.Circular, _pictureBox, LineProperty);
+            return new DrawFigurePolyline(GetPoints(), Polyline.Circular, LineProperty);
         }
     }
 }

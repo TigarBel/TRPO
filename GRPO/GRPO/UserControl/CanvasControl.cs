@@ -208,7 +208,7 @@ namespace GRPO
             {
                 foreach(IDrawable draw in Drawables)
                 {
-                    draw.Draw();
+                    draw.Draw(canvas);
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace GRPO
             canvas.Image = new Bitmap(canvas.Width,canvas.Height);
             foreach (IDrawable drawable in Drawables)
             {
-                drawable.Draw();
+                drawable.Draw(canvas);
             }
         }
         /// <summary>
@@ -373,9 +373,9 @@ namespace GRPO
                         if (Interaction == null)
                         {
                             RefreshCanvas();
-                            DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB, canvas,
+                            DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB, 
                                 new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
-                            drawFigureRectangle.Draw();
+                            drawFigureRectangle.Draw(canvas);
                         }
                         else
                         {
@@ -452,12 +452,14 @@ namespace GRPO
                                 if (DragProperty != null) DragProperty(Drawables[i]);
                                 if (e.Button == MouseButtons.Left)
                                 {
-                                    Interaction = new Interaction(Drawables[i], canvas, false);
+                                    Interaction = new Interaction(Drawables[i], false);
+                                    Interaction.DrawSelcet(canvas);
                                     //if (SaveStep != null) SaveStep();
                                 }
                                 else if (e.Button == MouseButtons.Right)
                                 {
-                                    Interaction = new Interaction(Drawables[i], canvas, true);
+                                    Interaction = new Interaction(Drawables[i], true);
+                                    Interaction.DrawSelcet(canvas);
                                     //if (SaveStep != null) SaveStep();
                                 }
                                 break;
@@ -492,7 +494,8 @@ namespace GRPO
                             RefreshCanvas();
                             if (localDrawables.Count > 0)
                             {
-                                Interaction = new Interaction(localDrawables, canvas, false);
+                                Interaction = new Interaction(localDrawables, false);
+                                Interaction.DrawSelcet(canvas);
                                 //if (SaveStep != null) SaveStep();
                             }
                         }
@@ -520,24 +523,24 @@ namespace GRPO
             {
                 case DrawingTools.DrawFigureLine:
                     {
-                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, canvas, LineProperty);
+                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, LineProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureRectangle:
                     {
-                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, canvas, LineProperty, FillProperty);
+                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, LineProperty, FillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureCircle:
                     {
                         DrawFigureCircle drawFigure = new DrawFigureCircle(pointA,
                         Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((pointB.X - pointA.X), 2) + Math.Pow((pointB.Y - pointA.Y), 2)))),/******/
-                        canvas, LineProperty, FillProperty);
+                        LineProperty, FillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureEllipse:
                     {
-                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, canvas, LineProperty,
+                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, LineProperty,
                             FillProperty);
                         return drawFigure;
                     }
@@ -556,7 +559,7 @@ namespace GRPO
             {
                 case DrawingTools.DrawFigurePolyline:
                     {
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, canvas, LineProperty);
+                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, LineProperty);
                         return drawFigure;
                     }
             }
@@ -607,7 +610,8 @@ namespace GRPO
                     Drawables.Add(drawable.Clone());
                 }
                 RefreshCanvas();
-                Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count), canvas, false);
+                Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count), false);
+                Interaction.DrawSelcet(canvas);
             }
         }
         /// <summary>

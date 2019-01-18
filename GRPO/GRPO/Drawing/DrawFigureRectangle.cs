@@ -19,10 +19,6 @@ namespace GRPO
         /// </summary>
         private FigureRectangle _figureRectangle;
         /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
-        /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
@@ -36,7 +32,6 @@ namespace GRPO
         public DrawFigureRectangle()
         {
             Rectangle = new FigureRectangle();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
@@ -45,13 +40,11 @@ namespace GRPO
         /// </summary>
         /// <param name="pointA">Начальная угловая точка</param>
         /// <param name="pointB">Конечная угловая точка</param>
-        /// <param name="canvas">Полотно на котором рисуется фигура</param>
         /// <param name="lineProperty">Свойство линии</param>
         /// <param name="fillProperty">Свойство заливки</param>
-        public DrawFigureRectangle(Point pointA, Point pointB, PictureBox canvas, LineProperty lineProperty, FillProperty fillProperty)
+        public DrawFigureRectangle(Point pointA, Point pointB, LineProperty lineProperty, FillProperty fillProperty)
         {
             Rectangle = new FigureRectangle(pointA, pointB);
-            Canvas = canvas;
             LineProperty = lineProperty;
             FillProperty = fillProperty;
         }
@@ -67,16 +60,6 @@ namespace GRPO
             set
             {
                 _figureRectangle = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -152,11 +135,12 @@ namespace GRPO
         /// <summary>
         /// Нарисовать объект
         /// </summary>
-        public void Draw()
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
-                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Graphics graphics = Graphics.FromImage(pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
                 graphics.FillPolygon(new SolidBrush(FillProperty.FillColor), Rectangle.Points.ToArray());
@@ -167,7 +151,7 @@ namespace GRPO
                 graphics.DrawLine(pen, Rectangle.PointLeftDown, Rectangle.PointLeftUp);
 
                 graphics.Dispose();
-                _pictureBox.Invalidate();
+                pictureBox.Invalidate();
             }
             else
             {
@@ -194,7 +178,7 @@ namespace GRPO
         public IDrawable Clone()
         {
             return new DrawFigureRectangle(new Point(Rectangle.PointLeftUp.X, Rectangle.PointLeftUp.Y), 
-                new Point(Rectangle.PointRightDown.X, Rectangle.PointRightDown.Y), _pictureBox, LineProperty, FillProperty);
+                new Point(Rectangle.PointRightDown.X, Rectangle.PointRightDown.Y), LineProperty, FillProperty);
         }
     }
 }

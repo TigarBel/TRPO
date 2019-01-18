@@ -20,10 +20,6 @@ namespace GRPO
         /// </summary>
         private FigureLine _figureLine;
         /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        private PictureBox _pictureBox;
-        /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
@@ -33,7 +29,6 @@ namespace GRPO
         public DrawFigureLine()
         {
             Line = new FigureLine();
-            Canvas = new PictureBox();
             LineProperty = new LineProperty();
         }
         /// <summary>
@@ -41,12 +36,10 @@ namespace GRPO
         /// </summary>
         /// <param name="a">Начальная точка</param>
         /// <param name="b">Конечная точка</param>
-        /// <param name="pictureBox">Холст на котором рисуют линию</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigureLine(Point a, Point b, PictureBox pictureBox, LineProperty extended)
+        public DrawFigureLine(Point a, Point b, LineProperty extended)
         {
             Line = new FigureLine(a, b);
-            Canvas = pictureBox;
             LineProperty = extended;
         }
         /// <summary>
@@ -61,16 +54,6 @@ namespace GRPO
             set
             {
                 _figureLine = value;
-            }
-        }
-        /// <summary>
-        /// Холст на котором рисуют
-        /// </summary>
-        public PictureBox Canvas
-        {
-            set
-            {
-                _pictureBox = value;
             }
         }
         /// <summary>
@@ -90,16 +73,17 @@ namespace GRPO
         /// <summary>
         /// Нарисовать линию
         /// </summary>
-        public void Draw()
+        /// <param name="pictureBox">Холст на котором рисуют</param>
+        public void Draw(PictureBox pictureBox)
         {
-            if (_pictureBox.Image != null)
+            if (pictureBox.Image != null)
             {
-                Graphics graphics = Graphics.FromImage(_pictureBox.Image);
+                Graphics graphics = Graphics.FromImage(pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
                 graphics.DrawLine(pen, Line.PointA.X, Line.PointA.Y, Line.PointB.X, Line.PointB.Y);
                 graphics.Dispose();
-                _pictureBox.Invalidate();
+                pictureBox.Invalidate();
             }
             else
             {
@@ -165,7 +149,7 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureLine(Line.PointA, Line.PointB, _pictureBox, LineProperty);
+            return new DrawFigureLine(Line.PointA, Line.PointB, LineProperty);
         }
     }
 }
