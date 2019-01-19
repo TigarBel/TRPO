@@ -20,14 +20,6 @@ namespace GRPO
         /// </summary>
         private float _lineThickness;
         /// <summary>
-        /// Цвет линии
-        /// </summary>
-        private Color _lineColor;
-        /// <summary>
-        /// Тип линии
-        /// </summary>
-        private DashStyle _lineType;
-        /// <summary>
         /// Пустой класс Расширения
         /// </summary>
         public LineProperty()
@@ -73,30 +65,10 @@ namespace GRPO
         /// <summary>
         /// Цвет линии
         /// </summary>
-        public Color LineColor
-        {
-            get
-            {
-                return _lineColor;
-            }
-            set
-            {
-                _lineColor = value;
-            }
-        }
+        public Color LineColor { get; set; }
         /// <summary>
         /// Тип линии
         /// </summary>
-        public DashStyle LineType
-        {
-            get
-            {
-                return _lineType;
-            }
-            set
-            {
-                _lineType = value;
-            }
-        }
+        public DashStyle LineType { get; set; }
     }
 }
