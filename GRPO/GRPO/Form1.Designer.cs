@@ -28,7 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            GRPO.FillProperty fillProperty1 = new GRPO.FillProperty();
+            GRPO.LineProperty lineProperty1 = new GRPO.LineProperty();
+            GRPO.FillProperty fillProperty2 = new GRPO.FillProperty();
+            GRPO.LineProperty lineProperty2 = new GRPO.LineProperty();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -46,9 +49,9 @@
             // 
             this.button1.Location = new System.Drawing.Point(6, 386);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 88);
+            this.button1.Size = new System.Drawing.Size(109, 88);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1 (Очистить холст)";
+            this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -56,9 +59,9 @@
             // 
             this.button2.Location = new System.Drawing.Point(882, 65);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 90);
+            this.button2.Size = new System.Drawing.Size(109, 90);
             this.button2.TabIndex = 2;
-            this.button2.Text = "button2 (Сохранить проект)";
+            this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -66,9 +69,9 @@
             // 
             this.button3.Location = new System.Drawing.Point(882, 161);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(98, 90);
+            this.button3.Size = new System.Drawing.Size(109, 90);
             this.button3.TabIndex = 3;
-            this.button3.Text = "button3 (Открыть проект)";
+            this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -85,11 +88,14 @@
             // 
             // _toolsWithPropertyControl
             // 
-            this._toolsWithPropertyControl.FillProperty = ((GRPO.FillProperty)(resources.GetObject("_toolsWithPropertyControl.FillProperty")));
-            this._toolsWithPropertyControl.LineProperty = ((GRPO.LineProperty)(resources.GetObject("_toolsWithPropertyControl.LineProperty")));
+            fillProperty1.FillColor = System.Drawing.Color.White;
+            this._toolsWithPropertyControl.FillProperty = fillProperty1;
+            lineProperty1.LineColor = System.Drawing.Color.Black;
+            lineProperty1.LineThickness = 1F;
+            lineProperty1.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._toolsWithPropertyControl.LineProperty = lineProperty1;
             this._toolsWithPropertyControl.Location = new System.Drawing.Point(7, 20);
             this._toolsWithPropertyControl.Name = "_toolsWithPropertyControl";
-            this._toolsWithPropertyControl.SelectTool = ((GRPO.Tools)(resources.GetObject("_toolsWithPropertyControl.SelectTool")));
             this._toolsWithPropertyControl.Size = new System.Drawing.Size(207, 325);
             this._toolsWithPropertyControl.TabIndex = 19;
             // 
@@ -129,15 +135,14 @@
             // _canvasControl
             // 
             this._canvasControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this._canvasControl.BuferDraw = ((System.Collections.Generic.List<GRPO.IDrawable>)(resources.GetObject("_canvasControl.BuferDraw")));
-            this._canvasControl.Drawables = ((System.Collections.Generic.List<GRPO.IDrawable>)(resources.GetObject("_canvasControl.Drawables")));
-            this._canvasControl.FillProperty = ((GRPO.FillProperty)(resources.GetObject("_canvasControl.FillProperty")));
-            this._canvasControl.Image = ((System.Drawing.Image)(resources.GetObject("_canvasControl.Image")));
-            this._canvasControl.Interaction = null;
-            this._canvasControl.LineProperty = ((GRPO.LineProperty)(resources.GetObject("_canvasControl.LineProperty")));
+            fillProperty2.FillColor = System.Drawing.Color.White;
+            this._canvasControl.FillProperty = fillProperty2;
+            lineProperty2.LineColor = System.Drawing.Color.Black;
+            lineProperty2.LineThickness = 1F;
+            lineProperty2.LineType = System.Drawing.Drawing2D.DashStyle.Solid;
+            this._canvasControl.LineProperty = lineProperty2;
             this._canvasControl.Location = new System.Drawing.Point(236, 65);
             this._canvasControl.Name = "_canvasControl";
-            this._canvasControl.SelectTool = ((GRPO.Tools)(resources.GetObject("_canvasControl.SelectTool")));
             this._canvasControl.Size = new System.Drawing.Size(640, 480);
             this._canvasControl.TabIndex = 9;
             // 
@@ -145,8 +150,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 605);
-            this.Controls.Add(this._canvasControl);
+            this.ClientSize = new System.Drawing.Size(1006, 605);
+            MainForm mainForm = this;
+            mainForm.Controls.Add(this._canvasControl);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
