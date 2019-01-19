@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using GRPO.Drawing;
 using GRPO.Drawing.Property;
+using GRPO.Drawing.Interface;
+
 
 namespace GRPO
 {

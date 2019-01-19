@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRPO
+namespace GRPO.Drawing.Interface
 {
+    /// <summary>
+    /// Интерфейс для хранения свойство заливки фигуры
+    /// </summary>
     interface IFillPropertyble
     {
         /// <summary>

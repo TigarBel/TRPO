@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Drawing.Interface
 {
+    /// <summary>
+    /// Интерфейс для отрисовки фигур
+    /// </summary>
     public interface IDrawable
     {
         /// <summary>

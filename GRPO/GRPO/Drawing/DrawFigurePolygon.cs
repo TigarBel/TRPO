@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using GRPO.Figure;
 using GRPO.Drawing.Property;
+using GRPO.Drawing.Interface;
 
 namespace GRPO.Drawing
 {

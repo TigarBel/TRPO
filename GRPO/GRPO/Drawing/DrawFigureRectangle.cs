@@ -1,4 +1,5 @@
-﻿using GRPO.Drawing.Property;
+﻿using GRPO.Drawing.Interface;
+using GRPO.Drawing.Property;
 using GRPO.Figure;
 using System;
 using System.Collections.Generic;
