@@ -130,17 +130,21 @@ namespace GRPO
             {
                 //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                //
                 _historyManager_StepBack();
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                //
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
                 //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                //
                 _historyManager_StepForward();
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                //
             }
         }
         /// <summary>
@@ -178,9 +182,11 @@ namespace GRPO
             {
                 //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                //
                 _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.CursorSelect);
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                //
                 return;
             }
             if(drawable is ILinePropertyble figureWithLineProperty)
@@ -199,29 +205,49 @@ namespace GRPO
             HistoryManagerToolsControl historyManagerToolsControl = new HistoryManagerToolsControl(_toolsWithPropertyControl.SelectTool,
                    _toolsWithPropertyControl.LineProperty, _toolsWithPropertyControl.FillProperty);
 
-            HistoryManagerCanvasControl historyManagerCanvasControl = new HistoryManagerCanvasControl(_canvasControl.BuferDraw, _canvasControl.Drawables,
-                _canvasControl.Image, _canvasControl.Interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
+            //Клонирование списка холста
+            List<IDrawable> localDrawablesForCanvas = new List<IDrawable>();
+            foreach (IDrawable drawable in _canvasControl.Drawables)
+            {
+                localDrawablesForCanvas.Add(drawable.Clone());
+            }
+            //Клонирование списка интерактива
+            List<IDrawable> localDrawablesForInteraction = new List<IDrawable>();
+            Interaction interaction = null;
+            if (_canvasControl.Interaction != null)
+            {
+                foreach (IDrawable drawable in _canvasControl.Interaction.DrawableFigures)
+                {
+                    localDrawablesForInteraction.Add(drawable.Clone());
+                }
+                interaction = new Interaction(localDrawablesForInteraction, _canvasControl.Interaction.EnablePoints);
+            }
+            //
+            HistoryManagerCanvasControl historyManagerCanvasControl = new HistoryManagerCanvasControl(_canvasControl.BuferDraw, localDrawablesForCanvas,
+                _canvasControl.Image, interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
 
             _historyManager.SaveStep(historyManagerToolsControl, historyManagerCanvasControl);
         }
 
         private void _historyManager_Step()
         {
-            //Этот момент не подлежит сохранению
-            _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
-            _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
-            _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
-            _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
-            //Востанавливаем сохранение на изменение инструментов
-            _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
-
             _canvasControl.BuferDraw = _historyManager.ManagerCanvasControl.BuferDraw;
             _canvasControl.Image = _historyManager.ManagerCanvasControl.Image;
-            _canvasControl.Drawables = _historyManager.ManagerCanvasControl.Drawables;
             _canvasControl.Interaction = _historyManager.ManagerCanvasControl.Interaction;
+            _canvasControl.Drawables = _historyManager.ManagerCanvasControl.Drawables;
             int X = _historyManager.ManagerCanvasControl.GetWidthCanvas();
             int Y = _historyManager.ManagerCanvasControl.GetHeightCanvas();
             _canvasControl.SetSizeCanvas(X, Y);
+
+            //Этот момент не подлежит сохранению
+            _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+            //  
+            _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
+            _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
+            _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
+            //Востанавливаем сохранение на изменение инструментов
+            _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+            //
         }
 
         private void _historyManager_StepForward()

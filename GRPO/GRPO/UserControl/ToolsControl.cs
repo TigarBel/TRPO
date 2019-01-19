@@ -39,9 +39,12 @@ namespace GRPO
 
         private void AllButtonBackColorWhite()
         {
-            foreach(Button button in _buttons)
+            if (_buttons != null)
             {
-                button.BackColor = Color.White;
+                foreach (Button button in _buttons)
+                {
+                    button.BackColor = Color.White;
+                }
             }
         }
 
@@ -106,7 +109,52 @@ namespace GRPO
             {
                 _tools = value;
                 if (ButtonClick != null) ButtonClick();
+                /*!!!*/ChoiceButton();/*!!!*/
             }
         }
+        /*!!!*/
+        private void ChoiceButton()
+        {
+            AllButtonBackColorWhite();
+            switch (SelectTool.DrawingTools)
+            {
+                case DrawingTools.CursorSelect:
+                    {
+                        buttonCursorSelect.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.MassSelect:
+                    {
+                        buttonMassSelect.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.DrawFigureLine:
+                    {
+                        buttonFigureLine.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.DrawFigurePolyline:
+                    {
+                        buttonFigurePolyline.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.DrawFigureRectangle:
+                    {
+                        buttonFigureRectangle.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.DrawFigureCircle:
+                    {
+                        buttonFigureCircle.BackColor = Color.Black;
+                        break;
+                    }
+                case DrawingTools.DrawFigureEllipse:
+                    {
+                        buttonFigureEllips.BackColor = Color.Black;
+                        break;
+                    }
+            }
+        }
+        /*!!!*/
     }
 }

@@ -107,7 +107,7 @@ namespace GRPO
             set
             {
                 _selectTool = value;
-
+                
                 if (value.DrawingTools != DrawingTools.CursorSelect)
                 {
                     Interaction = null;
@@ -237,6 +237,11 @@ namespace GRPO
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw(canvas);
+            }
+
+            if (Interaction != null)
+            {
+                Interaction.DrawSelcet(canvas);
             }
         }
         /// <summary>
