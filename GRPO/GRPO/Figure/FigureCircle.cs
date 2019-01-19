@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры - круг
@@ -31,13 +31,14 @@ namespace GRPO
         /// <summary>
         /// Класс фигуры Окружность
         /// </summary>
-        /// <param name="position">Расположение окружности</param>
-        /// <param name="radius"> Радиус окружности</param>
-        public FigureCircle(Point position, int radius)
+        /// <param name="pointA">Расположение окружности / начальная точка</param>
+        /// <param name="pointB">Конечная точка</param>
+        public FigureCircle(Point pointA, Point pointB)
         {
-            X = position.X - radius;
-            Y = position.Y - radius;
-            Radius = radius;
+            Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((pointB.X - pointA.X), 2) + Math.Pow((pointB.Y - pointA.Y), 2))));
+            X = pointA.X - Radius;
+            Y = pointA.Y - Radius;
+            Radius = Radius;
             Width = Radius * 2;
             Height = Radius * 2;
         }
@@ -46,10 +47,7 @@ namespace GRPO
         /// </summary>
         public int Radius
         {
-            get
-            {
-                return _radius;
-            }
+            get { return _radius; }
             set
             {
                 Width = value * 2;
@@ -60,12 +58,9 @@ namespace GRPO
         /// <summary>
         /// Позиция фигуры
         /// </summary>
-        public Point Position
+        public new Point Position
         {
-            get
-            {
-                return new Point(X, Y);
-            }
+            get { return new Point(X, Y); }
             set
             {
                 X = value.X;
@@ -77,10 +72,7 @@ namespace GRPO
         /// </summary>
         public int WidthCircle
         {
-            get
-            {
-                return Width;
-            }
+            get { return Width; }
             set
             {
                 if (value > 5)
@@ -95,10 +87,7 @@ namespace GRPO
         /// </summary>
         public int HeightCircle
         {
-            get
-            {
-                return Height;
-            }
+            get { return Height; }
             set
             {
                 if (value > 5)

@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using GRPO.Drawing;
+using GRPO.Drawing.Property;
 
 namespace GRPO
 {
@@ -538,9 +540,7 @@ namespace GRPO
                     }
                 case DrawingTools.DrawFigureCircle:
                     {
-                        DrawFigureCircle drawFigure = new DrawFigureCircle(pointA,
-                        Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((pointB.X - pointA.X), 2) + Math.Pow((pointB.Y - pointA.Y), 2)))),/******/
-                        LineProperty, FillProperty);
+                        DrawFigureCircle drawFigure = new DrawFigureCircle(pointA, pointB, LineProperty, FillProperty);
                         return drawFigure;
                     }
                 case DrawingTools.DrawFigureEllipse:

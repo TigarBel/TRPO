@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры
@@ -12,22 +12,6 @@ namespace GRPO
     [Serializable]
     class Figure
     {
-        /// <summary>
-        /// Позиция фигуры по координате X
-        /// </summary>
-        private int _xPosition;
-        /// <summary>
-        /// Позиция фигуры по координате Y
-        /// </summary>
-        private int _yPosition;
-        /// <summary>
-        /// Ширина фигуры
-        /// </summary>
-        private int _width;
-        /// <summary>
-        /// Высота фигуры
-        /// </summary>
-        private int _height;
         /// <summary>
         /// Пустой класс фигуры
         /// </summary>
@@ -55,58 +39,18 @@ namespace GRPO
         /// <summary>
         /// Позиция фигуры по координате X
         /// </summary>
-        protected int X
-        {
-            get
-            {
-                return _xPosition;
-            }
-            set
-            {
-                _xPosition = value;
-            }
-        }
+        protected int X { get; set; }
         /// <summary>
         /// Позиция фигуры по координате Y
         /// </summary>
-        protected int Y
-        {
-            get
-            {
-                return _yPosition;
-            }
-            set
-            {
-                _yPosition = value;
-            }
-        }
+        protected int Y { get; set; }
         /// <summary>
         /// Ширина фигуры
         /// </summary>
-        protected int Width
-        {
-            get
-            {
-                return _width;
-            }
-            set
-            {
-                _width = value;
-            }
-        }
+        protected int Width { get; set; }
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        protected int Height
-        {
-            get
-            {
-                return _height;
-            }
-            set
-            {
-                _height = value;
-            }
-        }
+        protected int Height { get; set; }
     }
 }

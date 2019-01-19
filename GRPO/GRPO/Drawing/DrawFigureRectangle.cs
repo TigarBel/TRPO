@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GRPO.Drawing.Property;
+using GRPO.Figure;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GRPO
+namespace GRPO.Drawing
 {
     /// <summary>
     /// Класс отрисовки фигуры - прямоугольник

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры - многоугольник
@@ -13,10 +13,6 @@ namespace GRPO
     [Serializable]
     class FigurePolygon : Figure
     {
-        /// <summary>
-        /// Список точек многоугольника
-        /// </summary>
-        private List<Point> _points;
         /// <summary>
         /// Количество углов многоугольника
         /// </summary>
@@ -73,26 +69,13 @@ namespace GRPO
         /// <summary>
         /// Список точек многоугольника
         /// </summary>
-        public List<Point> Points
-        {
-            get
-            {
-                return _points;
-            }
-            set
-            {
-                _points = value;
-            }
-        }
+        public List<Point> Points { get; set; }
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return new Point(X, Y);
-            }
+            get { return new Point(X, Y); }
             set
             {
                 for (int i = 0; i < Points.Count; i++)
@@ -108,10 +91,7 @@ namespace GRPO
         /// </summary>
         public int WidthPolygon
         {
-            get
-            {
-                return Width;
-            }
+            get { return Width; }
             set
             {
                 if (value > 10)
@@ -131,10 +111,7 @@ namespace GRPO
         /// </summary>
         public int HeightPolygon
         {
-            get
-            {
-                return Height;
-            }
+            get { return Height; }
             set
             {
                 if (value > 10)

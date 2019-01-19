@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace GRPO
+namespace GRPO.Drawing.Property
 {
     /// <summary>
     /// Класс свойство линии фигуры
@@ -46,10 +46,7 @@ namespace GRPO
         /// </summary>
         public float LineThickness
         {
-            get
-            {
-                return _lineThickness;
-            }
+            get { return _lineThickness; }
             set
             {
                 if (value > 0)

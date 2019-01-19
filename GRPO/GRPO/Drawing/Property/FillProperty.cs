@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Drawing.Property
 {
     /// <summary>
     /// Класс свойства заливки фигуры
@@ -13,10 +13,6 @@ namespace GRPO
     [Serializable]
     public class FillProperty
     {
-        /// <summary>
-        /// Цвет заливки
-        /// </summary>
-        private Color _fillColor;
         /// <summary>
         /// Пустой класс Расширения
         /// </summary>
@@ -38,16 +34,6 @@ namespace GRPO
         /// <summary>
         /// Цвет заливки
         /// </summary>
-        public Color FillColor
-        {
-            get
-            {
-                return _fillColor;
-            }
-            set
-            {
-                _fillColor = value;
-            }
-        }
+        public Color FillColor { get; set; }
     }
 }

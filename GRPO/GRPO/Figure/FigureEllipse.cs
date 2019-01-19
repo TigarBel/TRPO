@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры - эллипс
@@ -41,10 +41,7 @@ namespace GRPO
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return new Point(X, Y);
-            }
+            get { return new Point(X, Y); }
             set
             {
                 X = value.X;
@@ -56,10 +53,7 @@ namespace GRPO
         /// </summary>
         public int WidthEllipse
         {
-            get
-            {
-                return Width;
-            }
+            get { return Width; }
             set
             {
                 if (value > 5)
@@ -73,10 +67,7 @@ namespace GRPO
         /// </summary>
         public int HeightEllipse
         {
-            get
-            {
-                return Height;
-            }
+            get { return Height; }
             set
             {
                 if (value > 5)

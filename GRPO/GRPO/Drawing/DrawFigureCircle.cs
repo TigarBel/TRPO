@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GRPO.Figure;
+using GRPO.Drawing.Property;
 
-namespace GRPO
+namespace GRPO.Drawing
 {
     /// <summary>
     /// Класс отрисовки фигуры - круг
@@ -39,13 +41,13 @@ namespace GRPO
         /// <summary>
         /// Класс Отрисовки круга
         /// </summary>
-        /// <param name="position">Расположение окружности</param>
-        /// <param name="radius"> Радиус окружности</param>
+        /// <param name="pointA">Расположение окружности / начальная точка</param>
+        /// <param name="pointB">Конечная точка</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigureCircle(Point position, int radius, LineProperty extendedForLine, FillProperty extendedForFigure)
+        public DrawFigureCircle(Point pointA, Point pointB, LineProperty extendedForLine, FillProperty extendedForFigure)
         {
-            Circle = new FigureCircle(position, radius);
+            Circle = new FigureCircle(pointA, pointB);
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -174,7 +176,8 @@ namespace GRPO
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureCircle(Circle.Position, Circle.Radius, LineProperty, FillProperty);
+            return new DrawFigureCircle(Circle.Position, new Point(Circle.Position.X + Circle.Radius, Circle.Position.Y + Circle.Radius),
+                LineProperty, FillProperty);
         }
     }
 }

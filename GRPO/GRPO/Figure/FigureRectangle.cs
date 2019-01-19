@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры - прямоугольник
@@ -73,9 +73,6 @@ namespace GRPO
             points.Add(_pointLeftDown);
 
             Points = points;
-            /*Position = PointLeftUp;
-            WidthPolygon = PointRightDown.X - PointLeftDown.X;
-            Height = PointRightDown.Y - PointRightUp.Y;*/
         }
         /// <summary>
         /// Пустой класс фигуры Прямоугольника
@@ -127,10 +124,7 @@ namespace GRPO
         /// </summary>
         public Point PointLeftUp
         {
-            get
-            {
-                return new Point(_pointLeftUp.X, _pointLeftUp.Y);
-            }
+            get { return new Point(_pointLeftUp.X, _pointLeftUp.Y); }
             set
             {
                 if (value.X < PointRightUp.X - _restriction && value.Y < PointLeftDown.Y - _restriction)
@@ -148,10 +142,7 @@ namespace GRPO
         /// </summary>
         public Point PointRightUp
         {
-            get
-            {
-                return new Point(_pointRightUp.X, _pointRightUp.Y);
-            }
+            get { return new Point(_pointRightUp.X, _pointRightUp.Y); }
             set
             {
                 if (value.X > PointLeftUp.X + _restriction && value.Y < PointRightDown.Y - _restriction)
@@ -169,10 +160,7 @@ namespace GRPO
         /// </summary>
         public Point PointRightDown
         {
-            get
-            {
-                return new Point(_pointRightDown.X, _pointRightDown.Y);
-            }
+            get { return new Point(_pointRightDown.X, _pointRightDown.Y); }
             set
             {
                 if (value.X > PointLeftDown.X + _restriction && value.Y > PointRightUp.Y + _restriction)
@@ -190,10 +178,7 @@ namespace GRPO
         /// </summary>
         public Point PointLeftDown
         {
-            get
-            {
-                return new Point(_pointLeftDown.X, _pointLeftDown.Y);
-            }
+            get { return new Point(_pointLeftDown.X, _pointLeftDown.Y); }
             set
             {
                 if (value.X < PointRightDown.X - _restriction && value.Y > PointLeftUp.Y + _restriction)
@@ -245,10 +230,7 @@ namespace GRPO
         /// </summary>
         public new Point Position
         {
-            get
-            {
-                return new Point(X, Y);
-            }
+            get { return new Point(X, Y); }
             set
             {
                 List<Point> points = new List<Point>();

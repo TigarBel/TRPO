@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры полилиния
@@ -58,10 +58,7 @@ namespace GRPO
         /// </summary>
         public List<Point> Points
         {
-            get
-            {
-                return _points;
-            }
+            get { return _points; }
             set
             {
                 if (value.Count >= 1)
@@ -81,26 +78,13 @@ namespace GRPO
         /// <summary>
         /// Ложь: линейная; Истина: дуговая
         /// </summary>
-        public bool Circular
-        {
-            get
-            {
-                return _circular;
-            }
-            set
-            {
-                _circular = value;
-            }
-        }
+        public bool Circular { get; set; }
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return new Point(X, Y);
-            }
+            get { return new Point(X, Y); }
             set
             {
                 for (int i = 0; i < Points.Count; i++)
@@ -116,10 +100,7 @@ namespace GRPO
         /// </summary>
         public int WidthPolyline
         {
-            get
-            {
-                return Width;
-            }
+            get { return Width; }
             set
             {
                 if (value > 10)
@@ -146,10 +127,7 @@ namespace GRPO
         /// </summary>
         public int HeightPolyline
         {
-            get
-            {
-                return Height;
-            }
+            get { return Height; }
             set
             {
                 if (value > 10)

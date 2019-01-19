@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            GRPO.FillProperty fillProperty1 = new GRPO.FillProperty();
-            GRPO.LineProperty lineProperty1 = new GRPO.LineProperty();
-            GRPO.FillProperty fillProperty2 = new GRPO.FillProperty();
-            GRPO.LineProperty lineProperty2 = new GRPO.LineProperty();
+            GRPO.Drawing.Property.FillProperty fillProperty1 = new GRPO.Drawing.Property.FillProperty();
+            GRPO.Drawing.Property.LineProperty lineProperty1 = new GRPO.Drawing.Property.LineProperty();
+            GRPO.Drawing.Property.FillProperty fillProperty2 = new GRPO.Drawing.Property.FillProperty();
+            GRPO.Drawing.Property.LineProperty lineProperty2 = new GRPO.Drawing.Property.LineProperty();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GRPO.Drawing;
+using GRPO.Drawing.Property;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -145,16 +147,20 @@ namespace GRPO
         {
             List<Point> points = GetBorderPoints(index);
             DrawFigureCircle drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y),
-                _radiusDrawPoint, new LineProperty(), new FillProperty());
+                new Point(points[0].X + (points[1].X - points[0].X) / 2 + _radiusDrawPoint, points[0].Y + _radiusDrawPoint), 
+                new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[1].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                _radiusDrawPoint, new LineProperty(), new FillProperty());
+                new Point(points[1].X + _radiusDrawPoint, points[1].Y + (points[2].Y - points[1].Y) / 2 + _radiusDrawPoint), 
+                new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[2].Y),
-                _radiusDrawPoint, new LineProperty(), new FillProperty());
+                new Point(points[0].X + (points[1].X - points[0].X) / 2 + _radiusDrawPoint, points[2].Y + _radiusDrawPoint), 
+                new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
             drawFigure = new DrawFigureCircle(new Point(points[0].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                _radiusDrawPoint, new LineProperty(), new FillProperty());
+                new Point(points[0].X + _radiusDrawPoint, points[1].Y + (points[2].Y - points[1].Y) / 2 + _radiusDrawPoint),
+                new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
         }
         /// <summary>
@@ -166,7 +172,8 @@ namespace GRPO
             List<Point> points = GetBorderPoints(index);
             for (int i = 0; i < 4; i++)
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, new LineProperty(), new FillProperty());
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
+                    new LineProperty(), new FillProperty());
                 drawFigure.Draw(pictureBox);
             }
         }
@@ -191,7 +198,8 @@ namespace GRPO
             List<Point> points = DrawableFigures[0].GetPoints();
             for (int i = 0; i < points.Count; i++) 
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], _radiusDrawPoint, new LineProperty(), new FillProperty(Color.Transparent));
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
+                    new LineProperty(), new FillProperty(Color.Transparent));
                 drawFigure.Draw(pictureBox);
             }
         }

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using GRPO.Figure;
+using GRPO.Drawing.Property;
 
-namespace GRPO
+namespace GRPO.Drawing
 {
     /// <summary>
     /// Класс отрисовки фигуры - многоугольник

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            GRPO.FillProperty fillProperty1 = new GRPO.FillProperty();
-            GRPO.LineProperty lineProperty1 = new GRPO.LineProperty();
+            GRPO.Drawing.Property.FillProperty fillProperty1 = new GRPO.Drawing.Property.FillProperty();
+            GRPO.Drawing.Property.LineProperty lineProperty1 = new GRPO.Drawing.Property.LineProperty();
             this._toolsControl = new GRPO.ToolsControl();
             this._fillFigureControl = new GRPO.FillFigureControl();
             this._propertyLineControl = new GRPO.PropertyLineControl();

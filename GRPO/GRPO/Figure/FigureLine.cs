@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace GRPO
+namespace GRPO.Figure
 {
     /// <summary>
     /// Класс фигуры - линия
@@ -63,10 +63,7 @@ namespace GRPO
         /// </summary>
         public Point PointA
         {
-            get
-            {
-                return _pointA;
-            }
+            get { return _pointA; }
             set
             {
                 _pointA = value;
@@ -78,10 +75,7 @@ namespace GRPO
         /// </summary>
         public Point PointB
         {
-            get
-            {
-                return _pointB;
-            }
+            get { return _pointB; }
             set
             {
                 _pointB = value;
@@ -93,10 +87,7 @@ namespace GRPO
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return _position; }
             set
             {
                 _pointA = new Point(PointA.X - (Position.X - value.X), PointA.Y - (Position.Y - value.Y));
@@ -109,10 +100,7 @@ namespace GRPO
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Math.Abs(PointA.X - PointB.X);
-            }
+            get { return Math.Abs(PointA.X - PointB.X); }
             set
             {
                 if (value > 10)
@@ -134,10 +122,7 @@ namespace GRPO
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Math.Abs(PointA.Y - PointB.Y);
-            }
+            get { return Math.Abs(PointA.Y - PointB.Y); }
             set
             {
                 if (value > 10)
