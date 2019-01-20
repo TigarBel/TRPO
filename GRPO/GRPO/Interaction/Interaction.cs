@@ -291,7 +291,7 @@ namespace GRPO
                     }
                 case "DrawFigureCircle":
                     {
-                        ((DrawFigureCircle)DrawableFigures[0]).Circle.Radius = (pointDeviation.X - ((DrawFigureCircle)DrawableFigures[0]).Position.X) / 2;
+                        ((DrawFigureCircle)DrawableFigures[0]).Circle.Width = pointDeviation.X - ((DrawFigureCircle)DrawableFigures[0]).Position.X;
                         break;
                     }
                 case "DrawFigureEllipse":

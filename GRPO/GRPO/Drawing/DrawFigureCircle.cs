@@ -106,8 +106,8 @@ namespace GRPO.Drawing
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
                 graphics.FillEllipse(new SolidBrush(FillProperty.FillColor), 
-                    Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
-                graphics.DrawEllipse(pen, Circle.Position.X, Circle.Position.Y, Circle.WidthCircle, Circle.HeightCircle);
+                    Circle.Position.X, Circle.Position.Y, Circle.Width, Circle.Height);
+                graphics.DrawEllipse(pen, Circle.Position.X, Circle.Position.Y, Circle.Width, Circle.Height);
                 graphics.Dispose();
                 pictureBox.Invalidate();
             }
@@ -124,9 +124,7 @@ namespace GRPO.Drawing
         {
             List<Point> points = new List<Point>();
             points.Add(new Point(Circle.Position.X, Circle.Position.Y));
-            points.Add(new Point(Circle.Position.X + Circle.WidthCircle, Circle.Position.Y));
-            points.Add(new Point(Circle.Position.X + Circle.WidthCircle, Circle.Position.Y + Circle.HeightCircle));
-            points.Add(new Point(Circle.Position.X, Circle.Position.Y + Circle.HeightCircle));
+            points.Add(new Point(Circle.Position.X + Circle.Width, Circle.Position.Y + Circle.Height));
             return points;
         }
         /// <summary>
@@ -150,11 +148,11 @@ namespace GRPO.Drawing
         {
             get
             {
-                return Circle.WidthCircle;
+                return Circle.Width;
             }
             set
             {
-                Circle.WidthCircle = value;
+                Circle.Width = value;
             }
         }
         /// <summary>
@@ -164,11 +162,11 @@ namespace GRPO.Drawing
         {
             get
             {
-                return Circle.HeightCircle;
+                return Circle.Height;
             }
             set
             {
-                Circle.HeightCircle = value;
+                Circle.Height = value;
             }
         }
         /// <summary>

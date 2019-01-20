@@ -125,12 +125,6 @@ namespace GRPO.Drawing
         /// <summary>
         /// Тип инструмента
         /// </summary>
-        public TypeTools TypeTools
-        {
-            get
-            {
-                return _typeTools;
-            }
-        }
+        public TypeTools TypeTools { get { return _typeTools; } }
     }
 }

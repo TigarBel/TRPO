@@ -11,17 +11,14 @@ namespace GRPO.Figure
     /// Класс фигуры - эллипс
     /// </summary>
     [Serializable]
-    class FigureEllipse : Figure
+    class FigureEllipse : FigureLine
     {
         /// <summary>
         ///  Пустой класс фигуры Эллипс
         /// </summary>
         public FigureEllipse()
         {
-            X = 0;
-            Y = 0;
-            Width = 0;
-            Height = 0;
+
         }
         /// <summary>
         /// Класс фигуры Эллипс
@@ -29,24 +26,11 @@ namespace GRPO.Figure
         /// <param name="position">Расположения эллипса</param>
         /// <param name="width">Ширина эллипса</param>
         /// <param name="height">Высота эллипса</param>
-        public FigureEllipse(Point position, int width, int height)
+        public FigureEllipse(Point pointA, Point pointB)
         {
-            X = position.X;
-            Y = position.Y;
-            Width = width;
-            Height = height;
-        }
-        /// <summary>
-        /// Позиция фигуры
-        /// </summary>
-        public Point Position
-        {
-            get { return new Point(X, Y); }
-            set
-            {
-                X = value.X;
-                Y = value.Y;
-            }
+            PointA = pointA;
+            PointB = pointB;
+            Init();
         }
         /// <summary>
         /// Ширина фигуры

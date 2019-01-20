@@ -28,7 +28,7 @@ namespace GRPO.Figure
         /// <summary>
         /// Изменение параметров: расположения, ширины и высоты фигуры
         /// </summary>
-        private void Init()
+        protected void Init()
         {
             List<Point> points = new List<Point>();
             points.Add(PointA);
@@ -103,7 +103,7 @@ namespace GRPO.Figure
             get { return Math.Abs(PointA.X - PointB.X); }
             set
             {
-                if (value > 10)
+                if (value > 1)
                 {
                     if (Width != 0)
                     {
@@ -125,13 +125,12 @@ namespace GRPO.Figure
             get { return Math.Abs(PointA.Y - PointB.Y); }
             set
             {
-                if (value > 10)
+                if (value > 1)
                 {
                     if (Height != 0)
                     {
                         PointA = new Point(PointA.X, Position.Y + Convert.ToInt32((float)(PointA.Y - Position.Y) / (float)Height * (float)value));
                         PointB = new Point(PointB.X, Position.Y + Convert.ToInt32((float)(PointB.Y - Position.Y) / (float)Height * (float)value));
-                        Height = value;
                     }
                     else
                     {

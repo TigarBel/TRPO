@@ -547,7 +547,7 @@ namespace GRPO
                     }
                 case DrawingTools.DrawFigureEllipse:
                     {
-                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB.X - pointA.X, pointB.Y - pointA.Y, LineProperty,
+                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB, LineProperty,
                             FillProperty);
                         return drawFigure;
                     }

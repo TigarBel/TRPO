@@ -42,14 +42,13 @@ namespace GRPO.Drawing
         /// <summary>
         /// Класс Отрисовки эллипса
         /// </summary>
-        /// <param name="position">Расположения эллипса</param>
-        /// <param name="width">Ширина эллипса</param>
-        /// <param name="height">Высота эллипса</param>
+        /// <param name="pointA">Начальная точка</param>
+        /// <param name="pointB">Конечная точка</param>
         /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
         /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigureEllipse(Point position, int width, int height, LineProperty extendedForLine, FillProperty extendedForFigure)
+        public DrawFigureEllipse(Point pointA, Point pointB, LineProperty extendedForLine, FillProperty extendedForFigure)
         {
-            Ellipse = new FigureEllipse(position, width, height);
+            Ellipse = new FigureEllipse(pointA, pointB);
             LineProperty = extendedForLine;
             FillProperty = extendedForFigure;
         }
@@ -178,7 +177,8 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureEllipse(Ellipse.Position, Ellipse.WidthEllipse, Ellipse.HeightEllipse, LineProperty, FillProperty);
+            return new DrawFigureEllipse(Ellipse.Position,
+                new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y + Ellipse.HeightEllipse), LineProperty, FillProperty);
         }
     }
 }

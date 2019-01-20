@@ -22,11 +22,7 @@ namespace GRPO.Figure
         /// </summary>
         public FigureCircle()
         {
-            X = 0;
-            Y = 0;
-            Width = 0;
-            Height = 0;
-            Radius = 0;
+
         }
         /// <summary>
         /// Класс фигуры Окружность
@@ -35,12 +31,10 @@ namespace GRPO.Figure
         /// <param name="pointB">Конечная точка</param>
         public FigureCircle(Point pointA, Point pointB)
         {
-            Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((pointB.X - pointA.X), 2) + Math.Pow((pointB.Y - pointA.Y), 2))));
-            X = pointA.X - Radius;
-            Y = pointA.Y - Radius;
-            Radius = Radius;
-            Width = Radius * 2;
-            Height = Radius * 2;
+            Position = new Point(0, 0);
+            PointA = pointA;
+            PointB = pointB;
+            Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((PointB.X - PointA.X), 2) + Math.Pow((PointB.Y - PointA.Y), 2))));
         }
         /// <summary>
         /// Радиус фигуры Окружность
@@ -50,50 +44,40 @@ namespace GRPO.Figure
             get { return _radius; }
             set
             {
-                Width = value * 2;
-                Height = value * 2;
+                PointA = new Point(PointA.X - value, PointA.Y - value);
+                PointB = new Point(PointA.X + value, PointA.Y + value);
                 _radius = value;
-            }
-        }
-        /// <summary>
-        /// Позиция фигуры
-        /// </summary>
-        public new Point Position
-        {
-            get { return new Point(X, Y); }
-            set
-            {
-                X = value.X;
-                Y = value.Y;
             }
         }
         /// <summary>
         /// Ширина фигуры
         /// </summary>
-        public int WidthCircle
+        public new int Width
         {
-            get { return Width; }
+            get { return Radius * 2; }
             set
             {
                 if (value > 5)
                 {
-                    Width = value;
-                    Height = value;
+                    PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+                    PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
+                    Radius = value / 2;
                 }
             }
         }
         /// <summary>
         /// Высота фигуры
         /// </summary>
-        public int HeightCircle
+        public new int Height
         {
-            get { return Height; }
+            get { return Radius * 2; }
             set
             {
                 if (value > 5)
                 {
-                    Width = value;
-                    Height = value;
+                    PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+                    PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
+                    Radius = value / 2;
                 }
             }
         }

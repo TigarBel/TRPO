@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GRPO.Drawing;
+using GRPO.UserControls.ToolsIncludeButtons;
 
 namespace GRPO
 {
@@ -16,7 +17,9 @@ namespace GRPO
     /// </summary>
     public partial class ToolsControl : UserControl
     {
+
         private Tools _tools;
+
         private List<Button> _buttons;
 
         public delegate void ButtonStateHandler();
@@ -29,6 +32,7 @@ namespace GRPO
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
 
             _buttons = new List<Button>();
+            /*ToolIncludeButton toolIncludeButton = new ToolIncludeButton(buttonCursorSelect, DrawingTools.CursorSelect, ref _tools, _buttons);*/
             _buttons.Add(buttonCursorSelect);
             _buttons.Add(buttonMassSelect);
             _buttons.Add(buttonFigureLine);
@@ -48,7 +52,6 @@ namespace GRPO
                 }
             }
         }
-
         private void buttonCursorSelect_Click(object sender, EventArgs e)
         {
             AllButtonBackColorWhite();
