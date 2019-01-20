@@ -342,7 +342,7 @@ namespace GRPO
         /// <param name="drawable">Фигура</param>
         public void AddDrawableFigure(IDrawable drawable)
         {
-            if(DrawableFigures.Contains(drawable))
+            if(!DrawableFigures.Contains(drawable))
             {
                 DrawableFigures.Add(drawable);
                 EnablePoints = false;

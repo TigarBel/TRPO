@@ -10,7 +10,7 @@ namespace GRPO.Figure
     /// Класс фигуры
     /// </summary>
     [Serializable]
-    class Figure
+    abstract class Figure
     {
         /// <summary>
         /// Пустой класс фигуры

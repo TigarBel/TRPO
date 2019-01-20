@@ -17,88 +17,42 @@ namespace GRPO
     /// </summary>
     public partial class ToolsControl : UserControl
     {
-
-        private Tools _tools;
-
-        private List<Button> _buttons;
-
+        /// <summary>
+        /// Объект инструмента
+        /// </summary>
+        private Tools _tools = new Tools();
+        /// <summary>
+        /// Списко объектов инструментов в кнопках
+        /// </summary>
+        private List<ToolIncludeButton> _toolIncludeButtons = new List<ToolIncludeButton>();
+        /// <summary>
+        /// Список кнопок
+        /// </summary>
+        private List<Button> _buttons = new List<Button>();
+        /// <summary>
+        /// Делегат для события изменения состояния кнопка
+        /// </summary>
         public delegate void ButtonStateHandler();
+        /// <summary>
+        /// Событие при изменении состояния кнопки
+        /// </summary>
         public event ButtonStateHandler ButtonClick;
-
+        /// <summary>
+        /// Конструктор класса пользовательский интерфейс для выбора инструмента
+        /// </summary>
         public ToolsControl()
         {
             InitializeComponent();
 
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
 
-            _buttons = new List<Button>();
-            /*ToolIncludeButton toolIncludeButton = new ToolIncludeButton(buttonCursorSelect, DrawingTools.CursorSelect, ref _tools, _buttons);*/
-            _buttons.Add(buttonCursorSelect);
-            _buttons.Add(buttonMassSelect);
-            _buttons.Add(buttonFigureLine);
-            _buttons.Add(buttonFigurePolyline);
-            _buttons.Add(buttonFigureRectangle);
-            _buttons.Add(buttonFigureCircle);
-            _buttons.Add(buttonFigureEllips);
-        }
-
-        private void AllButtonBackColorWhite()
-        {
-            if (_buttons != null)
-            {
-                foreach (Button button in _buttons)
-                {
-                    button.BackColor = Color.White;
-                }
-            }
-        }
-        private void buttonCursorSelect_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.CursorSelect);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonMassSelect_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.MassSelect);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonFigureLine_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.DrawFigureLine);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonFigurePolyline_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.DrawFigurePolyline);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonFigureRectangle_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.DrawFigureRectangle);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonFigureCircle_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.DrawFigureCircle);
-            ((Button)sender).BackColor = Color.Black;
-        }
-
-        private void buttonFigureEllips_Click(object sender, EventArgs e)
-        {
-            AllButtonBackColorWhite();
-            SelectTool = new Tools(DrawingTools.DrawFigureEllipse);
-            ((Button)sender).BackColor = Color.Black;
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonCursorSelect, DrawingTools.CursorSelect, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonMassSelect, DrawingTools.MassSelect, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureLine, DrawingTools.DrawFigureLine, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolyline, DrawingTools.DrawFigurePolyline, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureRectangle, DrawingTools.DrawFigureRectangle, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureCircle, DrawingTools.DrawFigureCircle, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureEllips, DrawingTools.DrawFigureEllipse, ref _tools, _buttons, RefreshSelectTool));
         }
         /// <summary>
         /// Выбранный тип класса IDrawable
@@ -113,52 +67,11 @@ namespace GRPO
             {
                 _tools = value;
                 if (ButtonClick != null) ButtonClick();
-                /*!!!*/ChoiceButton();/*!!!*/
             }
         }
-        /*!!!*/
-        private void ChoiceButton()
-        {
-            AllButtonBackColorWhite();
-            switch (SelectTool.DrawingTools)
-            {
-                case DrawingTools.CursorSelect:
-                    {
-                        buttonCursorSelect.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.MassSelect:
-                    {
-                        buttonMassSelect.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.DrawFigureLine:
-                    {
-                        buttonFigureLine.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.DrawFigurePolyline:
-                    {
-                        buttonFigurePolyline.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.DrawFigureRectangle:
-                    {
-                        buttonFigureRectangle.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.DrawFigureCircle:
-                    {
-                        buttonFigureCircle.BackColor = Color.Black;
-                        break;
-                    }
-                case DrawingTools.DrawFigureEllipse:
-                    {
-                        buttonFigureEllips.BackColor = Color.Black;
-                        break;
-                    }
-            }
-        }
-        /*!!!*/
+        /// <summary>
+        /// Процедура для события, при изменении ссылки
+        /// </summary>
+        private void RefreshSelectTool() { SelectTool = SelectTool; }
     }
 }

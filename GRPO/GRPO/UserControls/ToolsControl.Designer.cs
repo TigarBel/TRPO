@@ -46,7 +46,6 @@
             this.buttonMassSelect.Size = new System.Drawing.Size(35, 35);
             this.buttonMassSelect.TabIndex = 2;
             this.buttonMassSelect.UseVisualStyleBackColor = false;
-            this.buttonMassSelect.Click += new System.EventHandler(this.buttonMassSelect_Click);
             // 
             // buttonCursorSelect
             // 
@@ -57,7 +56,6 @@
             this.buttonCursorSelect.Size = new System.Drawing.Size(35, 35);
             this.buttonCursorSelect.TabIndex = 1;
             this.buttonCursorSelect.UseVisualStyleBackColor = false;
-            this.buttonCursorSelect.Click += new System.EventHandler(this.buttonCursorSelect_Click);
             // 
             // buttonFigureEllips
             // 
@@ -68,7 +66,6 @@
             this.buttonFigureEllips.Size = new System.Drawing.Size(35, 35);
             this.buttonFigureEllips.TabIndex = 7;
             this.buttonFigureEllips.UseVisualStyleBackColor = false;
-            this.buttonFigureEllips.Click += new System.EventHandler(this.buttonFigureEllips_Click);
             // 
             // buttonFigureCircle
             // 
@@ -79,7 +76,6 @@
             this.buttonFigureCircle.Size = new System.Drawing.Size(35, 35);
             this.buttonFigureCircle.TabIndex = 6;
             this.buttonFigureCircle.UseVisualStyleBackColor = false;
-            this.buttonFigureCircle.Click += new System.EventHandler(this.buttonFigureCircle_Click);
             // 
             // buttonFigureRectangle
             // 
@@ -90,7 +86,6 @@
             this.buttonFigureRectangle.Size = new System.Drawing.Size(35, 35);
             this.buttonFigureRectangle.TabIndex = 5;
             this.buttonFigureRectangle.UseVisualStyleBackColor = false;
-            this.buttonFigureRectangle.Click += new System.EventHandler(this.buttonFigureRectangle_Click);
             // 
             // buttonFigurePolyline
             // 
@@ -101,7 +96,6 @@
             this.buttonFigurePolyline.Size = new System.Drawing.Size(35, 35);
             this.buttonFigurePolyline.TabIndex = 4;
             this.buttonFigurePolyline.UseVisualStyleBackColor = false;
-            this.buttonFigurePolyline.Click += new System.EventHandler(this.buttonFigurePolyline_Click);
             // 
             // buttonFigureLine
             // 
@@ -112,7 +106,6 @@
             this.buttonFigureLine.Size = new System.Drawing.Size(35, 35);
             this.buttonFigureLine.TabIndex = 3;
             this.buttonFigureLine.UseVisualStyleBackColor = false;
-            this.buttonFigureLine.Click += new System.EventHandler(this.buttonFigureLine_Click);
             // 
             // ToolsControl
             // 

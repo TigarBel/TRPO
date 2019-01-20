@@ -48,7 +48,7 @@ namespace GRPO
 
             _historyManager = new HistoryManager(historyManagerToolsControl, historyManagerCanvasControl);
 
-            _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.DrawFigureLine);
+            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -58,7 +58,9 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
+            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
+            _canvasControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
+            /*SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "GraphicsPO Project|*.grpo",
                 FileName = _historyManager.FileName
@@ -70,7 +72,7 @@ namespace GRPO
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
                     binaryFormatter.Serialize(stream, _historyManager);
                 }
-            }
+            }*/
         }
 
         private void button3_Click(object sender, EventArgs e)

@@ -488,32 +488,32 @@ namespace GRPO
                                 //if (SaveStep != null) SaveStep();
                             }
 
-                            /*if (Interaction == null)
+                            if (Interaction == null)
                             {
                                 Interaction = new Interaction();
-                                for (int x = points.Min(point => point.X); x < points.Max(point => point.X); x++)
+                                int Xmin = points.Min(point => point.X);
+                                int Ymin = points.Min(point => point.Y);
+                                int Xmax = points.Max(point => point.X);
+                                int Ymax = points.Max(point => point.Y);
+                                foreach (IDrawable drawable in Drawables)
                                 {
-                                    for(int y = points.Min(point => point.Y); y < points.Max(point => point.Y); y++)
+                                    if (Xmin >= drawable.GetPoints().Min(point => point.X) &&
+                                        Xmax <= drawable.GetPoints().Max(point => point.X) &&
+                                        Ymin >= drawable.GetPoints().Min(point => point.Y) &&
+                                        Ymax <= drawable.GetPoints().Max(point => point.Y))
                                     {
-                                        foreach (IDrawable drawable in Drawables)
-                                        {
-                                            int Xmin = drawable.GetPoints().Min(point => point.X);
-                                            int Ymin = drawable.GetPoints().Min(point => point.Y);
-                                            int Xmin = drawable.GetPoints().Min(point => point.X);
-                                            int Ymin = drawable.GetPoints().Min(point => point.Y);
-
-                                            if (X >= points.Min(point => point.X) &&
-                                                X <= points.Max(point => point.X) &&
-                                                Y >= points.Min(point => point.Y) &&
-                                                Y <= points.Max(point => point.Y))
-                                            {
-                                                localDrawables.Add(drawable);
-                                            }
-                                            Interaction.AddDrawableFigure();
-                                        }
+                                        Interaction.AddDrawableFigure(drawable);
                                     }
                                 }
-                            }*/
+                                if (Interaction.DrawableFigures.Count == 0)
+                                {
+                                    Interaction = null;
+                                }
+                                else
+                                {
+                                    Interaction.DrawSelcet(canvas);
+                                }
+                            }
                         }
                         else
                         {
@@ -611,5 +611,10 @@ namespace GRPO
                 if (DragProperty != null) DragProperty(null);
             }
         }
+
+        /*public void AddFigureInInteractive()
+        {
+
+        }*/
     }
 }
