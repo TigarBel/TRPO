@@ -1,31 +1,16 @@
-﻿using System;
+﻿using GRPO.Drawing;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using GRPO.Drawing;
-using GRPO.Drawing.Property;
-using GRPO.Drawing.Interface;
 
-
-namespace GRPO
+namespace GRPO.UserControls.CanvasMouseActions
 {
-    /// <summary>
-    /// Пользовательский интерфейс полотна для рисования
-    /// </summary>
-    public partial class CanvasControl : UserControl
+    class MouseAction
     {
-
-        public delegate void Drag(IDrawable drawable);
-        public event Drag DragProperty;
-
-        public delegate void CanvasControChanged();
-        public event CanvasControChanged SaveStep;
         /// <summary>
         /// Фабрика фигур
         /// </summary>
@@ -46,193 +31,20 @@ namespace GRPO
         /// Флаг при создании полифигур
         /// </summary>
         private bool _flagPolyFigure;
-        /// <summary>
-        /// Список фигур хронящихся в памяти
-        /// </summary>
-        private List<IDrawable> _buferDraw = new List<IDrawable>();
-        /// <summary>
-        /// Список фигур
-        /// </summary>
-        private List<IDrawable> _drawables = new List<IDrawable>();
-        /// <summary>
-        /// Инструмент для рисования
-        /// </summary>
-        private Tools _selectTool;
-        /// <summary>
-        /// Объект взаимодействия с нарисованными фигурами
-        /// </summary>
-        private Interaction _interaction;
-        /// <summary>
-        /// Инициализация пользовательского интерфейса полотна для рисования
-        /// </summary>
-        public CanvasControl()
-        {
-            InitializeComponent();
-            SetSizeCanvas(100, 50);
-            SelectTool = new Tools(DrawingTools.DrawFigureLine);
-            LineProperty = new LineProperty();
-            FillProperty = new FillProperty();
-        }
-        /// <summary>
-        /// Список фигур
-        /// </summary>
-        public List<IDrawable> Drawables
-        {
-            get
-            {
-                return _drawables;
-            }
-            set
-            {
-                _drawables = value;
-                if (_drawables != null)
-                {
-                    if (_drawables.Count > 0)
-                    {
-                        RefreshCanvas();
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Инструмент для рисования
-        /// </summary>
-        public Tools SelectTool
-        {
-            get
-            {
-                return _selectTool;
-            }
-            set
-            {
-                _selectTool = value;
-                _flagMouseDown = false;
-                _flagPolyFigure = false;
-                RefreshCanvas();
-            }
-        }
-        /// <summary>
-        /// Свойство линии
-        /// </summary>
-        public LineProperty LineProperty { get; set; }
-        /// <summary>
-        /// Свойство заливки
-        /// </summary>
-        public FillProperty FillProperty { get; set; }
-        /// <summary>
-        /// Картинка с холста
-        /// </summary>
-        public Image Image
-        {
-            get
-            {
-                return new Bitmap(canvas.Image);
-            }
-            set
-            {
-                canvas.Image = new Bitmap(value);
-            }
-        }
-        /// <summary>
-        /// Объект взаимодействия с нарисованными фигурами
-        /// </summary>
-        public Interaction Interaction
-        {
-            get
-            {
-                return _interaction;
-            }
-            set
-            {
-                _interaction = value;
-            }
-        }
-        /// <summary>
-        /// Список фигур хронящихся в памяти
-        /// </summary>
-        public List<IDrawable> BuferDraw
-        {
-            get
-            {
-                return _buferDraw;
-            }
-            set
-            {
-                _buferDraw = value;
-            }
-        }
-        /// <summary>
-        /// Задать размер полотна
-        /// </summary>
-        /// <param name="width">Ширина полотна</param>
-        /// <param name="height">Высота полотна</param>
-        public void SetSizeCanvas(int width, int height)
-        {
-            if (width <= 0)
-            {
-                throw new ArgumentException("Ширина полотна не может быть меньше 1!");
-            }
-            if (height <= 0)
-            {
-                throw new ArgumentException("Высота полотна не может быть меньше 1!");
-            }
-            canvas.Size = new Size(width, height);
-            canvas.Image = new Bitmap(width, height);
-            if(Drawables.Count > 0)
-            {
-                foreach(IDrawable draw in Drawables)
-                {
-                    draw.Draw(canvas);
-                }
-            }
-        }
-        /// <summary>
-        /// Получить ширину холста
-        /// </summary>
-        /// <returns>Ширину холста</returns>
-        public int GetWidthCanvas()
-        {
-            return canvas.Width;
-        }
-        /// <summary>
-        /// Получить высоту холста
-        /// </summary>
-        /// <returns>Высоту холста</returns>
-        public int GetHeightCanvas()
-        {
-            return canvas.Height;
-        }
-        /// <summary>
-        /// Перерисовать фигуры из списка
-        /// </summary>
-        public void RefreshCanvas()
-        {
-            canvas.Image = new Bitmap(canvas.Width,canvas.Height);
-            foreach (IDrawable drawable in Drawables)
-            {
-                drawable.Draw(canvas);
-            }
 
-            if (Interaction != null)
-            {
-                Interaction.DrawSelcet(canvas);
-            }
-        }
-        /// <summary>
-        /// Очистка холста
-        /// </summary>
-        public void ClearCanvas()
+        public MouseAction(PictureBox pictureBox)
         {
-            Drawables.Clear();
-            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            Canvas = pictureBox;
         }
 
-        private void canvas_MouseDown(object sender, MouseEventArgs e)
+        private PictureBox Canvas { get; set; }
+
+        /*private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
-            if (SelectTool.TypeTools == TypeTools.SimpleFigure) 
+            if (SelectTool.TypeTools == TypeTools.SimpleFigure)
             {
                 Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointA, LineProperty, FillProperty, SelectTool.DrawingTools));
             }
@@ -291,14 +103,14 @@ namespace GRPO
                     if (SelectTool.DrawingTools == DrawingTools.MassSelect)
                     {
                         List<Point> localPoints = new List<Point>();
-                        foreach(IDrawable drawable in Interaction.DrawableFigures)
+                        foreach (IDrawable drawable in Interaction.DrawableFigures)
                         {
-                            foreach(Point point in drawable.GetPoints())
+                            foreach (Point point in drawable.GetPoints())
                             {
                                 localPoints.Add(point);
                             }
                         }
-                        
+
                         if (localPoints.Min(point => point.X) > _pointA.X ||
                             localPoints.Min(point => point.Y) > _pointA.Y ||
                             localPoints.Max(point => point.X) < _pointA.X ||
@@ -352,13 +164,13 @@ namespace GRPO
                         if (Interaction == null)
                         {
                             RefreshCanvas();
-                            DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB, 
+                            DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB,
                                 new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
                             drawFigureRectangle.Draw(canvas);
                         }
                         else
                         {
-                            foreach(IDrawable drawable in Interaction.DrawableFigures)
+                            foreach (IDrawable drawable in Interaction.DrawableFigures)
                             {
                                 int x = drawable.Position.X;
                                 int y = drawable.Position.Y;
@@ -371,7 +183,7 @@ namespace GRPO
                 }
             }
 
-            if(_flagPolyFigure)
+            if (_flagPolyFigure)
             {
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
@@ -389,7 +201,7 @@ namespace GRPO
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
-            RefreshCanvas();
+
             if (_flagMouseDown)
             {
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
@@ -413,7 +225,7 @@ namespace GRPO
                     }
                 }
 
-                if (SelectTool.TypeTools == TypeTools.SelectFigure) 
+                if (SelectTool.TypeTools == TypeTools.SelectFigure)
                 {
                     if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                     {
@@ -516,94 +328,20 @@ namespace GRPO
             }
         }
         /// <summary>
-        /// Скопировать фигуру(ы) в буфер
+        /// Перерисовать фигуры из списка
         /// </summary>
-        public void Copy()
+        public void RefreshCanvas()
         {
-            BuferDraw.Clear();
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            foreach (IDrawable drawable in Drawables)
             {
-                foreach (IDrawable drawable in Interaction.DrawableFigures)
-                {
-                    BuferDraw.Add(drawable.Clone());
-                }
+                drawable.Draw(canvas);
             }
-        }
-        /// <summary>
-        /// Вставить фигуру(ы)
-        /// </summary>
-        public void Paste()
-        {
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && BuferDraw != null)
-            {
-                List<Point> localPoints = new List<Point>();
-                foreach (IDrawable drawable in BuferDraw)
-                {
-                    foreach (Point point in drawable.GetPoints())
-                    {
-                        localPoints.Add(point);
-                    }
-                }
 
-                foreach (IDrawable drawable in BuferDraw)
-                {
-                    if (_pointB.X > 0 && _pointB.X < GetWidthCanvas() && _pointB.Y > 0 && _pointB.Y < GetHeightCanvas())
-                    {
-                        int Width = drawable.Position.X - localPoints.Min(point => point.X);
-                        int Height = drawable.Position.Y - localPoints.Min(point => point.Y);
-                        drawable.Position = new Point(_pointB.X + Width, _pointB.Y + Height);
-                    }
-                    else
-                    {
-                        drawable.Position = new Point(10, 10);
-                    }
-                    Drawables.Add(drawable.Clone());
-                }
-                RefreshCanvas();
-                Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count), false);
+            if (Interaction != null)
+            {
                 Interaction.DrawSelcet(canvas);
             }
-        }
-        /// <summary>
-        /// Удалить фигуру(ы)
-        /// </summary>
-        public void Delete()
-        {
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
-            {
-                foreach (IDrawable drawable in Interaction.DrawableFigures)
-                {
-                    Drawables.Remove(drawable);
-                }
-
-                RefreshCanvas();
-                Interaction = null;
-                if (DragProperty != null) DragProperty(null);
-            }
-        }
-        /// <summary>
-        /// Вырезать фигуру(ы)
-        /// </summary>
-        public void Cut()
-        {
-            BuferDraw.Clear();
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
-            {
-                foreach (IDrawable drawable in Interaction.DrawableFigures)
-                {
-                    BuferDraw.Add(drawable.Clone());
-                    Drawables.Remove(drawable);
-                }
-
-                RefreshCanvas();
-                Interaction = null;
-                if (DragProperty != null) DragProperty(null);
-            }
-        }
-
-        /*public void AddFigureInInteractive()
-        {
-
         }*/
     }
 }

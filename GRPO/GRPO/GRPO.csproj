@@ -72,9 +72,10 @@
     <Compile Include="Drawing\Interface\ILinePropertyble.cs" />
     <Compile Include="Interaction\Interaction.cs" />
     <Compile Include="Drawing\Tools.cs" />
-    <Compile Include="HistoryManager.cs" />
-    <Compile Include="HistoryManagerCanvasControl.cs" />
-    <Compile Include="HistoryManagerToolsControl.cs" />
+    <Compile Include="HistoryManagers\HistoryManager.cs" />
+    <Compile Include="HistoryManagers\HistoryManagerCanvasControl.cs" />
+    <Compile Include="HistoryManagers\HistoryManagerToolsControl.cs" />
+    <Compile Include="UserControls\CanvasMouseActions\MouseAction.cs" />
     <Compile Include="UserControls\ToolsIncludeButtons\ToolIncludeButton.cs" />
     <Compile Include="UserControls\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>

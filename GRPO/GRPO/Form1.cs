@@ -1,6 +1,7 @@
 ﻿using GRPO.Drawing;
 using GRPO.Drawing.Interface;
 using GRPO.Drawing.Property;
+using GRPO.HistoryManagers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +37,7 @@ namespace GRPO
             _toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
 
-            
+            //
             _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
             _canvasControl.SaveStep += _historyManager_SaveStep;
 
@@ -47,8 +48,7 @@ namespace GRPO
                 _canvasControl.Image, _canvasControl.Interaction, _canvasControl.GetWidthCanvas(), _canvasControl.GetHeightCanvas());
 
             _historyManager = new HistoryManager(historyManagerToolsControl, historyManagerCanvasControl);
-
-            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
+            //
         } 
 
         private void button1_Click(object sender, EventArgs e)
@@ -58,8 +58,6 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
-            _canvasControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
             /*SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "GraphicsPO Project|*.grpo",
@@ -73,6 +71,8 @@ namespace GRPO
                     binaryFormatter.Serialize(stream, _historyManager);
                 }
             }*/
+            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
+            _canvasControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -112,7 +112,27 @@ namespace GRPO
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(e.KeyCode.ToString());
-            if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
+            if (e.Control && e.KeyCode == Keys.Z)
+            {
+                //Этот момент не подлежит сохранению
+                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                //
+                _historyManager_StepBack();
+                //Востанавливаем сохранение на изменение инструментов
+                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                //
+            }
+            else if (e.Control && e.KeyCode == Keys.Y)
+            {
+                //Этот момент не подлежит сохранению
+                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
+                //
+                _historyManager_StepForward();
+                //Востанавливаем сохранение на изменение инструментов
+                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
+                //
+            }
+            else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
             {
                 if (e.Control && e.KeyCode == Keys.C)
                 {
@@ -134,26 +154,6 @@ namespace GRPO
                 {
                     //_canvasControl.Interaction.AddDrawableFigure();
                 }
-            }
-            if (e.Control && e.KeyCode == Keys.Z)
-            {
-                //Этот момент не подлежит сохранению
-                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
-                //
-                _historyManager_StepBack();
-                //Востанавливаем сохранение на изменение инструментов
-                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
-                //
-            }
-            else if (e.Control && e.KeyCode == Keys.Y)
-            {
-                //Этот момент не подлежит сохранению
-                _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
-                //
-                _historyManager_StepForward();
-                //Востанавливаем сохранение на изменение инструментов
-                _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
-                //
             }
         }
         /// <summary>
@@ -192,10 +192,12 @@ namespace GRPO
                 //Этот момент не подлежит сохранению
                 _toolsWithPropertyControl.FigurePropertyChanged -= _historyManager_SaveStep;
                 //
-                _toolsWithPropertyControl.SelectTool = new Tools(DrawingTools.CursorSelect);
+                _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.CursorSelect;
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
                 //
+                _toolsWithPropertyControl.LineProperty = null;
+                _toolsWithPropertyControl.FillProperty = null;
                 return;
             }
             if(drawable is ILinePropertyble figureWithLineProperty)
@@ -211,7 +213,7 @@ namespace GRPO
         private void _historyManager_SaveStep()
         {
 
-            HistoryManagerToolsControl historyManagerToolsControl = new HistoryManagerToolsControl(_toolsWithPropertyControl.SelectTool,
+            HistoryManagerToolsControl historyManagerToolsControl = new HistoryManagerToolsControl(new Tools(_toolsWithPropertyControl.SelectTool.DrawingTools),
                    _toolsWithPropertyControl.LineProperty, _toolsWithPropertyControl.FillProperty);
 
             //Клонирование списка холста
@@ -253,7 +255,7 @@ namespace GRPO
             //  
             _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
             _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
-            _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
+            _toolsWithPropertyControl.SelectTool.DrawingTools = _historyManager.ManagerToolsControl.SelectTool.DrawingTools;
             //Востанавливаем сохранение на изменение инструментов
             _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
             //

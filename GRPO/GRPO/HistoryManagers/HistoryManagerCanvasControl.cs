@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRPO
+namespace GRPO.HistoryManagers
 {
     /// <summary>
     /// Класс отвечающий за историю CanvasControl

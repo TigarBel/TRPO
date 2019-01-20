@@ -106,8 +106,15 @@ namespace GRPO
             }
             set
             {
-                _propertyLineControl.LineProperty = value;
-                _propertyLineControl.Visible = true;
+                if (value == null)
+                {
+                    _propertyLineControl.Visible = false;
+                }
+                else
+                {
+                    _propertyLineControl.LineProperty = value;
+                    _propertyLineControl.Visible = true;
+                }
             }
         }
         /// <summary>
@@ -121,8 +128,15 @@ namespace GRPO
             }
             set
             {
-                _fillFigureControl.FillProperty = value;
-                _fillFigureControl.Visible = true;
+                if (value == null)
+                {
+                    _fillFigureControl.Visible = false;
+                }
+                else
+                {
+                    _fillFigureControl.FillProperty = value;
+                    _fillFigureControl.Visible = true;
+                }
             }
         }
         /// <summary>
