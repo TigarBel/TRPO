@@ -118,7 +118,7 @@ namespace GRPO.Drawing
         {
             if (pictureBox.Image != null)
             {
-                if (Polygon.Points.Count > 2)
+                if (Polygon.Points.Count > 1)
                 {
                     Graphics graphics = Graphics.FromImage(pictureBox.Image);
                     Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
@@ -134,7 +134,7 @@ namespace GRPO.Drawing
                 }
                 else
                 {
-                    throw new Exception("Многоугольник пустой, либо не имеет минимум 3 точек отрисовки!");
+                    throw new Exception("Многоугольник пустой, либо не имеет минимум 2 точек отрисовки!");
                 }
             }
             else

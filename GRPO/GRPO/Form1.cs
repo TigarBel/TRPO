@@ -1,4 +1,5 @@
-﻿using GRPO.Drawing;
+﻿using GRPO.Commands;
+using GRPO.Drawing;
 using GRPO.Drawing.Interface;
 using GRPO.Drawing.Property;
 using GRPO.HistoryManagers;
@@ -21,8 +22,11 @@ namespace GRPO
     {
         private HistoryManager _historyManager;
 
+        private ControlUnit _controlUnit = new ControlUnit();
+
         public MainForm()
         {
+            
             InitializeComponent();
 
             foreach (Control control in Controls)
@@ -33,6 +37,8 @@ namespace GRPO
             }
 
             _canvasControl.SetSizeCanvas(640, 480);
+
+            _canvasControl.ControlUnit = _controlUnit;
             
             _toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
@@ -58,7 +64,7 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            /*SaveFileDialog saveFileDialog = new SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "GraphicsPO Project|*.grpo",
                 FileName = _historyManager.FileName
@@ -70,9 +76,7 @@ namespace GRPO
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
                     binaryFormatter.Serialize(stream, _historyManager);
                 }
-            }*/
-            _toolsWithPropertyControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
-            _canvasControl.SelectTool.DrawingTools = DrawingTools.DrawFigureLine;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -121,6 +125,7 @@ namespace GRPO
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
                 //
+                _controlUnit.Undo(1);
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
@@ -131,6 +136,7 @@ namespace GRPO
                 //Востанавливаем сохранение на изменение инструментов
                 _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
                 //
+                _controlUnit.Redo(1);
             }
             else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
             {
@@ -255,7 +261,7 @@ namespace GRPO
             //  
             _toolsWithPropertyControl.LineProperty = _historyManager.ManagerToolsControl.LineProperty;
             _toolsWithPropertyControl.FillProperty = _historyManager.ManagerToolsControl.FillProperty;
-            _toolsWithPropertyControl.SelectTool.DrawingTools = _historyManager.ManagerToolsControl.SelectTool.DrawingTools;
+            _toolsWithPropertyControl.SelectTool = _historyManager.ManagerToolsControl.SelectTool;
             //Востанавливаем сохранение на изменение инструментов
             _toolsWithPropertyControl.FigurePropertyChanged += _historyManager_SaveStep;
             //

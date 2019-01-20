@@ -65,7 +65,7 @@ namespace GRPO.UserControls.ToolsIncludeButtons
         {
             AllButtonBackColorWhite();
             _tools.DrawingTools = DrawingTools;
-            ((Button)sender).BackColor = Color.Black;
+            //((Button)sender).BackColor = Color.Black;
             if (ToolsChanged != null) ToolsChanged();
         }
         /// <summary>
@@ -80,6 +80,13 @@ namespace GRPO.UserControls.ToolsIncludeButtons
                     button.BackColor = Color.White;
                 }
             }
+        }
+        /// <summary>
+        /// Залипание кнопки
+        /// </summary>
+        public void PaintOver()
+        {
+            if (_tools.DrawingTools == DrawingTools) Button.BackColor = Color.Black;
         }
     }
 }

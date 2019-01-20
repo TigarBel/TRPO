@@ -67,6 +67,10 @@ namespace GRPO
             {
                 _tools = value;
                 if (ButtonClick != null) ButtonClick();
+                foreach(ToolIncludeButton toolIncludeButton in _toolIncludeButtons)
+                {
+                    toolIncludeButton.PaintOver();
+                }
             }
         }
         /// <summary>

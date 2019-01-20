@@ -11,7 +11,7 @@ using System.Drawing.Drawing2D;
 using GRPO.Drawing;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
-
+using GRPO.Commands;
 
 namespace GRPO
 {
@@ -20,6 +20,7 @@ namespace GRPO
     /// </summary>
     public partial class CanvasControl : UserControl
     {
+        public ControlUnit ControlUnit { get; set; }
 
         public delegate void Drag(IDrawable drawable);
         public event Drag DragProperty;
@@ -215,7 +216,7 @@ namespace GRPO
 
             if (Interaction != null)
             {
-                Interaction.DrawSelcet(canvas);
+                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
             }
         }
         /// <summary>
@@ -389,14 +390,16 @@ namespace GRPO
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
-            RefreshCanvas();
             if (_flagMouseDown)
             {
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
-                    RefreshCanvas();
+                    //
+                    List<Point> points = new List<Point>() { _pointA, _pointB };
+                    ControlUnit.Drawing("Создать линию", points, LineProperty, FillProperty);
+                    //
                     if (SaveStep != null) SaveStep();
                 }
 
@@ -408,7 +411,6 @@ namespace GRPO
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
-                        RefreshCanvas();
                         if (SaveStep != null) SaveStep();
                     }
                 }
@@ -432,13 +434,13 @@ namespace GRPO
                                 if (e.Button == MouseButtons.Left)
                                 {
                                     Interaction = new Interaction(Drawables[i], false);
-                                    Interaction.DrawSelcet(canvas);
+                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                     //if (SaveStep != null) SaveStep();
                                 }
                                 else if (e.Button == MouseButtons.Right)
                                 {
                                     Interaction = new Interaction(Drawables[i], true);
-                                    Interaction.DrawSelcet(canvas);
+                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                     //if (SaveStep != null) SaveStep();
                                 }
                                 break;
@@ -470,11 +472,10 @@ namespace GRPO
                                 }
                             }
 
-                            RefreshCanvas();
                             if (localDrawables.Count > 0)
                             {
                                 Interaction = new Interaction(localDrawables, false);
-                                Interaction.DrawSelcet(canvas);
+                                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                 //if (SaveStep != null) SaveStep();
                             }
 
@@ -501,7 +502,7 @@ namespace GRPO
                                 }
                                 else
                                 {
-                                    Interaction.DrawSelcet(canvas);
+                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                 }
                             }
                         }
@@ -513,6 +514,7 @@ namespace GRPO
                     if (SaveStep != null) SaveStep();
                 }
                 _flagMouseDown = false;
+                RefreshCanvas();
             }
         }
         /// <summary>
@@ -561,7 +563,7 @@ namespace GRPO
                 }
                 RefreshCanvas();
                 Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count), false);
-                Interaction.DrawSelcet(canvas);
+                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
             }
         }
         /// <summary>
