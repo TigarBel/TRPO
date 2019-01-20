@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drawing\FactoryDrawFigure.cs" />
     <Compile Include="UserControls\CanvasControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

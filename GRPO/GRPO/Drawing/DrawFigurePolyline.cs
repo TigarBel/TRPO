@@ -38,11 +38,10 @@ namespace GRPO.Drawing
         /// Класс Отрисовки полилинии
         /// </summary>
         /// <param name="points">Список точек полилиинии</param>
-        /// <param name="circular">Тип полилинии</param>
         /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigurePolyline(List<Point> points, bool circular, LineProperty extended)
+        public DrawFigurePolyline(List<Point> points, LineProperty extended)
         {
-            Polyline = new FigurePolyline(points, circular);
+            Polyline = new FigurePolyline(points);
             LineProperty = extended;
         }
         /// <summary>
@@ -164,7 +163,7 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolyline(GetPoints(), Polyline.Circular, LineProperty);
+            return new DrawFigurePolyline(GetPoints(), LineProperty);
         }
     }
 }

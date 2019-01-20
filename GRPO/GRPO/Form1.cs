@@ -58,7 +58,7 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            /*SaveFileDialog saveFileDialog = new SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "GraphicsPO Project|*.grpo",
                 FileName = _historyManager.FileName
@@ -70,14 +70,7 @@ namespace GRPO
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
                     binaryFormatter.Serialize(stream, _historyManager);
                 }
-            }*/
-            DrawFigureCircle drawFigureCircle = new DrawFigureCircle(new Point(100, 100), new Point(150, 150),
-                new LineProperty(1, Color.Black, DashStyle.Solid), new FillProperty(Color.White));
-            _canvasControl.Drawables.Add(drawFigureCircle);
-            DrawFigureEllipse drawFigureEllipse = new DrawFigureEllipse(new Point(100, 100), new Point(150, 150),
-                new LineProperty(1, Color.Black, DashStyle.Solid), new FillProperty(Color.White));
-            _canvasControl.Drawables.Add(drawFigureEllipse);
-            _canvasControl.RefreshCanvas();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -134,6 +127,10 @@ namespace GRPO
                 else if (e.Control && e.KeyCode == Keys.X)
                 {
                     _canvasControl.Cut();
+                }
+                else if (e.Control)
+                {
+                    //_canvasControl.Interaction.AddDrawableFigure();
                 }
             }
             if (e.Control && e.KeyCode == Keys.Z)

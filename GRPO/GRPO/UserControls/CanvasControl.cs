@@ -56,14 +56,6 @@ namespace GRPO
         /// </summary>
         private Tools _selectTool;
         /// <summary>
-        /// Свойство линии
-        /// </summary>
-        private LineProperty _lineProperty;
-        /// <summary>
-        /// Свойство заливки
-        /// </summary>
-        private FillProperty _fillProperty;
-        /// <summary>
         /// Объект взаимодействия с нарисованными фигурами
         /// </summary>
         private Interaction _interaction;
@@ -124,31 +116,11 @@ namespace GRPO
         /// <summary>
         /// Свойство линии
         /// </summary>
-        public LineProperty LineProperty
-        {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
-        }
+        public LineProperty LineProperty { get; set; }
         /// <summary>
         /// Свойство заливки
         /// </summary>
-        public FillProperty FillProperty
-        {
-            get
-            {
-                return _fillProperty;
-            }
-            set
-            {
-                _fillProperty = value;
-            }
-        }
+        public FillProperty FillProperty { get; set; }
         /// <summary>
         /// Картинка с холста
         /// </summary>
@@ -264,7 +236,8 @@ namespace GRPO
 
             if (SelectTool.TypeTools == TypeTools.SimpleFigure) 
             {
-                Drawables.Add(DrawFigure(_pointA, _pointA, SelectTool.DrawingTools));
+                FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                Drawables.Add(factoryDrawFigure.SimpleFigure(_pointA, _pointA, LineProperty, FillProperty, SelectTool.DrawingTools));
             }
 
             if (SelectTool.TypeTools == TypeTools.PolyFigure)
@@ -276,12 +249,14 @@ namespace GRPO
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
                 }
                 if (!_flagPolyFigure)
                 {
                     List<Point> points = new List<Point>() { new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y) };
-                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
 
                     _flagPolyFigure = true;
                 }
@@ -292,7 +267,8 @@ namespace GRPO
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
 
                     _flagPolyFigure = false;
                 }
@@ -351,7 +327,8 @@ namespace GRPO
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
 
@@ -410,7 +387,8 @@ namespace GRPO
                     points.Add(_pointB);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
                     RefreshCanvas();
                 }
             }
@@ -425,7 +403,8 @@ namespace GRPO
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(DrawFigure(_pointA, _pointB, SelectTool.DrawingTools));
+                    FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                    Drawables.Add(factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
                     RefreshCanvas();
                     if (SaveStep != null) SaveStep();
                 }
@@ -437,7 +416,8 @@ namespace GRPO
                         List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
-                        Drawables.Add(DrawPolyFigure(points, SelectTool.DrawingTools));
+                        FactoryDrawFigure factoryDrawFigure = new FactoryDrawFigure();
+                        Drawables.Add(factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
                         RefreshCanvas();
                         if (SaveStep != null) SaveStep();
                     }
@@ -479,6 +459,9 @@ namespace GRPO
                     {
                         if (Interaction == null)
                         {
+                            List<Point> points = new List<Point>();
+                            points.Add(_pointA);
+                            points.Add(_pointB);
                             List<IDrawable> localDrawables = new List<IDrawable>();
 
                             foreach (IDrawable drawable in Drawables)
@@ -488,9 +471,6 @@ namespace GRPO
                                 int Y = drawable.GetPoints().Max(point => point.Y) -
                                     (drawable.GetPoints().Max(point => point.Y) - drawable.GetPoints().Min(point => point.Y)) / 2;
 
-                                List<Point> points = new List<Point>();
-                                points.Add(_pointA);
-                                points.Add(_pointB);
                                 if (X >= points.Min(point => point.X) &&
                                     X <= points.Max(point => point.X) &&
                                     Y >= points.Min(point => point.Y) &&
@@ -507,6 +487,33 @@ namespace GRPO
                                 Interaction.DrawSelcet(canvas);
                                 //if (SaveStep != null) SaveStep();
                             }
+
+                            /*if (Interaction == null)
+                            {
+                                Interaction = new Interaction();
+                                for (int x = points.Min(point => point.X); x < points.Max(point => point.X); x++)
+                                {
+                                    for(int y = points.Min(point => point.Y); y < points.Max(point => point.Y); y++)
+                                    {
+                                        foreach (IDrawable drawable in Drawables)
+                                        {
+                                            int Xmin = drawable.GetPoints().Min(point => point.X);
+                                            int Ymin = drawable.GetPoints().Min(point => point.Y);
+                                            int Xmin = drawable.GetPoints().Min(point => point.X);
+                                            int Ymin = drawable.GetPoints().Min(point => point.Y);
+
+                                            if (X >= points.Min(point => point.X) &&
+                                                X <= points.Max(point => point.X) &&
+                                                Y >= points.Min(point => point.Y) &&
+                                                Y <= points.Max(point => point.Y))
+                                            {
+                                                localDrawables.Add(drawable);
+                                            }
+                                            Interaction.AddDrawableFigure();
+                                        }
+                                    }
+                                }
+                            }*/
                         }
                         else
                         {
@@ -518,59 +525,6 @@ namespace GRPO
 
                 _flagMouseDown = false;
             }
-        }
-        /// <summary>
-        /// Создать простую фигуру из двух точек
-        /// </summary>
-        /// <param name="pointA">Начальная точка</param>
-        /// <param name="pointB">Конечная точка</param>
-        /// <param name="selectTool">Иструмент(тип) выбранно фигуры</param>
-        /// <returns></returns>
-        private IDrawable DrawFigure(Point pointA, Point pointB, DrawingTools selectTool)
-        {
-            switch (selectTool)
-            {
-                case DrawingTools.DrawFigureLine:
-                    {
-                        DrawFigureLine drawFigure = new DrawFigureLine(pointA, pointB, LineProperty);
-                        return drawFigure;
-                    }
-                case DrawingTools.DrawFigureRectangle:
-                    {
-                        DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB, LineProperty, FillProperty);
-                        return drawFigure;
-                    }
-                case DrawingTools.DrawFigureCircle:
-                    {
-                        DrawFigureCircle drawFigure = new DrawFigureCircle(pointA, pointB, LineProperty, FillProperty);
-                        return drawFigure;
-                    }
-                case DrawingTools.DrawFigureEllipse:
-                    {
-                        DrawFigureEllipse drawFigure = new DrawFigureEllipse(pointA, pointB, LineProperty,
-                            FillProperty);
-                        return drawFigure;
-                    }
-            }
-            return null;
-        }
-        /// <summary>
-        /// Создать сложную фигуру из нескольких точек
-        /// </summary>
-        /// <param name="points">Список точек</param>
-        /// <param name="selectTool">Иструмент(тип) выбранно фигуры</param>
-        /// <returns></returns>
-        private IDrawable DrawPolyFigure(List<Point> points, DrawingTools selectTool)
-        {
-            switch(selectTool)
-            {
-                case DrawingTools.DrawFigurePolyline:
-                    {
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, false, LineProperty);
-                        return drawFigure;
-                    }
-            }
-            return null;
         }
         /// <summary>
         /// Скопировать фигуру(ы) в буфер

@@ -18,10 +18,6 @@ namespace GRPO.Figure
         /// </summary>
         private List<Point> _points;
         /// <summary>
-        /// Ложь: линейная; Истина: дуговая
-        /// </summary>
-        private bool _circular;
-        /// <summary>
         /// Обновить значения для класса Фигура
         /// </summary>
         private void RefreshValues()
@@ -41,17 +37,14 @@ namespace GRPO.Figure
             Width = 0;
             Height = 0;
             Points = new List<Point>();
-            Circular = false;
         }
         /// <summary>
         /// Класс фигуры Полилиния
         /// </summary>
         /// <param name="points">Список точек</param>
-        /// <param name="circular">Ложь: линейная; Истина: дуговая</param>
-        public FigurePolyline(List<Point> points, bool circular)
+        public FigurePolyline(List<Point> points)
         {
             Points = points;
-            Circular = circular;
         }
         /// <summary>
         /// Список точек полилинии
@@ -75,10 +68,6 @@ namespace GRPO.Figure
                 }
             }
         }
-        /// <summary>
-        /// Ложь: линейная; Истина: дуговая
-        /// </summary>
-        public bool Circular { get; set; }
         /// <summary>
         /// Позиция фигуры
         /// </summary>
