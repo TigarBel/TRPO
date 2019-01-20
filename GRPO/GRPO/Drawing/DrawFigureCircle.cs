@@ -117,15 +117,12 @@ namespace GRPO.Drawing
             }
         }
         /// <summary>
-        /// Взять список точек
+        /// Cписок точек
         /// </summary>
-        /// <returns>Списко точек формирующих фигуру</returns>
-        public List<Point> GetPoints()
+        public List<Point> Points
         {
-            List<Point> points = new List<Point>();
-            points.Add(new Point(Circle.Position.X, Circle.Position.Y));
-            points.Add(new Point(Circle.Position.X + Circle.Width, Circle.Position.Y + Circle.Height));
-            return points;
+            get { return Circle.Points; }
+            set { Circle.Points = value; }
         }
         /// <summary>
         /// Позиция фигуры

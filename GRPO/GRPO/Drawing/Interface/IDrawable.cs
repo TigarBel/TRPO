@@ -33,7 +33,7 @@ namespace GRPO.Drawing.Interface
         /// Взять список точек
         /// </summary>
         /// <returns>Списко точек формирующих фигуру</returns>
-        List<Point> GetPoints();
+        List<Point> Points { get; set; }
         /// <summary>
         /// Клонировать объект
         /// </summary>

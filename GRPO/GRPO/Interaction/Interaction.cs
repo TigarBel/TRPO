@@ -33,7 +33,7 @@ namespace GRPO
         /// <summary>
         /// Радиус точек отображения габаритов
         /// </summary>
-        private int _radiusDrawPoint = 5;
+        private int _radiusDrawPoint = 4;
         /// <summary>
         /// Пустой класс взаимодействия
         /// </summary>
@@ -185,10 +185,10 @@ namespace GRPO
         /// <returns>Угловые точки</returns>
         private List<Point> GetBorderPoints(int index)
         {
-            int minX = DrawableFigures[index].GetPoints().Min(point => point.X);
-            int maxX = DrawableFigures[index].GetPoints().Max(point => point.X);
-            int minY = DrawableFigures[index].GetPoints().Min(point => point.Y);
-            int maxY = DrawableFigures[index].GetPoints().Max(point => point.Y);
+            int minX = DrawableFigures[index].Points.Min(point => point.X);
+            int maxX = DrawableFigures[index].Points.Max(point => point.X);
+            int minY = DrawableFigures[index].Points.Min(point => point.Y);
+            int maxY = DrawableFigures[index].Points.Max(point => point.Y);
             return new List<Point>() { new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY) };
         }
         /// <summary>
@@ -196,7 +196,7 @@ namespace GRPO
         /// </summary>
         private void DrawPoints(PictureBox pictureBox)
         {
-            List<Point> points = DrawableFigures[0].GetPoints();
+            List<Point> points = DrawableFigures[0].Points;
             for (int i = 0; i < points.Count; i++) 
             {
                 DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
@@ -212,7 +212,7 @@ namespace GRPO
         private int GetNumberPoint(Point point)
         {
             int number = 0;
-            foreach (Point sizePoint in DrawableFigures[0].GetPoints())
+            foreach (Point sizePoint in DrawableFigures[0].Points)
             {
                 if (point.X >= sizePoint.X - _radiusDrawPoint && point.X <= sizePoint.X + _radiusDrawPoint && 
                     point.Y >= sizePoint.Y - _radiusDrawPoint && point.Y <= sizePoint.Y + _radiusDrawPoint)
@@ -239,101 +239,11 @@ namespace GRPO
         /// <param name="pointDeviation">Подредактированная точка</param>
         public void ChangePoint(Point pointDeviation)
         {
-            switch (DrawableFigures[0].GetType().Name)
+            if (_indexSelectPoint != -1)
             {
-                case "DrawFigureLine":
-                    {
-                        if (_indexSelectPoint == 0)
-                        {
-                            ((DrawFigureLine)DrawableFigures[0]).Line.PointA = new Point(pointDeviation.X, pointDeviation.Y);
-                        }
-                        else if (_indexSelectPoint == 1)
-                        {
-                            ((DrawFigureLine)DrawableFigures[0]).Line.PointB = new Point(pointDeviation.X, pointDeviation.Y);
-                        }
-                        break;
-                    }
-                case "DrawFigurePolyline":
-                    {
-                        if (_indexSelectPoint != -1)
-                        {
-                            ((DrawFigurePolyline)DrawableFigures[0]).Polyline.Points[_indexSelectPoint] =
-                                new Point(pointDeviation.X, pointDeviation.Y);
-                        }
-                        break;
-                    }
-                case "DrawFigureRectangle":
-                    {
-                        switch (_indexSelectPoint)
-                        {
-                            case 0:
-                                {
-                                    ((DrawFigureRectangle)DrawableFigures[0]).Rectangle.PointLeftUp = new Point(pointDeviation.X, pointDeviation.Y);
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    ((DrawFigureRectangle)DrawableFigures[0]).Rectangle.PointRightUp = new Point(pointDeviation.X, pointDeviation.Y);
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    ((DrawFigureRectangle)DrawableFigures[0]).Rectangle.PointRightDown = new Point(pointDeviation.X, pointDeviation.Y);
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    ((DrawFigureRectangle)DrawableFigures[0]).Rectangle.PointLeftDown = new Point(pointDeviation.X, pointDeviation.Y);
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-                case "DrawFigureCircle":
-                    {
-                        ((DrawFigureCircle)DrawableFigures[0]).Circle.Width = pointDeviation.X - ((DrawFigureCircle)DrawableFigures[0]).Position.X;
-                        break;
-                    }
-                case "DrawFigureEllipse":
-                    {
-                        switch(_indexSelectPoint)
-                        {
-                            case 0:
-                                {
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Width = ((DrawFigureEllipse)DrawableFigures[0]).Width -
-                                        (pointDeviation.X - ((DrawFigureEllipse)DrawableFigures[0]).Position.X);
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Height = ((DrawFigureEllipse)DrawableFigures[0]).Height -
-                                        (pointDeviation.Y - ((DrawFigureEllipse)DrawableFigures[0]).Position.Y);
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Position = new Point(pointDeviation.X,pointDeviation.Y);
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Width = pointDeviation.X - ((DrawFigureEllipse)DrawableFigures[0]).Position.X;
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Height = ((DrawFigureEllipse)DrawableFigures[0]).Height -
-                                        (pointDeviation.Y - ((DrawFigureEllipse)DrawableFigures[0]).Position.Y);
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Position = 
-                                        new Point(((DrawFigureEllipse)DrawableFigures[0]).Position.X, pointDeviation.Y);
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Width = pointDeviation.X - ((DrawFigureEllipse)DrawableFigures[0]).Position.X;
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Height = pointDeviation.Y - ((DrawFigureEllipse)DrawableFigures[0]).Position.Y;
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Width = ((DrawFigureEllipse)DrawableFigures[0]).Width -
-                                        (pointDeviation.X - ((DrawFigureEllipse)DrawableFigures[0]).Position.X);
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Height = pointDeviation.Y - ((DrawFigureEllipse)DrawableFigures[0]).Position.Y;
-                                    ((DrawFigureEllipse)DrawableFigures[0]).Position =
-                                        new Point(pointDeviation.X, ((DrawFigureEllipse)DrawableFigures[0]).Position.Y);
-                                    break;
-                                }
-                        }
-                        break;
-                    }
+                List<Point> points = DrawableFigures[0].Points;
+                points[_indexSelectPoint] = pointDeviation;
+                DrawableFigures[0].Points = points;
             }
         }
         /// <summary>

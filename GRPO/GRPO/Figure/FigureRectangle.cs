@@ -209,14 +209,32 @@ namespace GRPO.Figure
             {
                 if (value.Count == 4)
                 {
-                    if (value[0].X == value[3].X && value[0].Y == value[1].Y &&
-                    value[1].X == value[2].X && value[2].Y == value[3].Y)
+                    if (PointLeftUp != value[0] && PointRightUp != value[1] && PointRightDown != value[2] && PointLeftDown != value[3])
                     {
-                        SortList(value);
+                        if (value[0].X == value[3].X && value[0].Y == value[1].Y && value[1].X == value[2].X && value[2].Y == value[3].Y)
+                        {
+                            SortList(value);
+                        }
+                        else
+                        {
+                            throw new Exception("Положение точек не соответсвуют прямоугольнику!");
+                        }
                     }
-                    else
+                    else if (PointLeftUp != value[0]) 
                     {
-                        throw new Exception("Положение точек не соответсвуют прямоугольнику!");
+                        PointLeftUp = value[0];
+                    }
+                    else if (PointRightUp != value[1])
+                    {
+                        PointRightUp = value[1];
+                    }
+                    else if (PointRightDown != value[2])
+                    {
+                        PointRightDown = value[2];
+                    }
+                    else if (PointLeftDown != value[3])
+                    {
+                        PointLeftDown = value[3];
                     }
                 }
                 else

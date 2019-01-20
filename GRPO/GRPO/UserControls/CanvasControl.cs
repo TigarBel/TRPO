@@ -241,7 +241,7 @@ namespace GRPO
             {
                 if (_flagPolyFigure)
                 {
-                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    List<Point> points = Drawables[Drawables.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointA);
 
@@ -257,7 +257,7 @@ namespace GRPO
                 }
                 if (e.Button == MouseButtons.Right && _flagPolyFigure)
                 {
-                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    List<Point> points = Drawables[Drawables.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointA);
 
@@ -293,7 +293,7 @@ namespace GRPO
                         List<Point> localPoints = new List<Point>();
                         foreach(IDrawable drawable in Interaction.DrawableFigures)
                         {
-                            foreach(Point point in drawable.GetPoints())
+                            foreach(Point point in drawable.Points)
                             {
                                 localPoints.Add(point);
                             }
@@ -375,7 +375,7 @@ namespace GRPO
             {
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
-                    List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                    List<Point> points = Drawables[Drawables.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointB);
 
@@ -404,7 +404,7 @@ namespace GRPO
                 {
                     if (e.Button == MouseButtons.Left)
                     {
-                        List<Point> points = Drawables[Drawables.Count - 1].GetPoints();
+                        List<Point> points = Drawables[Drawables.Count - 1].Points;
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
@@ -422,10 +422,10 @@ namespace GRPO
                         if (DragProperty != null) DragProperty(null);
                         for (int i = Drawables.Count - 1; i >= 0; i--)
                         {
-                            int minX = Drawables[i].GetPoints().Min(point => point.X);
-                            int maxX = Drawables[i].GetPoints().Max(point => point.X);
-                            int minY = Drawables[i].GetPoints().Min(point => point.Y);
-                            int maxY = Drawables[i].GetPoints().Max(point => point.Y);
+                            int minX = Drawables[i].Points.Min(point => point.X);
+                            int maxX = Drawables[i].Points.Max(point => point.X);
+                            int minY = Drawables[i].Points.Min(point => point.Y);
+                            int maxY = Drawables[i].Points.Max(point => point.Y);
                             if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
                             {
                                 if (DragProperty != null) DragProperty(Drawables[i]);
@@ -456,10 +456,10 @@ namespace GRPO
 
                             foreach (IDrawable drawable in Drawables)
                             {
-                                int X = drawable.GetPoints().Max(point => point.X) -
-                                    (drawable.GetPoints().Max(point => point.X) - drawable.GetPoints().Min(point => point.X)) / 2;
-                                int Y = drawable.GetPoints().Max(point => point.Y) -
-                                    (drawable.GetPoints().Max(point => point.Y) - drawable.GetPoints().Min(point => point.Y)) / 2;
+                                int X = drawable.Points.Max(point => point.X) -
+                                    (drawable.Points.Max(point => point.X) - drawable.Points.Min(point => point.X)) / 2;
+                                int Y = drawable.Points.Max(point => point.Y) -
+                                    (drawable.Points.Max(point => point.Y) - drawable.Points.Min(point => point.Y)) / 2;
 
                                 if (X >= points.Min(point => point.X) &&
                                     X <= points.Max(point => point.X) &&
@@ -487,10 +487,10 @@ namespace GRPO
                                 int Ymax = points.Max(point => point.Y);
                                 foreach (IDrawable drawable in Drawables)
                                 {
-                                    if (Xmin >= drawable.GetPoints().Min(point => point.X) &&
-                                        Xmax <= drawable.GetPoints().Max(point => point.X) &&
-                                        Ymin >= drawable.GetPoints().Min(point => point.Y) &&
-                                        Ymax <= drawable.GetPoints().Max(point => point.Y))
+                                    if (Xmin >= drawable.Points.Min(point => point.X) &&
+                                        Xmax <= drawable.Points.Max(point => point.X) &&
+                                        Ymin >= drawable.Points.Min(point => point.Y) &&
+                                        Ymax <= drawable.Points.Max(point => point.Y))
                                     {
                                         Interaction.AddDrawableFigure(drawable);
                                     }
@@ -539,7 +539,7 @@ namespace GRPO
                 List<Point> localPoints = new List<Point>();
                 foreach (IDrawable drawable in BuferDraw)
                 {
-                    foreach (Point point in drawable.GetPoints())
+                    foreach (Point point in drawable.Points)
                     {
                         localPoints.Add(point);
                     }

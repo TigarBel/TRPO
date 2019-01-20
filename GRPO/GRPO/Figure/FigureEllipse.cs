@@ -60,5 +60,35 @@ namespace GRPO.Figure
                 }
             }
         }
+        /// <summary>
+        /// Список точек описывающих эллипс
+        /// </summary>
+        public new List<Point> Points
+        {
+            get
+            {
+                List<Point> points = new List<Point>();
+                points.Add(PointA);
+                points.Add(PointB);
+                return points;
+            }
+            set
+            {
+                if (value.Count == 2)
+                {
+                    if (PointA != value[0] && PointB != value[1])
+                    {
+                        PointA = value[0];
+                        PointB = value[1];
+                    }
+                    else if (PointA != value[0]) PointA = value[0];
+                    else if (PointB != value[1]) PointB = value[1];
+                }
+                else
+                {
+                    throw new ArgumentException("Эллипс описывает строго 2 точки!");
+                }
+            }
+        }
     }
 }

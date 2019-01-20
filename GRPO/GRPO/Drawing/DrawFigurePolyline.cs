@@ -103,17 +103,12 @@ namespace GRPO.Drawing
             }
         }
         /// <summary>
-        /// Взять список точек
+        /// Cписок точек
         /// </summary>
-        /// <returns>Списко точек формирующих фигуру</returns>
-        public List<Point> GetPoints()
+        public List<Point> Points
         {
-            List<Point> points = new List<Point>();
-            for(int i = 0; i < Polyline.Points.Count; i++)
-            {
-                points.Add(Polyline.Points[i]);
-            }
-            return points;
+            get { return Polyline.Points; }
+            set { Polyline.Points = value; }
         }
         /// <summary>
         /// Позиция фигуры
@@ -163,7 +158,7 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolyline(GetPoints(), LineProperty);
+            return new DrawFigurePolyline(Points, LineProperty);
         }
     }
 }

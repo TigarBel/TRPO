@@ -94,15 +94,12 @@ namespace GRPO.Drawing
             }
         }
         /// <summary>
-        /// Взять список точек
+        /// Cписок точек
         /// </summary>
-        /// <returns>Списко точек формирующих фигуру</returns>
-        public List<Point> GetPoints()
+        public List<Point> Points
         {
-            List<Point> points = new List<Point>();
-            points.Add(Line.PointA);
-            points.Add(Line.PointB);
-            return points;
+            get { return Line.Points; }
+            set { Line.Points = value; }
         }
         /// <summary>
         /// Позиция фигуры

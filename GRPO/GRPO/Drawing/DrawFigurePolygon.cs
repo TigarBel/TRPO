@@ -143,17 +143,12 @@ namespace GRPO.Drawing
             }
         }
         /// <summary>
-        /// Взять список точек
+        /// Cписок точек
         /// </summary>
-        /// <returns>Списко точек формирующих фигуру</returns>
-        public List<Point> GetPoints()
+        public List<Point> Points
         {
-            List<Point> points = new List<Point>();
-            for (int i = 0; i < Polygon.Points.Count; i++)
-            {
-                points.Add(Polygon.Points[i]);
-            }
-            return points;
+            get { return Polygon.Points; }
+            set { Polygon.Points = value; }
         }
         /// <summary>
         /// Позиция фигуры
@@ -203,7 +198,7 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolygon(GetPoints(), LineProperty, FillProperty);
+            return new DrawFigurePolygon(Points, LineProperty, FillProperty);
         }
     }
 }

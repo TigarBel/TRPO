@@ -45,7 +45,7 @@ namespace GRPO.Figure
             set
             {
                 PointA = new Point(PointA.X - value, PointA.Y - value);
-                PointB = new Point(PointA.X + value, PointA.Y + value);
+                PointB = new Point(PointA.X + value * 2, PointA.Y + value * 2);
                 _radius = value;
             }
         }
@@ -78,6 +78,47 @@ namespace GRPO.Figure
                     PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
                     PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
                     Radius = value / 2;
+                }
+            }
+        }
+        /// <summary>
+        /// Список точек описывающих окружность
+        /// </summary>
+        public new List<Point> Points
+        {
+            get
+            {
+                List<Point> points = new List<Point>();
+                /*points.Add(Position);
+                points.Add(new Point(Position.X + Width, Position.Y + Height));*/
+                points.Add(PointA);
+                points.Add(PointB);
+                return points;
+            }
+            set
+            {
+                if (value.Count == 2)
+                {
+                    if (PointA != value[0] && PointB != value[1])
+                    {
+                        PointA = value[0];
+                        PointB = value[1];
+                    }
+                    else if (PointA != value[0])
+                    {
+                        PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+                        PointB = new Point(value[0].X, value[0].Y);
+                    }
+                    else if (PointB != value[1])
+                    {
+                        PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+                        PointB = new Point(value[1].X, value[1].Y);
+                    }
+                    Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((PointB.X - PointA.X), 2) + Math.Pow((PointB.Y - PointA.Y), 2))));
+                }
+                else
+                {
+                    throw new ArgumentException("Окружность описывает строго 2 точки!");
                 }
             }
         }
