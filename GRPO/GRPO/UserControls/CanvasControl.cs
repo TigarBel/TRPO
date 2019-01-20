@@ -120,6 +120,8 @@ namespace GRPO
         /// Свойство заливки
         /// </summary>
         public FillProperty FillProperty { get; set; }
+
+        private Image _image = new Bitmap(640, 480);
         /// <summary>
         /// Картинка с холста
         /// </summary>
@@ -131,7 +133,8 @@ namespace GRPO
             }
             set
             {
-                canvas.Image = new Bitmap(value);
+                _image = new Bitmap(value);
+                ControlUnit.Image = new Bitmap(value);
             }
         }
         /// <summary>
@@ -208,7 +211,7 @@ namespace GRPO
         /// </summary>
         public void RefreshCanvas()
         {
-            canvas.Image = new Bitmap(canvas.Width,canvas.Height);
+            canvas.Image = new Bitmap(_image);
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw(canvas);
@@ -225,6 +228,7 @@ namespace GRPO
         public void ClearCanvas()
         {
             Drawables.Clear();
+            _image = new Bitmap(canvas.Width, canvas.Height);
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
         }
 

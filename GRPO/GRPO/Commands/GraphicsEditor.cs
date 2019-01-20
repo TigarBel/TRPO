@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
     public class GraphicsEditor
     {
 
         public List<IDrawable> _drawablesList = new List<IDrawable>();
 
-        public void Operation(string keywords, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
+        public void CreateFigure(string keywords, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
             switch (keywords)
             {
@@ -25,6 +29,28 @@ namespace GRPO.Commands
                 case "Создать окружность": _drawablesList.Add(new DrawFigureCircle(points[0], points[1], lineProperty, fillProperty)); break;
                 case "Создать эллипс": _drawablesList.Add(new DrawFigureEllipse(points[0], points[1], lineProperty, fillProperty)); break;
                 case "Удалить фигуру": _drawablesList.Remove(_drawablesList[_drawablesList.Count - 1]); break;
+            }
+            Console.WriteLine(keywords);
+        }
+
+        public void ChangeProperty(string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
+        {
+            switch (keywords)
+            {
+                case "Изменить свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = lineProperty; break;
+                case "Изменить свойство заливки":((IFillPropertyble)_drawablesList[index]).FillProperty = fillProperty; break;
+                case "Вернуть свойство":
+                    {
+                        if (_drawablesList is ILinePropertyble)
+                        {
+                            ((ILinePropertyble)_drawablesList[index]).LineProperty = lineProperty;
+                        }
+                        if (_drawablesList is IFillPropertyble)
+                        {
+                            ((IFillPropertyble)_drawablesList[index]).FillProperty = fillProperty;
+                        }
+                        break;
+                    }
             }
             Console.WriteLine(keywords);
         }

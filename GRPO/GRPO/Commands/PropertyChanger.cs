@@ -8,25 +8,21 @@ using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [Serializable]
-    class DrawingCommand : Command
+    class PropertyChanger : Command
     {
         GraphicsEditor _graphicsEditor;
         string _keywords;
-        List<Point> _points;
+        int _index;
         LineProperty _lineProperty;
         FillProperty _fillProperty;
 
         // Constructor
-        public DrawingCommand(GraphicsEditor graphicsEditor,
-            string keywords, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
+        public PropertyChanger(GraphicsEditor graphicsEditor,
+            string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
         {
             _graphicsEditor = graphicsEditor;
             _keywords = keywords;
-            _points = points;
+            _index = index;
             _lineProperty = lineProperty;
             _fillProperty = fillProperty;
         }
@@ -36,9 +32,9 @@ namespace GRPO.Commands
             set { _keywords = value; }
         }
 
-        public List<Point> Points
+        public int Index
         {
-            set { _points = value; }
+            set { _index = value; }
         }
 
         public LineProperty LineProperty
@@ -53,18 +49,18 @@ namespace GRPO.Commands
 
         public override void Execute()
         {
-            _graphicsEditor.CreateFigure(_keywords, _points, _lineProperty, _fillProperty);
+            _graphicsEditor.ChangeProperty(_keywords, _index, _lineProperty, _fillProperty);
         }
 
         public override void UnExecute()
         {
-            _graphicsEditor.CreateFigure(Undo(), _points, _lineProperty, _fillProperty);
+            _graphicsEditor.ChangeProperty(Undo(), _index, _lineProperty, _fillProperty);
         }
 
         // Private helper function : приватные вспомогательные функции
         private string Undo()
         {
-            return "Удалить фигуру";
+            return "Вернуть свойство";
         }
     }
 }

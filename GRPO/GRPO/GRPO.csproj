@@ -50,6 +50,7 @@
     <Compile Include="Commands\ControlUnit.cs" />
     <Compile Include="Commands\DrawingCommand.cs" />
     <Compile Include="Commands\GraphicsEditor.cs" />
+    <Compile Include="Commands\PropertyChanger.cs" />
     <Compile Include="Commands\SelectToolsCommand.cs" />
     <Compile Include="Drawing\FactoryDrawFigure.cs" />
     <Compile Include="Example.cs" />

@@ -9,17 +9,26 @@ using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
     public class ControlUnit
     {
         // Initializers
         public GraphicsEditor _graphicsEditor = new GraphicsEditor();
         private List<Command> _commands = new List<Command>();
 
+
         private int _current = 0;
+
+        public string FileName { get; set; }
+
+        public Image Image { get; set; }
 
         public void Redo(int levels)
         {
-            Console.WriteLine("\n---- Redo {0} levels ", levels);
+            Console.WriteLine("levels " + levels);
 
             // Делаем возврат операций
             for (int i = 0; i < levels; i++)
@@ -29,7 +38,7 @@ namespace GRPO.Commands
 
         public void Undo(int levels)
         {
-            Console.WriteLine("\n---- Undo {0} levels ", levels);
+            Console.WriteLine("levels " + levels);
 
             // Делаем отмену операций
             for (int i = 0; i < levels; i++)
@@ -39,20 +48,24 @@ namespace GRPO.Commands
 
         public void Drawing(string keywords, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
-
-            // Создаем команду операции и выполняем её
             Command command = new DrawingCommand(_graphicsEditor, keywords, points, lineProperty, fillProperty);
             command.Execute();
-
             if (_current < _commands.Count)
             {
-                // если "внутри undo" мы запускаем новую операцию, 
-                // надо обрубать список команд, следующих после текущей, 
-                // иначе undo/redo будут некорректны
                 _commands.RemoveRange(_current, _commands.Count - _current);
             }
+            _commands.Add(command);
+            _current++;
+        }
 
-            // Добавляем операцию к списку отмены
+        public void ChangeProperty(string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
+        {
+            Command command = new PropertyChanger(_graphicsEditor, keywords, index, lineProperty, fillProperty);
+            command.Execute();
+            if (_current < _commands.Count)
+            {
+                _commands.RemoveRange(_current, _commands.Count - _current);
+            }
             _commands.Add(command);
             _current++;
         }

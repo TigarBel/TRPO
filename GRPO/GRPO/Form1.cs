@@ -66,15 +66,24 @@ namespace GRPO
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "GraphicsPO Project|*.grpo",
-                FileName = _historyManager.FileName
+                Filter = "GraphicsPO Project|*.grpo|Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF",
+                //FileName = _historyManager.FileName
+                FileName = _controlUnit.FileName
             };
             if (saveFileDialog.ShowDialog() != DialogResult.Cancel)
             {
-                using (var stream = saveFileDialog.OpenFile())
+                if (saveFileDialog.Filter == "GraphicsPO Project|*.grpo")
                 {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(stream, _historyManager);
+                    using (var stream = saveFileDialog.OpenFile())
+                    {
+                        BinaryFormatter binaryFormatter = new BinaryFormatter();
+                        //binaryFormatter.Serialize(stream, _historyManager);
+                        binaryFormatter.Serialize(stream, _controlUnit);
+                    }
+                }
+                else
+                {
+                    _canvasControl.Image.Save(saveFileDialog.FileName);
                 }
             }
         }
@@ -83,15 +92,29 @@ namespace GRPO
         {
             //mainPictureBox.Image.Save("111lol.jpg");
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "GraphicsPO Project|*.grpo";
+            openFileDialog.Filter = "GraphicsPO Project|*.grpo|Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF";
             if (openFileDialog.ShowDialog() != DialogResult.Cancel)
             {
-                using (var stream = openFileDialog.OpenFile())
+                if (openFileDialog.SafeFileName == "*.grpo")
                 {
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    _historyManager = (HistoryManager)binaryFormatter.Deserialize(stream);
-                    _historyManager_Step();
-                    _canvasControl.RefreshCanvas();
+                    using (var stream = openFileDialog.OpenFile())
+                    {
+                        BinaryFormatter binaryFormatter = new BinaryFormatter();
+                        /*_historyManager = (HistoryManager)binaryFormatter.Deserialize(stream);
+                        _historyManager_Step();*/
+                        _controlUnit = (ControlUnit)binaryFormatter.Deserialize(stream);
+                        _canvasControl.ControlUnit = _controlUnit;
+                        _canvasControl.Drawables = _controlUnit._graphicsEditor._drawablesList;
+                        _canvasControl.RefreshCanvas();
+                    }
+                }
+                else
+                {
+                    using (var image = new Bitmap(openFileDialog.OpenFile()))
+                    {
+                        _canvasControl.Image = new Bitmap(image);
+                        _canvasControl.RefreshCanvas();
+                    }
                 }
             }
         }
