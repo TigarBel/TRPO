@@ -32,10 +32,6 @@ namespace GRPO
         /// </summary>
         private int _indexSelectPoint;
         /// <summary>
-        /// Радиус точек отображения габаритов
-        /// </summary>
-        private int _radiusDrawPoint = 4;
-        /// <summary>
         /// Пустой класс взаимодействия
         /// </summary>
         public Interaction()

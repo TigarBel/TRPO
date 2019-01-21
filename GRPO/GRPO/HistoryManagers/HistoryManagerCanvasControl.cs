@@ -23,14 +23,6 @@ namespace GRPO.HistoryManagers
         /// </summary>
         private List<IDrawable> _drawables;
         /// <summary>
-        /// Картинка с холста
-        /// </summary>
-        private Image _image;
-        /// <summary>
-        /// Объект взаимодействия с нарисованными фигурами
-        /// </summary>
-        private Interaction _interaction;
-        /// <summary>
         /// Размер холста по X
         /// </summary>
         private int _sizeCanvasX;
@@ -47,13 +39,10 @@ namespace GRPO.HistoryManagers
         /// <param name="interaction">Объект взаимодействия с нарисованными фигурами</param>
         /// <param name="sizeCanvasX">Размер холста по X</param>
         /// <param name="sizeCanvasY">Размер холста по Y</param>
-        public HistoryManagerCanvasControl(List<IDrawable> buferDraw, List<IDrawable> drawables, Image image, Interaction interaction,
-            int sizeCanvasX, int sizeCanvasY)
+        public HistoryManagerCanvasControl(List<IDrawable> buferDraw, List<IDrawable> drawables, int sizeCanvasX, int sizeCanvasY)
         {
             _buferDraw = new List<IDrawable>(buferDraw);
             _drawables = new List<IDrawable>(drawables);
-            _image = image;
-            _interaction = interaction;
             _sizeCanvasX = sizeCanvasX;
             _sizeCanvasY = sizeCanvasY;
         }
@@ -65,26 +54,6 @@ namespace GRPO.HistoryManagers
             get
             {
                 return _drawables;
-            }
-        }
-        /// <summary>
-        /// Картинка с холста
-        /// </summary>
-        public Image Image
-        {
-            get
-            {
-                return new Bitmap(_image);
-            }
-        }
-        /// <summary>
-        /// Объект взаимодействия с нарисованными фигурами
-        /// </summary>
-        public Interaction Interaction
-        {
-            get
-            {
-                return _interaction;
             }
         }
         /// <summary>

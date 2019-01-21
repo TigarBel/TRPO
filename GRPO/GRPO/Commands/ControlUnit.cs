@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRPO.Drawing;
 
 namespace GRPO.Commands
 {
@@ -15,13 +16,25 @@ namespace GRPO.Commands
     [Serializable]
     public class ControlUnit
     {
-        // Initializers
-        public GraphicsEditor _graphicsEditor = new GraphicsEditor();
+
+        private GraphicsEditor _graphicsEditor = new GraphicsEditor();
+
         private List<Command> _commands = new List<Command>();
+
+        private string _fileName = "Безымянный";
 
         private int _current = 0;
 
-        public string FileName { get; set; }
+        public GraphicsEditor GraphicsEditor
+        {
+            get { return _graphicsEditor; }
+        }
+
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = value; }
+        }
 
         public Image Image { get; set; }
 
@@ -31,8 +44,12 @@ namespace GRPO.Commands
 
             // Делаем возврат операций
             for (int i = 0; i < levels; i++)
+            {
                 if (_current < _commands.Count)
+                {
                     _commands[_current++].Execute();
+                }
+            }
         }
 
         public void Undo(int levels)
@@ -41,30 +58,40 @@ namespace GRPO.Commands
 
             // Делаем отмену операций
             for (int i = 0; i < levels; i++)
+            {
                 if (_current > 0)
+                {
                     _commands[--_current].UnExecute();
+                }
+            }
+
         }
 
-        public void Drawing(string keywords, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
+        public void Drawing(string keywords, Tools tools, List<Point> points, LineProperty lineProperty,
+            FillProperty fillProperty)
         {
-            Command command = new DrawingCommand(_graphicsEditor, keywords, points, lineProperty, fillProperty);
+            Command command = new CommandDrawing(_graphicsEditor, keywords, tools, points, lineProperty, fillProperty);
             command.Execute();
             if (_current < _commands.Count)
             {
                 _commands.RemoveRange(_current, _commands.Count - _current);
             }
+
             _commands.Add(command);
             _current++;
         }
 
-        public void ChangeProperty(string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
+        public void ChangeProperty(string keywords, int index, LineProperty _oldLineProperty,
+            LineProperty _newLineProperty, FillProperty _oldFillProperty, FillProperty _newFillProperty)
         {
-            Command command = new PropertyCommand(_graphicsEditor, keywords, index, lineProperty, fillProperty);
+            Command command = new CommandPropertyChanger(_graphicsEditor, keywords, index, _oldLineProperty, _newLineProperty,
+                _oldFillProperty, _newFillProperty);
             command.Execute();
             if (_current < _commands.Count)
             {
                 _commands.RemoveRange(_current, _commands.Count - _current);
             }
+
             _commands.Add(command);
             _current++;
         }

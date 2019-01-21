@@ -126,8 +126,6 @@ namespace GRPO.HistoryManagers
             {
                 return /*_managerCanvasControls[StepsSelect];*/new HistoryManagerCanvasControl(_managerCanvasControls[StepsSelect].BuferDraw, 
                     _managerCanvasControls[StepsSelect].Drawables,
-                    _managerCanvasControls[StepsSelect].Image, 
-                    _managerCanvasControls[StepsSelect].Interaction,
                     _managerCanvasControls[StepsSelect].GetWidthCanvas(), 
                     _managerCanvasControls[StepsSelect].GetHeightCanvas());
             }

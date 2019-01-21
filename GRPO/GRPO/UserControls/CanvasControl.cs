@@ -20,7 +20,6 @@ namespace GRPO
     /// </summary>
     public partial class CanvasControl : UserControl
     {
-        public ControlUnit ControlUnit { get; set; }
 
         public delegate void Drag(IDrawable drawable);
         public event Drag DragProperty;
@@ -51,6 +50,11 @@ namespace GRPO
         /// Список фигур хронящихся в памяти
         /// </summary>
         private List<IDrawable> _buferDraw = new List<IDrawable>();
+
+        /// <summary>
+        /// Управляющий элемент
+        /// </summary>
+        private ControlUnit _controlUnit = new ControlUnit();
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -69,10 +73,20 @@ namespace GRPO
         public CanvasControl()
         {
             InitializeComponent();
-            SetSizeCanvas(100, 50);
+            SetSizeCanvas(100, 100);
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
+        }
+
+        public ControlUnit ControlUnit
+        {
+            get { return _controlUnit; }
+            set
+            {
+                _controlUnit = value;
+                Drawables = _controlUnit.GraphicsEditor.Drawables;
+            }
         }
         /// <summary>
         /// Список фигур
@@ -81,7 +95,7 @@ namespace GRPO
         {
             get
             {
-                return _drawables;
+                return ControlUnit.GraphicsEditor.Drawables; //_drawables;
             }
             set
             {
@@ -106,9 +120,18 @@ namespace GRPO
             }
             set
             {
-                _selectTool = value;
                 _flagMouseDown = false;
-                _flagPolyFigure = false;
+                if (_flagPolyFigure)
+                {
+                    List<Point> points = Drawables[Drawables.Count - 1].Points;
+                    points.RemoveAt(points.Count - 1);
+                    points.Add(_pointB);
+
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    ControlUnit.Drawing("Создать фигуру", new Tools(SelectTool.DrawingTools), points, LineProperty, FillProperty);
+                    _flagPolyFigure = false;
+                }
+                _selectTool = value;
                 RefreshCanvas();
             }
         }
@@ -269,7 +292,7 @@ namespace GRPO
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
+                    ControlUnit.Drawing("Создать фигуру", new Tools(SelectTool.DrawingTools), points, LineProperty, FillProperty);
 
                     _flagPolyFigure = false;
                 }
@@ -401,11 +424,12 @@ namespace GRPO
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
+                    //Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
                     //
                     List<Point> points = new List<Point>() { _pointA, _pointB };
-                    ControlUnit.Drawing("Создать линию", points, LineProperty, FillProperty);
+                    ControlUnit.Drawing("Создать фигуру", new Tools(SelectTool.DrawingTools), points, LineProperty, FillProperty);
                     //
+                    RefreshCanvas();
                     if (SaveStep != null) SaveStep();
                 }
 
@@ -417,6 +441,7 @@ namespace GRPO
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty, SelectTool.DrawingTools));
+                        RefreshCanvas();
                         if (SaveStep != null) SaveStep();
                     }
                 }
@@ -517,6 +542,7 @@ namespace GRPO
                             Interaction.EnablePoints = false;
                         }
                     }
+                    RefreshCanvas();
                     if (SaveStep != null) SaveStep();
                 }
                 _flagMouseDown = false;

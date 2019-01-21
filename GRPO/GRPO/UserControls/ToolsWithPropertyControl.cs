@@ -16,10 +16,17 @@ namespace GRPO
     {
         public delegate void FigurePropertyEventHandler();
         public event FigurePropertyEventHandler FigurePropertyChanged;
+        public event FigurePropertyEventHandler ToolsChanged;
+        public event FigurePropertyEventHandler LinePropertyChanged;
+        public event FigurePropertyEventHandler FillPropertyChanged;
 
         public ToolsWithPropertyControl()
         {
             InitializeComponent();
+
+            _toolsControl.ButtonClick += ChangeTools;
+            _propertyLineControl.LinePropertyChanged += ChangeLineProperty;
+            _fillFigureControl.FillPropertyChanged += ChangeFillProperty;
 
             _toolsControl.ButtonClick += ChangeProperty;
             _propertyLineControl.LinePropertyChanged += ChangeProperty;
@@ -145,6 +152,27 @@ namespace GRPO
         private void ChangeProperty()
         {
             if (FigurePropertyChanged != null) FigurePropertyChanged();
+        }
+        /// <summary>
+        /// Событие при смене инструмента
+        /// </summary>
+        private void ChangeTools()
+        {
+            if (ToolsChanged != null) ToolsChanged();
+        }
+        /// <summary>
+        /// Событие при изменении свойства линии
+        /// </summary>
+        private void ChangeLineProperty()
+        {
+            if (LinePropertyChanged != null) LinePropertyChanged();
+        }
+        /// <summary>
+        /// Событие при изменении свойства заливки
+        /// </summary>
+        private void ChangeFillProperty()
+        {
+            if (FillPropertyChanged != null) FillPropertyChanged();
         }
     }
 }

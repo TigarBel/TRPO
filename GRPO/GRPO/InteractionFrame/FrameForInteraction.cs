@@ -12,12 +12,16 @@ using System.Windows.Forms;
 
 namespace GRPO.InteractionFrame
 {
+    /// <summary>
+    /// Класс отрисовки рамок для класса интерактив
+    /// </summary>
+    [Serializable]
     public abstract class FrameForInteraction
     {
         /// <summary>
         /// Радиус точек отображения габаритов
         /// </summary>
-        public int _radiusDrawPoint = 4;
+        protected int _radiusDrawPoint = 4;
         /// <summary>
         /// Отрисовка выделения
         /// </summary>
