@@ -22,8 +22,8 @@ namespace GRPO.Commands
         /// </summary>
         private List<string> _keywords = new List<string>()
         {
-            "Создать фигуру", "Удалить фигуру", "Изменить свойство линии", "Изменить свойство заливки",
-            "Удалить весь список", "Удалить элементы", "Удалить элемент"
+            "Создать фигуру"/*0*/, "Удалить фигуру"/*1*/, "Изменить свойство линии"/*2*/, "Изменить свойство заливки"/*3*/,
+            "Удалить весь список"/*4*/, "Удалить элемент(ы)"/*5*/
         };
         /// <summary>
         /// Список фигур
@@ -118,25 +118,21 @@ namespace GRPO.Commands
                 case "Удалить весь список":
                     _drawablesList.Clear();
                     break;
-                case "Удалить элементы":
+                case "Удалить элемент(ы)":
                 {
-                    foreach (IDrawable drawable in drawables)
+                    indexes.Reverse();
+                    foreach (int index in indexes)
                     {
-                        _drawablesList.Remove(drawable);
+                        _drawablesList.RemoveAt(index);
                     }
 
+                    indexes.Reverse();
                     break;
                 }
-                case "Удалить элемент":
-                    _drawablesList.Remove(drawables[0]);
-                    break;
                 case "Восстановить весь список":
                     _drawablesList = drawables;
                     break;
-                case "Восстановить элементы списка":
-                    _drawablesList = Reload(drawables, indexes);
-                    break;
-                case "Восстановить элемент списка":
+                case "Восстановить элемент(ы) списка":
                     _drawablesList = Reload(drawables, indexes);
                     break;
             }
@@ -153,7 +149,7 @@ namespace GRPO.Commands
         {
             List<IDrawable> localDrawables = new List<IDrawable>();
             int count = 0;
-            for (int i = 0; i < _drawablesList.Count - 1 + drawables.Count - 1; i++)
+            for (int i = 0; i < _drawablesList.Count + drawables.Count; i++)
             {
                 if (indexes.Contains(i))
                 {
@@ -162,10 +158,10 @@ namespace GRPO.Commands
                 }
                 else
                 {
-                    localDrawables.Add(_drawablesList[i]);
+                    localDrawables.Add(_drawablesList[i - count]);
                 }
             }
-            return drawables;
+            return localDrawables;
         }
         /// <summary>
         /// Список фигур

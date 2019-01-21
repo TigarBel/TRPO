@@ -18,7 +18,11 @@ namespace GRPO.Commands
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
-            Drawables = drawables;
+            List<IDrawable> localDrawables = Drawables = new List<IDrawable>();
+            foreach (var drawable in drawables)
+            {
+                Drawables.Add(drawable.Clone());
+            }
             Indexes = indexes;
         }
 
@@ -46,8 +50,7 @@ namespace GRPO.Commands
             switch (Keywords)
             {
                 case "Удалить весь список": return "Восстановить весь список";
-                case "Удалить элементы": return "Восстановить элементы списка";
-                case "Удалить элемент": return "Восстановить элемент списка";
+                case "Удалить элемент(ы)": return "Восстановить элемент(ы) списка";
             }
             return null;
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GRPO.Commands
 {
     /// <summary>
-    /// 
+    /// Класс команды измения свойства фигуры
     /// </summary>
     [Serializable]
     class CommandPropertyChanger : Command

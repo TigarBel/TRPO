@@ -144,6 +144,7 @@ namespace GRPO
                     _flagPolyFigure = false;
                 }
 
+                Interaction = null;
                 _selectTool = value;
                 RefreshCanvas();
             }
@@ -263,8 +264,8 @@ namespace GRPO
         /// </summary>
         public void ClearCanvas()
         {
-            Drawables.Clear();
-            _image = new Bitmap(canvas.Width, canvas.Height);
+            ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], Drawables, null);
+            RefreshCanvas();
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
         }
 
@@ -649,13 +650,14 @@ namespace GRPO
         {
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
             {
+                List<int> indexes = new List<int>();
                 foreach (IDrawable drawable in Interaction.DrawableFigures)
                 {
-                    Drawables.Remove(drawable);
+                    indexes.Add(Drawables.IndexOf(drawable));
                 }
-
-                RefreshCanvas();
+                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures, indexes);
                 Interaction = null;
+                RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
             }
         }
@@ -668,14 +670,16 @@ namespace GRPO
             BuferDraw.Clear();
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
             {
+                List<int> indexes = new List<int>();
                 foreach (IDrawable drawable in Interaction.DrawableFigures)
                 {
                     BuferDraw.Add(drawable.Clone());
                     Drawables.Remove(drawable);
+                    indexes.Add(Drawables.IndexOf(drawable));
                 }
-
-                RefreshCanvas();
+                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures, indexes);
                 Interaction = null;
+                RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
             }
         }

@@ -1,22 +1,19 @@
-﻿using GRPO.Drawing.Property;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GRPO.Drawing;
 
 namespace GRPO.Commands
 {
     /// <summary>
-    /// Класс команды создания фигуры
+    /// 
     /// </summary>
     [Serializable]
-    class CommandDrawing : Command
+    class CommandReconstruction : Command
     {
-
-        public CommandDrawing(GraphicsEditor graphicsEditor,
+        /*
+        public CommandReconstruction(GraphicsEditor graphicsEditor,
             string keywords, Tools tools, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
             GraphicsEditor = graphicsEditor;
@@ -53,6 +50,16 @@ namespace GRPO.Commands
         private string Undo()
         {
             return "Удалить фигуру";
+        }*/
+        public override void Execute()
+        {
+            //GraphicsEditor.CreateFigure(Keywords, Tools, Points, LineProperty, FillProperty);
         }
+
+        public override void UnExecute()
+        {
+            //GraphicsEditor.CreateFigure(Undo(), Tools, Points, LineProperty, FillProperty);
+        }
+
     }
 }

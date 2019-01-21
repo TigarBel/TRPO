@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandClear.cs" />
+    <Compile Include="Commands\CommandReconstruction.cs" />
     <Compile Include="Commands\ControlUnit.cs" />
     <Compile Include="Commands\CommandDrawing.cs" />
     <Compile Include="Commands\GraphicsEditor.cs" />
