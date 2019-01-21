@@ -25,10 +25,6 @@ namespace GRPO
 
         public event Drag DragProperty;
 
-        public delegate void CanvasControChanged();
-
-        public event CanvasControChanged SaveStep;
-
         /// <summary>
         /// Фабрика фигур
         /// </summary>
@@ -43,6 +39,8 @@ namespace GRPO
         /// Конечная точка / Точка в момент отжатия кнопки мыши
         /// </summary>
         private Point _pointB;
+
+        private Point _point;
 
         /// <summary>
         /// Флаг устанавливаемый при зажатии кнопки мыши
@@ -273,6 +271,7 @@ namespace GRPO
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
+            _point = new Point(e.X, e.Y);
 
             if (SelectTool.TypeTools == TypeTools.SimpleFigure)
             {
@@ -321,6 +320,7 @@ namespace GRPO
             {
                 if (Interaction != null)
                 {
+                    
                     if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                     {
                         if (Interaction.EnablePoints)
@@ -458,7 +458,7 @@ namespace GRPO
                         points, LineProperty, FillProperty);
                     //
                     RefreshCanvas();
-                    if (SaveStep != null) SaveStep();
+                    
                 }
 
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
@@ -471,50 +471,51 @@ namespace GRPO
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
                             SelectTool.DrawingTools));
                         RefreshCanvas();
-                        if (SaveStep != null) SaveStep();
+                        
                     }
                 }
 
                 if (SelectTool.TypeTools == TypeTools.SelectFigure)
                 {
-                    if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
+                    if (Interaction == null)
                     {
-                        Interaction = null;
-                        _pointA = new Point(e.X, e.Y);
-                        if (DragProperty != null) DragProperty(null);
-                        for (int i = Drawables.Count - 1; i >= 0; i--)
+                        if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                         {
-                            int minX = Drawables[i].Points.Min(point => point.X);
-                            int maxX = Drawables[i].Points.Max(point => point.X);
-                            int minY = Drawables[i].Points.Min(point => point.Y);
-                            int maxY = Drawables[i].Points.Max(point => point.Y);
-                            if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
+                            Interaction = null;
+                            _pointA = new Point(e.X, e.Y);
+                            if (DragProperty != null) DragProperty(null);
+                            for (int i = Drawables.Count - 1; i >= 0; i--)
                             {
-                                if (DragProperty != null) DragProperty(Drawables[i]);
-                                if (e.Button == MouseButtons.Left)
+                                int minX = Drawables[i].Points.Min(point => point.X);
+                                int maxX = Drawables[i].Points.Max(point => point.X);
+                                int minY = Drawables[i].Points.Min(point => point.Y);
+                                int maxY = Drawables[i].Points.Max(point => point.Y);
+                                if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
                                 {
-                                    Interaction = new Interaction(Drawables[i], false);
-                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                        Interaction.DrawableFigures);
-                                    //if (SaveStep != null) SaveStep();
-                                }
-                                else if (e.Button == MouseButtons.Right)
-                                {
-                                    Interaction = new Interaction(Drawables[i], true);
-                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                        Interaction.DrawableFigures);
-                                    //if (SaveStep != null) SaveStep();
-                                }
+                                    if (DragProperty != null) DragProperty(Drawables[i]);
+                                    if (e.Button == MouseButtons.Left)
+                                    {
+                                        Interaction = new Interaction(Drawables[i], false);
+                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
+                                            Interaction.DrawableFigures);
+                                        //
+                                    }
+                                    else if (e.Button == MouseButtons.Right)
+                                    {
+                                        Interaction = new Interaction(Drawables[i], true);
+                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
+                                            Interaction.DrawableFigures);
+                                        //
+                                    }
 
-                                break;
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                    {
-                        if (Interaction == null)
+                        if (SelectTool.DrawingTools == DrawingTools.MassSelect)
                         {
+
                             List<Point> points = new List<Point>();
                             points.Add(_pointA);
                             points.Add(_pointB);
@@ -542,7 +543,7 @@ namespace GRPO
                             {
                                 Interaction = new Interaction(localDrawables, false);
                                 Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
-                                //if (SaveStep != null) SaveStep();
+                                //
                             }
 
                             if (Interaction == null)
@@ -574,14 +575,23 @@ namespace GRPO
                                 }
                             }
                         }
-                        else
+
+                    }
+                    else
+                    {
+                        List<int> indexes = new List<int>();
+                        for (int i = 0; i < Interaction.DrawableFigures.Count; i++)
                         {
-                            Interaction.EnablePoints = false;
+                            indexes.Add(Drawables.IndexOf(Interaction.DrawableFigures[i]));
                         }
+
+                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6], indexes, _point,
+                            _pointB);
+                        Interaction.EnablePoints = false;
                     }
 
                     RefreshCanvas();
-                    if (SaveStep != null) SaveStep();
+                    
                 }
 
                 _flagMouseDown = false;
@@ -627,6 +637,7 @@ namespace GRPO
                         int Width = drawable.Position.X - localPoints.Min(point => point.X);
                         int Height = drawable.Position.Y - localPoints.Min(point => point.Y);
                         drawable.Position = new Point(_pointB.X + Width, _pointB.Y + Height);
+                        //ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0],11111111111111111111111);
                     }
                     else
                     {

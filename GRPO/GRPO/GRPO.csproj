@@ -55,6 +55,7 @@
     <Compile Include="Commands\CommandPropertyChanger.cs" />
     <Compile Include="Drawing\FactoryDrawFigure.cs" />
     <Compile Include="Example.cs" />
+    <Compile Include="InteractionFrame\Checking.cs" />
     <Compile Include="InteractionFrame\FrameForInteraction.cs" />
     <Compile Include="UserControls\CanvasControl.cs">
       <SubType>UserControl</SubType>

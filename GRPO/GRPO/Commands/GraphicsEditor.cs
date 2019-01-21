@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRPO.InteractionFrame;
 
 namespace GRPO.Commands
 {
@@ -23,7 +24,7 @@ namespace GRPO.Commands
         private List<string> _keywords = new List<string>()
         {
             "Создать фигуру"/*0*/, "Удалить фигуру"/*1*/, "Изменить свойство линии"/*2*/, "Изменить свойство заливки"/*3*/,
-            "Удалить весь список"/*4*/, "Удалить элемент(ы)"/*5*/
+            "Удалить весь список"/*4*/, "Удалить элемент(ы)"/*5*/,"Изменить положение фигур(ы)"/*6*/,"Изменить опорную точку"/*7*/
         };
         /// <summary>
         /// Список фигур
@@ -42,44 +43,44 @@ namespace GRPO.Commands
             switch (keywords)
             {
                 case "Создать фигуру":
-                {
-                    switch (tools.DrawingTools)
                     {
-                        case DrawingTools.DrawFigureLine:
+                        switch (tools.DrawingTools)
                         {
-                            _drawablesList.Add(new DrawFigureLine(points[0], points[1], lineProperty));
-                            break;
+                            case DrawingTools.DrawFigureLine:
+                                {
+                                    _drawablesList.Add(new DrawFigureLine(points[0], points[1], lineProperty));
+                                    break;
+                                }
+                            case DrawingTools.DrawFigurePolyline:
+                                {
+                                    _drawablesList.Add(new DrawFigurePolyline(points, lineProperty));
+                                    break;
+                                }
+                            case DrawingTools.DrawFigureRectangle:
+                                {
+                                    _drawablesList.Add(
+                                        new DrawFigureRectangle(points[0], points[1], lineProperty, fillProperty));
+                                    break;
+                                }
+                            case DrawingTools.DrawFigureCircle:
+                                {
+                                    _drawablesList.Add(new DrawFigureCircle(points[0], points[1], lineProperty, fillProperty));
+                                    break;
+                                }
+                            case DrawingTools.DrawFigureEllipse:
+                                {
+                                    _drawablesList.Add(new DrawFigureEllipse(points[0], points[1], lineProperty, fillProperty));
+                                    break;
+                                }
                         }
-                        case DrawingTools.DrawFigurePolyline:
-                        {
-                            _drawablesList.Add(new DrawFigurePolyline(points, lineProperty));
-                            break;
-                        }
-                        case DrawingTools.DrawFigureRectangle:
-                        {
-                            _drawablesList.Add(
-                                new DrawFigureRectangle(points[0], points[1], lineProperty, fillProperty));
-                            break;
-                        }
-                        case DrawingTools.DrawFigureCircle:
-                        {
-                            _drawablesList.Add(new DrawFigureCircle(points[0], points[1], lineProperty, fillProperty));
-                            break;
-                        }
-                        case DrawingTools.DrawFigureEllipse:
-                        {
-                            _drawablesList.Add(new DrawFigureEllipse(points[0], points[1], lineProperty, fillProperty));
-                            break;
-                        }
-                    }
 
-                    break;
-                }
+                        break;
+                    }
                 case "Удалить фигуру":
-                {
-                    _drawablesList.Remove(_drawablesList[_drawablesList.Count - 1]);
-                    break;
-                }
+                    {
+                        _drawablesList.Remove(_drawablesList[_drawablesList.Count - 1]);
+                        break;
+                    }
             }
 
             Console.WriteLine(keywords);
@@ -99,9 +100,9 @@ namespace GRPO.Commands
             switch (keywords)
             {
                 case "Изменить свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = newLineProperty; break;
-                case "Изменить свойство заливки":((IFillPropertyble)_drawablesList[index]).FillProperty = newFillProperty; break;
-                case "Вернуть свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = oldLineProperty;break;
-                case "Вернуть свойство заливки": ((IFillPropertyble)_drawablesList[index]).FillProperty = oldFillProperty;break;
+                case "Изменить свойство заливки": ((IFillPropertyble)_drawablesList[index]).FillProperty = newFillProperty; break;
+                case "Вернуть свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = oldLineProperty; break;
+                case "Вернуть свойство заливки": ((IFillPropertyble)_drawablesList[index]).FillProperty = oldFillProperty; break;
             }
             Console.WriteLine(keywords);
         }
@@ -119,16 +120,16 @@ namespace GRPO.Commands
                     _drawablesList.Clear();
                     break;
                 case "Удалить элемент(ы)":
-                {
-                    indexes.Reverse();
-                    foreach (int index in indexes)
                     {
-                        _drawablesList.RemoveAt(index);
-                    }
+                        indexes.Reverse();
+                        foreach (int index in indexes)
+                        {
+                            _drawablesList.RemoveAt(index);
+                        }
 
-                    indexes.Reverse();
-                    break;
-                }
+                        indexes.Reverse();
+                        break;
+                    }
                 case "Восстановить весь список":
                     _drawablesList = drawables;
                     break;
@@ -164,6 +165,61 @@ namespace GRPO.Commands
             return localDrawables;
         }
         /// <summary>
+        /// Реконструировать фигуру
+        /// </summary>
+        /// <param name="keywords">Команда</param>
+        /// <param name="indexes">Список индексов фигур(ы)</param>
+        /// <param name="selectPoint">Выбранная точка</param>
+        /// <param name="newPoint">Новая точка</param>
+        public void Reconstruct(string keywords, List<int> indexes, Point selectPoint, Point newPoint)
+        {
+            switch (keywords)
+            {
+                case "Изменить положение фигур(ы)":
+                    foreach (int index in indexes)
+                    {
+                        _drawablesList[index].Position = new Point(
+                            _drawablesList[index].Position.X - selectPoint.X + newPoint.X,
+                            _drawablesList[index].Position.Y - selectPoint.Y + newPoint.Y);
+                    }
+                    break;
+                case "Изменить опорную точку":
+                    ChangePoint(indexes, selectPoint, newPoint);
+                    break;
+                case "Вернуть положение фигур(ы)":
+                    foreach (int index in indexes)
+                    {
+                        _drawablesList[index].Position = new Point(
+                            _drawablesList[index].Position.X + selectPoint.X - newPoint.X,
+                            _drawablesList[index].Position.Y + selectPoint.Y - newPoint.Y);
+                    }
+                    break;
+                case "Вернуть назад опорную точку":
+                    ChangePoint(indexes, newPoint, selectPoint);
+                    break;
+            }
+
+            Console.WriteLine(keywords);
+        }
+        /// <summary>
+        /// Изменить опорную точку
+        /// </summary>
+        /// <param name="indexes">Индекс фигуры</param>
+        /// <param name="selectPoint">Выбранная точка</param>
+        /// <param name="newPoint">Новая точка</param>
+        private void ChangePoint(List<int> indexes, Point selectPoint, Point newPoint)
+        {
+            Checking checking = new Checking();
+            int indexSelectPoint = checking.GetNumberPoint(selectPoint, _drawablesList[indexes[0]], 4);
+            if (indexSelectPoint != -1)
+            {
+                List<Point> points = _drawablesList[indexes[0]].Points;
+                points[indexSelectPoint] = newPoint;
+                _drawablesList[indexes[0]].Points = points;
+            }
+        }
+
+        /// <summary>
         /// Список фигур
         /// </summary>
         public List<IDrawable> Drawables
@@ -173,7 +229,7 @@ namespace GRPO.Commands
         /// <summary>
         /// Список ключевых слов
         /// </summary>
-        public  List<string> Keywords
+        public List<string> Keywords
         {
             get { return _keywords; }
         }

@@ -19,15 +19,11 @@ namespace GRPO
     [Serializable]
     public class Interaction : FrameForInteraction
     {
+
         /// <summary>
         /// Рисуемые объекты
         /// </summary>
         private List<IDrawable> _drawables = new List<IDrawable>();
-
-        /// <summary>
-        /// Разрашение измять опортные точки
-        /// </summary>
-        private bool _enablePoints;
 
         /// <summary>
         /// Индекс выбранной габоритной точки
@@ -74,38 +70,21 @@ namespace GRPO
         }
 
         /// <summary>
-        /// Разрашение измять опортные точки
+        /// Разрашение изменять опортные точки
         /// </summary>
         public bool EnablePoints { get; set; }
-
-        /// <summary>
-        /// Получить номер выбранной габаритной точки фигуры
-        /// </summary>
-        /// <param name="point">Локальная точка</param>
-        /// <returns>Номер габаритной точки фигуры</returns>
-        private int GetNumberPoint(Point point)
-        {
-            int number = 0;
-            foreach (Point sizePoint in DrawableFigures[0].Points)
-            {
-                if (point.X >= sizePoint.X - _radiusDrawPoint && point.X <= sizePoint.X + _radiusDrawPoint &&
-                    point.Y >= sizePoint.Y - _radiusDrawPoint && point.Y <= sizePoint.Y + _radiusDrawPoint)
-                {
-                    return number;
-                }
-
-                number++;
-            }
-
-            return -1;
-        }
 
         /// <summary>
         /// Выбранная габаритная точка
         /// </summary>
         public Point SelectPoint
         {
-            set { _indexSelectPoint = GetNumberPoint(new Point(value.X, value.Y)); }
+            set
+            {
+                Checking _checking = new Checking();
+                _indexSelectPoint =
+                    _checking.GetNumberPoint(new Point(value.X, value.Y), DrawableFigures[0], _radiusDrawPoint);
+            }
         }
 
         /// <summary>

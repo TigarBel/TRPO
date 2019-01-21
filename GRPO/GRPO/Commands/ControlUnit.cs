@@ -108,5 +108,18 @@ namespace GRPO.Commands
             _commands.Add(command);
             _current++;
         }
+
+        public void Reconstruction(string keywords, List<int> indexes, Point selectPoint, Point newPoint)
+        {
+            Command command = new CommandReconstruction(_graphicsEditor, keywords, indexes, selectPoint, newPoint);
+            command.Execute();
+            if (_current < _commands.Count)
+            {
+                _commands.RemoveRange(_current, _commands.Count - _current);
+            }
+
+            _commands.Add(command);
+            _current++;
+        }
     }
 }
