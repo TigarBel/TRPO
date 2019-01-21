@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace GRPO.Commands
 {
     /// <summary>
-    /// 
+    /// Класс хранения реализации команд
     /// </summary>
     [Serializable]
     public class GraphicsEditor
@@ -29,7 +29,14 @@ namespace GRPO.Commands
         /// Список фигур
         /// </summary>
         private List<IDrawable> _drawablesList = new List<IDrawable>();
-
+        /// <summary>
+        /// Команда по созданию фигур
+        /// </summary>
+        /// <param name="keywords">Команда</param>
+        /// <param name="tools">Используемый инструмент</param>
+        /// <param name="points">Точки образующие фигуру</param>
+        /// <param name="lineProperty">Свойство линии</param>
+        /// <param name="fillProperty">Свойство звлиыки</param>
         public void CreateFigure(string keywords, Tools tools, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
             switch (keywords)
@@ -77,7 +84,15 @@ namespace GRPO.Commands
 
             Console.WriteLine(keywords);
         }
-
+        /// <summary>
+        /// Командо для изменения свойств фигуры
+        /// </summary>
+        /// <param name="keywords">Команда</param>
+        /// <param name="index">Индекс фигуры из списка</param>
+        /// <param name="oldLineProperty">Старое свойство линии</param>
+        /// <param name="newLineProperty">Новое свойство линии</param>
+        /// <param name="oldFillProperty">Старое свойство заливки</param>
+        /// <param name="newFillProperty">Новое свойство заливки</param>
         public void ChangeProperty(string keywords, int index, LineProperty oldLineProperty,
             LineProperty newLineProperty, FillProperty oldFillProperty, FillProperty newFillProperty)
         {
@@ -91,16 +106,18 @@ namespace GRPO.Commands
             Console.WriteLine(keywords);
         }
         /// <summary>
-        /// 
+        /// Команда по очистке списка
         /// </summary>
-        /// <param name="keywords"></param>
+        /// <param name="keywords">Команда</param>
         /// <param name="drawables">Список удаляемых фигур</param>
-        /// <param name="indexes"></param>
-        public void DrawablesCleaer(string keywords,List<IDrawable> drawables)
+        /// <param name="indexes">Список индексов, свои места для фигур</param>
+        public void DrawablesCleaer(string keywords, List<IDrawable> drawables, List<int> indexes)
         {
             switch (keywords)
             {
-                case "Удалить весь список": _drawablesList.Clear(); break;
+                case "Удалить весь список":
+                    _drawablesList.Clear();
+                    break;
                 case "Удалить элементы":
                 {
                     foreach (IDrawable drawable in drawables)
@@ -110,12 +127,45 @@ namespace GRPO.Commands
 
                     break;
                 }
-                case "Удалить элемент": _drawablesList.Remove(drawables[0]); break;
-                case "Восстановить весь список": _drawablesList = drawables; break;
-                case "Восстановить элементы списка": _drawablesList = drawables/*lox2*/; break;
-                case "Восстановить элемент списка": _drawablesList = drawables/*lox1*/; break;
+                case "Удалить элемент":
+                    _drawablesList.Remove(drawables[0]);
+                    break;
+                case "Восстановить весь список":
+                    _drawablesList = drawables;
+                    break;
+                case "Восстановить элементы списка":
+                    _drawablesList = Reload(drawables, indexes);
+                    break;
+                case "Восстановить элемент списка":
+                    _drawablesList = Reload(drawables, indexes);
+                    break;
             }
+
             Console.WriteLine(keywords);
+        }
+        /// <summary>
+        /// Перезарядить список фигур
+        /// </summary>
+        /// <param name="drawables">Список добавляемых фигур</param>
+        /// <param name="indexes">Список индексов, свои места для фигур</param>
+        /// <returns></returns>
+        private List<IDrawable> Reload(List<IDrawable> drawables, List<int> indexes)
+        {
+            List<IDrawable> localDrawables = new List<IDrawable>();
+            int count = 0;
+            for (int i = 0; i < _drawablesList.Count - 1 + drawables.Count - 1; i++)
+            {
+                if (indexes.Contains(i))
+                {
+                    localDrawables.Add(drawables[count]);
+                    count++;
+                }
+                else
+                {
+                    localDrawables.Add(_drawablesList[i]);
+                }
+            }
+            return drawables;
         }
         /// <summary>
         /// Список фигур

@@ -95,5 +95,18 @@ namespace GRPO.Commands
             _commands.Add(command);
             _current++;
         }
+
+        public void Clear(string keywords, List<IDrawable> drawables,List<int> indexes)
+        {
+            Command command = new CommandClear(_graphicsEditor, keywords, drawables, indexes);
+            command.Execute();
+            if (_current < _commands.Count)
+            {
+                _commands.RemoveRange(_current, _commands.Count - _current);
+            }
+
+            _commands.Add(command);
+            _current++;
+        }
     }
 }

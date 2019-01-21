@@ -207,7 +207,9 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Функция по отлову изменения инструмента
+        /// </summary>
         private void _toolsWithPropertyControl_ToolsChanged()
         {
             _canvasControl.SelectTool = new Tools(_toolsWithPropertyControl.SelectTool.DrawingTools);
@@ -220,7 +222,9 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Функция по отлову изменения свойства линии фигуры
+        /// </summary>
         private void _toolsWithPropertyControl_LinePropertyChanged()
         {
             _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
@@ -241,7 +245,9 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Функция по отлову изменения свойства заливки фигуры
+        /// </summary>
         private void _toolsWithPropertyControl_FillPropertyChanged()
         {
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;

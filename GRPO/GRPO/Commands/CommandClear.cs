@@ -14,11 +14,12 @@ namespace GRPO.Commands
     class CommandClear : Command
     {
 
-        public CommandClear(GraphicsEditor graphicsEditor, string keywords, List<IDrawable> drawables)
+        public CommandClear(GraphicsEditor graphicsEditor, string keywords, List<IDrawable> drawables, List<int> indexes)
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
             Drawables = drawables;
+            Indexes = indexes;
         }
 
         private GraphicsEditor GraphicsEditor { get; set; }
@@ -27,14 +28,16 @@ namespace GRPO.Commands
 
         private List<IDrawable> Drawables  { get; set; }
 
+        private List<int> Indexes { get; set; }
+
         public override void Execute()
         {
-            GraphicsEditor.DrawablesCleaer(Keywords, Drawables);
+            GraphicsEditor.DrawablesCleaer(Keywords, Drawables, Indexes);
         }
 
         public override void UnExecute()
         {
-            GraphicsEditor.DrawablesCleaer(Undo(), Drawables);
+            GraphicsEditor.DrawablesCleaer(Undo(), Drawables, Indexes);
         }
 
         // Private helper function : приватные вспомогательные функции
