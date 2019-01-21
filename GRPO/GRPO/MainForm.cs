@@ -2,7 +2,6 @@
 using GRPO.Drawing;
 using GRPO.Drawing.Interface;
 using GRPO.Drawing.Property;
-using GRPO.HistoryManagers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -76,28 +75,26 @@ namespace GRPO
                         using (var stream = saveFileDialog.OpenFile())
                         {
                             BinaryFormatter binaryFormatter = new BinaryFormatter();
-                            _controlUnit = (ControlUnit) binaryFormatter.Deserialize(stream);
-                            _canvasControl.ControlUnit = _controlUnit;
-                            _canvasControl.RefreshCanvas();
+                            binaryFormatter.Serialize(stream, _controlUnit);
                         }
 
-                        break;
+                            break;
                     }
                     case 2:
                     {
-                        //this.button2.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        break;
+                        _canvasControl.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            break;
                     }
                     case 3:
                     {
-                        _canvasControl.Image.Save(saveFileDialog.FileName);
+                        _canvasControl.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
                         break;
                     }
                     case 4:
                     {
-                        //this.button2.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Gif);
-                        break;
+                        _canvasControl.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Gif);
+                            break;
                     }
                 }
             }

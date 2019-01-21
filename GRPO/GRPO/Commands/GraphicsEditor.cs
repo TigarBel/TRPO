@@ -21,7 +21,10 @@ namespace GRPO.Commands
         /// Список ключевых слов
         /// </summary>
         private List<string> _keywords = new List<string>()
-            {"Создать фигуру", "Удалить фигуру", "Изменить свойство линии", "Изменить свойство заливки"};
+        {
+            "Создать фигуру", "Удалить фигуру", "Изменить свойство линии", "Изменить свойство заливки",
+            "Удалить весь список", "Удалить элементы", "Удалить элемент"
+        };
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -75,15 +78,42 @@ namespace GRPO.Commands
             Console.WriteLine(keywords);
         }
 
-        public void ChangeProperty(string keywords, int index, LineProperty _oldLineProperty,
-            LineProperty _newLineProperty, FillProperty _oldFillProperty, FillProperty _newFillProperty)
+        public void ChangeProperty(string keywords, int index, LineProperty oldLineProperty,
+            LineProperty newLineProperty, FillProperty oldFillProperty, FillProperty newFillProperty)
         {
             switch (keywords)
             {
-                case "Изменить свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = _newLineProperty; break;
-                case "Изменить свойство заливки":((IFillPropertyble)_drawablesList[index]).FillProperty = _newFillProperty; break;
-                case "Вернуть свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = _oldLineProperty;break;
-                case "Вернуть свойство заливки": ((IFillPropertyble)_drawablesList[index]).FillProperty = _oldFillProperty;break;
+                case "Изменить свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = newLineProperty; break;
+                case "Изменить свойство заливки":((IFillPropertyble)_drawablesList[index]).FillProperty = newFillProperty; break;
+                case "Вернуть свойство линии": ((ILinePropertyble)_drawablesList[index]).LineProperty = oldLineProperty;break;
+                case "Вернуть свойство заливки": ((IFillPropertyble)_drawablesList[index]).FillProperty = oldFillProperty;break;
+            }
+            Console.WriteLine(keywords);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keywords"></param>
+        /// <param name="drawables">Список удаляемых фигур</param>
+        /// <param name="indexes"></param>
+        public void DrawablesCleaer(string keywords,List<IDrawable> drawables)
+        {
+            switch (keywords)
+            {
+                case "Удалить весь список": _drawablesList.Clear(); break;
+                case "Удалить элементы":
+                {
+                    foreach (IDrawable drawable in drawables)
+                    {
+                        _drawablesList.Remove(drawable);
+                    }
+
+                    break;
+                }
+                case "Удалить элемент": _drawablesList.Remove(drawables[0]); break;
+                case "Восстановить весь список": _drawablesList = drawables; break;
+                case "Восстановить элементы списка": _drawablesList = drawables/*lox2*/; break;
+                case "Восстановить элемент списка": _drawablesList = drawables/*lox1*/; break;
             }
             Console.WriteLine(keywords);
         }

@@ -23,14 +23,17 @@ namespace GRPO
         /// Рисуемые объекты
         /// </summary>
         private List<IDrawable> _drawables = new List<IDrawable>();
+
         /// <summary>
         /// Разрашение измять опортные точки
         /// </summary>
         private bool _enablePoints;
+
         /// <summary>
         /// Индекс выбранной габоритной точки
         /// </summary>
         private int _indexSelectPoint;
+
         /// <summary>
         /// Пустой класс взаимодействия
         /// </summary>
@@ -38,6 +41,7 @@ namespace GRPO
         {
             EnablePoints = false;
         }
+
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
@@ -48,6 +52,7 @@ namespace GRPO
             DrawableFigures.Add(drawableFigure);
             EnablePoints = enablePoints;
         }
+
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
@@ -58,24 +63,21 @@ namespace GRPO
             DrawableFigures = drawables;
             EnablePoints = enablePoints;
         }
+
         /// <summary>
         /// Рисуемые объекты
         /// </summary>
         public List<IDrawable> DrawableFigures
         {
-            get
-            {
-                return _drawables;
-            }
-            set
-            {
-                _drawables = value;
-            }
+            get { return _drawables; }
+            set { _drawables = value; }
         }
+
         /// <summary>
         /// Разрашение измять опортные точки
         /// </summary>
         public bool EnablePoints { get; set; }
+
         /// <summary>
         /// Получить номер выбранной габаритной точки фигуры
         /// </summary>
@@ -86,25 +88,26 @@ namespace GRPO
             int number = 0;
             foreach (Point sizePoint in DrawableFigures[0].Points)
             {
-                if (point.X >= sizePoint.X - _radiusDrawPoint && point.X <= sizePoint.X + _radiusDrawPoint && 
+                if (point.X >= sizePoint.X - _radiusDrawPoint && point.X <= sizePoint.X + _radiusDrawPoint &&
                     point.Y >= sizePoint.Y - _radiusDrawPoint && point.Y <= sizePoint.Y + _radiusDrawPoint)
                 {
                     return number;
                 }
+
                 number++;
             }
+
             return -1;
         }
+
         /// <summary>
         /// Выбранная габаритная точка
         /// </summary>
         public Point SelectPoint
         {
-            set
-            {
-                _indexSelectPoint = GetNumberPoint(new Point(value.X, value.Y));
-            }
+            set { _indexSelectPoint = GetNumberPoint(new Point(value.X, value.Y)); }
         }
+
         /// <summary>
         /// Изменить габаритную точку
         /// </summary>
@@ -118,13 +121,14 @@ namespace GRPO
                 DrawableFigures[0].Points = points;
             }
         }
+
         /// <summary>
         /// Добавление фигур в список выделяемых фигур
         /// </summary>
         /// <param name="drawable">Фигура</param>
         public void AddDrawableFigure(IDrawable drawable)
         {
-            if(!DrawableFigures.Contains(drawable))
+            if (!DrawableFigures.Contains(drawable))
             {
                 DrawableFigures.Add(drawable);
                 EnablePoints = false;

@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
     class CommandPropertyChanger : Command
     {
 
