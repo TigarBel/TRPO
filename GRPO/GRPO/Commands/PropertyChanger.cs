@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
-    class PropertyChanger : Command
+    class PropertyCommand : Command
     {
         GraphicsEditor _graphicsEditor;
         string _keywords;
@@ -17,7 +17,7 @@ namespace GRPO.Commands
         FillProperty _fillProperty;
 
         // Constructor
-        public PropertyChanger(GraphicsEditor graphicsEditor,
+        public PropertyCommand(GraphicsEditor graphicsEditor,
             string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
         {
             _graphicsEditor = graphicsEditor;

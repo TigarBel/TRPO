@@ -19,7 +19,6 @@ namespace GRPO.Commands
         public GraphicsEditor _graphicsEditor = new GraphicsEditor();
         private List<Command> _commands = new List<Command>();
 
-
         private int _current = 0;
 
         public string FileName { get; set; }
@@ -60,7 +59,7 @@ namespace GRPO.Commands
 
         public void ChangeProperty(string keywords, int index, LineProperty lineProperty, FillProperty fillProperty)
         {
-            Command command = new PropertyChanger(_graphicsEditor, keywords, index, lineProperty, fillProperty);
+            Command command = new PropertyCommand(_graphicsEditor, keywords, index, lineProperty, fillProperty);
             command.Execute();
             if (_current < _commands.Count)
             {

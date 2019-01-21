@@ -47,31 +47,31 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 386);
+            this.button1.Location = new System.Drawing.Point(6, 440);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(109, 88);
+            this.button1.Size = new System.Drawing.Size(206, 34);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Очистить холст";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(882, 65);
+            this.button2.Location = new System.Drawing.Point(354, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 90);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
+            this.button2.Text = "Сохранить";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(882, 161);
+            this.button3.Location = new System.Drawing.Point(435, 12);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(109, 90);
+            this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
+            this.button3.Text = "Открыть";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -105,7 +105,7 @@
             this.buttonAcceptSizePictureBox.Name = "buttonAcceptSizePictureBox";
             this.buttonAcceptSizePictureBox.Size = new System.Drawing.Size(75, 23);
             this.buttonAcceptSizePictureBox.TabIndex = 5;
-            this.buttonAcceptSizePictureBox.Text = "Accept";
+            this.buttonAcceptSizePictureBox.Text = "Применить";
             this.buttonAcceptSizePictureBox.UseVisualStyleBackColor = true;
             this.buttonAcceptSizePictureBox.Click += new System.EventHandler(this.buttonAcceptSizePictureBox_Click);
             // 
@@ -114,9 +114,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Size picture box:";
+            this.label1.Text = "Размер холста:";
             // 
             // textBox1
             // 
@@ -143,16 +143,16 @@
             this._canvasControl.LineProperty = lineProperty2;
             this._canvasControl.Location = new System.Drawing.Point(236, 65);
             this._canvasControl.Name = "_canvasControl";
-            this._canvasControl.Size = new System.Drawing.Size(640, 480);
+            this._canvasControl.Size = new System.Drawing.Size(1656, 884);
             this._canvasControl.TabIndex = 9;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1006, 605);
             MainForm mainForm = this;
             mainForm.Controls.Add(this._canvasControl);
+            this.ClientSize = new System.Drawing.Size(1904, 961);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);

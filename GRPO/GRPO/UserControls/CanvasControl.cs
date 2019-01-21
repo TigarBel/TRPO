@@ -120,7 +120,9 @@ namespace GRPO
         /// Свойство заливки
         /// </summary>
         public FillProperty FillProperty { get; set; }
-
+        /// <summary>
+        /// Хранилище для фона
+        /// </summary>
         private Image _image = new Bitmap(640, 480);
         /// <summary>
         /// Картинка с холста
