@@ -26,8 +26,8 @@ namespace GRPO.Commands
             }
 
             Indexes = indexes;
-            SelectPoint = selectPoint;
-            NewPoint = newPoint;
+            SelectPoint = new Point(selectPoint.X, selectPoint.Y);
+            NewPoint = new Point(newPoint.X, newPoint.Y);
         }
 
         private GraphicsEditor GraphicsEditor { get; set; }

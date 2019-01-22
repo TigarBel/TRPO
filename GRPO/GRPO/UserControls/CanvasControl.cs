@@ -12,6 +12,7 @@ using GRPO.Drawing;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
 using GRPO.Commands;
+using GRPO.InteractionFrame;
 
 namespace GRPO
 {
@@ -40,7 +41,7 @@ namespace GRPO
         /// </summary>
         private Point _pointB;
 
-        private Point _point;
+        private bool _flagSelectPoint = false;
 
         /// <summary>
         /// Флаг устанавливаемый при зажатии кнопки мыши
@@ -281,7 +282,6 @@ namespace GRPO
         {
             _flagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
-            _point = new Point(e.X, e.Y);
 
             if (SelectTool.TypeTools == TypeTools.SimpleFigure)
             {
@@ -336,6 +336,10 @@ namespace GRPO
                         if (Interaction.EnablePoints)
                         {
                             Interaction.SelectPoint = _pointA;
+                            Checking checking = new Checking();
+                            if (checking.GetNumberPoint(_pointA, Interaction.DrawableFigures[0],
+                                    4 /*см. в интерактиве*/) != -1 || _pointA.X == _pointB.X ||
+                                _pointA.Y == _pointB.Y) _flagSelectPoint = true;
                         }
                         else if (Interaction.DrawableFigures[0].Position.X > _pointA.X ||
                                  Interaction.DrawableFigures[0].Position.Y > _pointA.Y ||
@@ -398,7 +402,6 @@ namespace GRPO
                             {
                                 Interaction.ChangePoint(_pointB);
                                 RefreshCanvas();
-                                _pointA = new Point(e.X, e.Y);
                             }
                             else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y) 
                             {
@@ -565,14 +568,12 @@ namespace GRPO
                                         Interaction = new Interaction(Drawables[i], false);
                                         Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
                                             Interaction.DrawableFigures);
-                                        //
                                     }
                                     else if (e.Button == MouseButtons.Right)
                                     {
                                         Interaction = new Interaction(Drawables[i], true);
                                         Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
                                             Interaction.DrawableFigures);
-                                        //
                                     }
 
                                     break;
@@ -667,12 +668,23 @@ namespace GRPO
 
                             ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                 Interaction.DrawableFigures,
-                                GetIndexes(Interaction.DrawableFigures, Drawables),
-                                new Point(_pointA.X, _pointA.Y),
-                                new Point(_pointB.X, _pointB.Y));
+                                GetIndexes(Interaction.DrawableFigures, Drawables), _pointA, _pointB);
                             Interaction.EnablePoints = false;
                             _lineColor = new List<Color>();
                             _fillColor = new List<Color>();
+                        }
+
+                        else if (_flagSelectPoint)
+                        {
+                            Interaction.SelectPoint = _pointB;
+                            Interaction.ChangePoint(_pointA);
+
+                            ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
+                                Interaction.DrawableFigures, GetIndexes(Interaction.DrawableFigures, Drawables),
+                                _pointA, _pointB
+                            );
+                            RefreshCanvas();
+                            _flagSelectPoint = false;
                         }
                     }
 
