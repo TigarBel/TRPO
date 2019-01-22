@@ -13,80 +13,30 @@ using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
 using GRPO.Commands;
 using GRPO.InteractionFrame;
+using GRPO.UserControls.CanvasMouseActions;
 
 namespace GRPO
 {
     /// <summary>
     /// Пользовательский интерфейс полотна для рисования
     /// </summary>
-    public partial class CanvasControl : UserControl
+    public partial class CanvasControl : MouseAction
     {
-
-        public delegate void Drag(IDrawable drawable);
-
-        public event Drag DragProperty;
+        /// <summary>
+        /// Делегат для события загребсти
+        /// </summary>
+        /// <param name="drawable">Загребаемая фигура</param>
+        public delegate void CanvasControlDragProperty(IDrawable drawable);
 
         /// <summary>
-        /// Фабрика фигур
+        /// Событие при вытягивании свойства из фигуры
         /// </summary>
-        private FactoryDrawFigure _factoryDrawFigure = new FactoryDrawFigure();
-
-        /// <summary>
-        /// Начальная точка / Точка в момент нажатия кнопки мыши
-        /// </summary>
-        private Point _pointA;
-
-        /// <summary>
-        /// Конечная точка / Точка в момент отжатия кнопки мыши
-        /// </summary>
-        private Point _pointB;
-
-        private bool _flagSelectPoint = false;
-
-        /// <summary>
-        /// Флаг устанавливаемый при зажатии кнопки мыши
-        /// </summary>
-        private bool _flagMouseDown;
-
-        /// <summary>
-        /// Флаг при создании полифигур
-        /// </summary>
-        private bool _flagPolyFigure;
-
-        /// <summary>
-        /// Буфер для цвета линии фигуры
-        /// </summary>
-        private List<Color> _lineColor = new List<Color>();
-
-        /// <summary>
-        /// Буфер для цвета заливки фигуры
-        /// </summary>
-        private List<Color> _fillColor = new List<Color>();
+        public event CanvasControlDragProperty DragProperty;
 
         /// <summary>
         /// Список фигур хронящихся в памяти
         /// </summary>
         private List<IDrawable> _buferDraw = new List<IDrawable>();
-
-        /// <summary>
-        /// Управляющий элемент
-        /// </summary>
-        private ControlUnit _controlUnit = new ControlUnit();
-
-        /// <summary>
-        /// Список фигур
-        /// </summary>
-        private List<IDrawable> _drawables = new List<IDrawable>();
-
-        /// <summary>
-        /// Инструмент для рисования
-        /// </summary>
-        private Tools _selectTool;
-
-        /// <summary>
-        /// Объект взаимодействия с нарисованными фигурами
-        /// </summary>
-        private Interaction _interaction;
 
         /// <summary>
         /// Инициализация пользовательского интерфейса полотна для рисования
@@ -98,15 +48,30 @@ namespace GRPO
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
+
+            RefreshCanvasEvent += RefreshCanvas;
+            DragPropertyEvent += Drag;
+
+            canvas.MouseDown += canvas_MouseDown;
+            canvas.MouseMove += canvas_MouseMove;
+            canvas.MouseUp += canvas_MouseUp;
+
+            SelectToolMouseAction = SelectTool;
+            DrawablesMouseAction = Drawables;
+            LinePropertyMouseAction = LineProperty;
+            FillPropertyMouseAction = FillProperty;
+            ControlUnitMouseAction = ControlUnit;
+            InteractionMouseAction = Interaction;
+            CnavasMouseAction = canvas;
         }
 
         public ControlUnit ControlUnit
         {
-            get { return _controlUnit; }
+            get { return ControlUnitMouseAction; }
             set
             {
-                _controlUnit = value;
-                Drawables = _controlUnit.GraphicsEditor.Drawables;
+                ControlUnitMouseAction = value;
+                DrawablesMouseAction = ControlUnitMouseAction.GraphicsEditor.Drawables;
             }
         }
 
@@ -117,14 +82,14 @@ namespace GRPO
         {
             get
             {
-                return ControlUnit.GraphicsEditor.Drawables; //_drawables;
+                return ControlUnitMouseAction.GraphicsEditor.Drawables; //_drawables;
             }
             set
             {
-                _drawables = value;
-                if (_drawables != null)
+                DrawablesMouseAction = value;
+                if (DrawablesMouseAction != null)
                 {
-                    if (_drawables.Count > 0)
+                    if (DrawablesMouseAction.Count > 0)
                     {
                         RefreshCanvas();
                     }
@@ -137,42 +102,27 @@ namespace GRPO
         /// </summary>
         public Tools SelectTool
         {
-            get { return _selectTool; }
-            set
-            {
-                _flagMouseDown = false;
-                if (_flagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointB);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-                    _flagPolyFigure = false;
-                }
-
-                Interaction = null;
-                _selectTool = value;
-                RefreshCanvas();
-            }
+            get { return SelectToolMouseAction; }
+            set { SelectToolMouseAction = value; }
         }
 
         /// <summary>
         /// Свойство линии
         /// </summary>
-        public LineProperty LineProperty { get; set; }
+        public LineProperty LineProperty
+        {
+            get { return LinePropertyMouseAction; }
+            set { LinePropertyMouseAction = value; }
+        }
 
         /// <summary>
         /// Свойство заливки
         /// </summary>
-        public FillProperty FillProperty { get; set; }
-
-        /// <summary>
-        /// Хранилище для фона
-        /// </summary>
-        private Image _image = new Bitmap(640, 480);
+        public FillProperty FillProperty
+        {
+            get { return FillPropertyMouseAction; }
+            set { FillPropertyMouseAction = value; }
+        }
 
         /// <summary>
         /// Картинка с холста
@@ -180,7 +130,6 @@ namespace GRPO
         public Image Image
         {
             get { return new Bitmap(canvas.Image); }
-            set { _image = new Bitmap(value); }
         }
 
         /// <summary>
@@ -188,8 +137,8 @@ namespace GRPO
         /// </summary>
         public Interaction Interaction
         {
-            get { return _interaction; }
-            set { _interaction = value; }
+            get { return InteractionMouseAction; }
+            set { InteractionMouseAction = value; }
         }
 
         /// <summary>
@@ -252,13 +201,13 @@ namespace GRPO
         /// </summary>
         public void RefreshCanvas()
         {
-            canvas.Image = new Bitmap(_image);
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw(canvas);
             }
 
-            if (Interaction != null && !_flagMouseDown)
+            if (Interaction != null && !FlagMouseDown)
             {
                 Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
             }
@@ -272,406 +221,6 @@ namespace GRPO
             ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], Drawables, null);
             RefreshCanvas();
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-        }
-
-        private void canvas_MouseDown(object sender, MouseEventArgs e)
-        {
-            _flagMouseDown = true;
-            _pointA = new Point(e.X, e.Y);
-
-            if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-            {
-                Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointA, LineProperty, FillProperty,
-                    SelectTool.DrawingTools));
-            }
-
-            if (SelectTool.TypeTools == TypeTools.PolyFigure)
-            {
-                if (_flagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointA);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-                }
-
-                if (!_flagPolyFigure)
-                {
-                    List<Point> points = new List<Point>()
-                        {new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y)};
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-
-                    _flagPolyFigure = true;
-                }
-
-                if (e.Button == MouseButtons.Right && _flagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointA);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-
-                    _flagPolyFigure = false;
-                }
-            }
-
-            if (SelectTool.TypeTools == TypeTools.SelectFigure)
-            {
-                if (Interaction != null)
-                {
-
-                    if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                    {
-                        if (Interaction.EnablePoints)
-                        {
-                            Checking checking = new Checking();
-                            if (checking.GetNumberPoint(_pointA, Interaction.DrawableFigures[0],
-                                    4 /*см. в интерактиве*/) != -1 || _pointA.X == _pointB.X ||
-                                _pointA.Y == _pointB.Y)
-                            {
-                                Interaction.SelectPoint = _pointA;
-                                _flagSelectPoint = true;
-                            }
-                            else
-                            {
-                                Interaction = null;
-                            }
-                        }
-                        else if (Interaction.DrawableFigures[0].Position.X > _pointA.X &&
-                                 Interaction.DrawableFigures[0].Position.Y > _pointA.Y &&
-                                 Interaction.DrawableFigures[0].Position.X + Interaction.DrawableFigures[0].Width <
-                                 _pointA.X &&
-                                 Interaction.DrawableFigures[0].Position.Y + Interaction.DrawableFigures[0].Height <
-                                 _pointA.Y)
-                        {
-                            Interaction = null;
-                            RefreshCanvas();
-                        }
-
-                    }
-
-                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                    {
-                        List<Point> localPoints = new List<Point>();
-                        foreach (IDrawable drawable in Interaction.DrawableFigures)
-                        {
-                            foreach (Point point in drawable.Points)
-                            {
-                                localPoints.Add(point);
-                            }
-                        }
-
-                        if (localPoints.Min(point => point.X) > _pointA.X ||
-                            localPoints.Min(point => point.Y) > _pointA.Y ||
-                            localPoints.Max(point => point.X) < _pointA.X ||
-                            localPoints.Max(point => point.Y) < _pointA.Y)
-                        {
-                            Interaction = null;
-                            RefreshCanvas();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void canvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            _pointB = new Point(e.X, e.Y);
-
-            if (_flagMouseDown)
-            {
-                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-                {
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-                    RefreshCanvas();
-                }
-
-                if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
-                    if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                    {
-                        if (Interaction != null)
-                        {
-                            if (Interaction.EnablePoints)
-                            {
-                                Interaction.ChangePoint(_pointB);
-                                RefreshCanvas();
-                            }
-                            else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
-                            {
-                                DrawEmpty();
-                            }
-                        }
-                    }
-
-                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                    {
-                        if (Interaction == null)
-                        {
-                            RefreshCanvas();
-                            DrawFigureRectangle drawFigureRectangle = new DrawFigureRectangle(_pointA, _pointB,
-                                new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
-                            drawFigureRectangle.Draw(canvas);
-                        }
-                        else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
-                        {
-                            DrawEmpty();
-                        }
-                    }
-                }
-            }
-
-            if (_flagPolyFigure)
-            {
-                if (SelectTool.TypeTools == TypeTools.PolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointB);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-                    RefreshCanvas();
-                }
-            }
-        }
-        
-        private void canvas_MouseUp(object sender, MouseEventArgs e)
-        {
-            _pointB = new Point(e.X, e.Y);
-            if (_flagMouseDown)
-            {
-                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-                {
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    //Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
-                    //
-                    List<Point> points = new List<Point>() {_pointA, _pointB};
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-                    //
-                    RefreshCanvas();
-
-                }
-
-                if (SelectTool.TypeTools == TypeTools.PolyFigure)
-                {
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        List<Point> points = Drawables[Drawables.Count - 1].Points;
-                        points.Add(_pointB);
-                        Drawables.RemoveAt(Drawables.Count - 1);
-                        Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
-                            SelectTool.DrawingTools));
-                        RefreshCanvas();
-
-                    }
-                }
-
-                if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
-                    if (Interaction == null)
-                    {
-                        if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                        {
-                            Interaction = null;
-                            _pointA = new Point(e.X, e.Y);
-                            if (DragProperty != null) DragProperty(null);
-                            for (int i = Drawables.Count - 1; i >= 0; i--)
-                            {
-                                int minX = Drawables[i].Points.Min(point => point.X);
-                                int maxX = Drawables[i].Points.Max(point => point.X);
-                                int minY = Drawables[i].Points.Min(point => point.Y);
-                                int maxY = Drawables[i].Points.Max(point => point.Y);
-                                if (_pointA.X >= minX && _pointA.X <= maxX && _pointA.Y >= minY && _pointA.Y <= maxY)
-                                {
-                                    if (DragProperty != null) DragProperty(Drawables[i]);
-                                    if (e.Button == MouseButtons.Left)
-                                    {
-                                        Interaction = new Interaction(Drawables[i], false);
-                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                            Interaction.DrawableFigures);
-                                    }
-                                    else if (e.Button == MouseButtons.Right)
-                                    {
-                                        Interaction = new Interaction(Drawables[i], true);
-                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                            Interaction.DrawableFigures);
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                        {
-
-                            List<Point> points = new List<Point>();
-                            points.Add(_pointA);
-                            points.Add(_pointB);
-                            List<IDrawable> localDrawables = new List<IDrawable>();
-
-                            foreach (IDrawable drawable in Drawables)
-                            {
-                                int X = drawable.Points.Max(point => point.X) -
-                                        (drawable.Points.Max(point => point.X) -
-                                         drawable.Points.Min(point => point.X)) / 2;
-                                int Y = drawable.Points.Max(point => point.Y) -
-                                        (drawable.Points.Max(point => point.Y) -
-                                         drawable.Points.Min(point => point.Y)) / 2;
-
-                                if (X >= points.Min(point => point.X) &&
-                                    X <= points.Max(point => point.X) &&
-                                    Y >= points.Min(point => point.Y) &&
-                                    Y <= points.Max(point => point.Y))
-                                {
-                                    localDrawables.Add(drawable);
-                                }
-                            }
-
-                            if (localDrawables.Count > 0)
-                            {
-                                Interaction = new Interaction(localDrawables, false);
-                                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
-                                //
-                            }
-
-                            if (Interaction == null)
-                            {
-                                Interaction = new Interaction();
-                                int Xmin = points.Min(point => point.X);
-                                int Ymin = points.Min(point => point.Y);
-                                int Xmax = points.Max(point => point.X);
-                                int Ymax = points.Max(point => point.Y);
-                                foreach (IDrawable drawable in Drawables)
-                                {
-                                    if (Xmin >= drawable.Points.Min(point => point.X) &&
-                                        Xmax <= drawable.Points.Max(point => point.X) &&
-                                        Ymin >= drawable.Points.Min(point => point.Y) &&
-                                        Ymax <= drawable.Points.Max(point => point.Y))
-                                    {
-                                        Interaction.AddDrawableFigure(drawable);
-                                    }
-                                }
-
-                                if (Interaction.DrawableFigures.Count == 0)
-                                {
-                                    Interaction = null;
-                                }
-                                else
-                                {
-                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                        Interaction.DrawableFigures);
-                                }
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        if (_lineColor.Count != 0)
-                        {
-                            int idLineColor = 0;
-                            int idFillColor = 0;
-                            foreach (IDrawable drawable in Interaction.DrawableFigures)
-                            {
-                                if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                                {
-                                    drawableWithLinePropertyble.LineProperty.LineColor = _lineColor[idLineColor];
-                                    idLineColor++;
-                                }
-
-                                if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                                {
-                                    drawableWithFillPropertyble.FillProperty.FillColor = _fillColor[idFillColor];
-                                    idFillColor++;
-                                }
-                            }
-
-                            ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
-                                Interaction.DrawableFigures,
-                                GetIndexes(Interaction.DrawableFigures, Drawables), _pointA, _pointB);
-                            Interaction.EnablePoints = false;
-                            _lineColor = new List<Color>();
-                            _fillColor = new List<Color>();
-                        }
-
-                        else if (_flagSelectPoint)
-                        {
-                            Interaction.SelectPoint = _pointB;
-                            Interaction.ChangePoint(_pointA);
-
-                            ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
-                                Interaction.DrawableFigures, GetIndexes(Interaction.DrawableFigures, Drawables),
-                                _pointA, _pointB
-                            );
-                            RefreshCanvas();
-                            _flagSelectPoint = false;
-                        }
-                    }
-
-                    RefreshCanvas();
-
-                }
-
-                _flagMouseDown = false;
-                RefreshCanvas();
-            }
-        }
-
-        private void DrawEmpty()
-        {
-            RefreshCanvas();
-            List<IDrawable> drawables = new List<IDrawable>();
-            foreach (IDrawable drawable in Interaction.DrawableFigures)
-            {
-                drawables.Add(drawable.Clone());
-                if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                {
-                    _lineColor.Add(drawableWithLinePropertyble.LineProperty.LineColor);
-                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Transparent;
-                }
-
-                if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                {
-                    _fillColor.Add(drawableWithFillPropertyble.FillProperty.FillColor);
-                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Transparent;
-                }
-            }
-
-            foreach (IDrawable drawable in drawables)
-            {
-                int idLineProperty = 0;
-                int idFillProperty = 0;
-
-                if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                {
-                    drawableWithLinePropertyble.LineProperty.LineColor = _lineColor[idLineProperty];
-                    idLineProperty++;
-                }
-
-                if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                {
-                    drawableWithFillPropertyble.FillProperty.FillColor = _fillColor[idFillProperty];
-                    idFillProperty++;
-                }
-
-                int x = drawable.Position.X;
-                int y = drawable.Position.Y;
-                drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
-                drawable.Draw(canvas);
-            }
         }
 
         /// <summary>
@@ -708,11 +257,11 @@ namespace GRPO
                 List<IDrawable> drawables = new List<IDrawable>();
                 foreach (IDrawable drawable in BuferDraw)
                 {
-                    if (_pointB.X > 0 && _pointB.X < GetWidthCanvas() && _pointB.Y > 0 && _pointB.Y < GetHeightCanvas())
+                    if (PointB.X > 0 && PointB.X < GetWidthCanvas() && PointB.Y > 0 && PointB.Y < GetHeightCanvas())
                     {
                         int Width = drawable.Position.X - localPoints.Min(point => point.X);
                         int Height = drawable.Position.Y - localPoints.Min(point => point.Y);
-                        drawable.Position = new Point(_pointB.X + Width, _pointB.Y + Height);
+                        drawable.Position = new Point(PointB.X + Width, PointB.Y + Height);
                     }
                     else
                     {
@@ -769,23 +318,13 @@ namespace GRPO
             }
         }
 
-        private List<int> GetIndexes(List<IDrawable> localDrawables, List<IDrawable> globalDrawables)
+        /// <summary>
+        /// Под метод для наследуемого класса
+        /// </summary>
+        /// <param name="drawable">Загребаемая фигура</param>
+        private void Drag(IDrawable drawable)
         {
-            List<int> indexes = new List<int>();
-            int count = 0;
-            foreach (IDrawable drawable in localDrawables)
-            {
-                if (globalDrawables.IndexOf(drawable) != -1)
-                    indexes.Add(globalDrawables.IndexOf(drawable));
-                else
-                {
-                    indexes.Add(count + Drawables.Count);
-                    count++;
-                }
-
-            }
-
-            return indexes;
+            if (DragProperty != null) DragProperty(drawable);
         }
 
         /*public void AddFigureInInteractive()
