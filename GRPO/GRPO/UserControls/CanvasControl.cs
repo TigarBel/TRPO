@@ -405,45 +405,7 @@ namespace GRPO
                             }
                             else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                             {
-                                RefreshCanvas();
-                                /*************************************Начало дублирование**********************************************/
-                                List<IDrawable> drawables = new List<IDrawable>();
-                                foreach (IDrawable drawable in Interaction.DrawableFigures)
-                                {
-                                    drawables.Add(drawable.Clone());
-                                    if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                                    {
-                                        _lineColor.Add(drawableWithLinePropertyble.LineProperty.LineColor);
-                                        drawableWithLinePropertyble.LineProperty.LineColor = Color.Transparent;
-                                    }
-
-                                    if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                                    {
-                                        _fillColor.Add(drawableWithFillPropertyble.FillProperty.FillColor);
-                                        drawableWithFillPropertyble.FillProperty.FillColor = Color.Transparent;
-                                    }
-                                }
-
-                                foreach (IDrawable drawable in drawables)
-                                {
-                                    if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                                    {
-                                        drawableWithLinePropertyble.LineProperty.LineColor = Color.Black;
-                                    }
-
-                                    if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                                    {
-                                        drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
-                                    }
-
-                                    int x = drawable.Position.X;
-                                    int y = drawable.Position.Y;
-                                    drawable.Position = new Point(x + (_pointB.X - _pointA.X),
-                                        y + (_pointB.Y - _pointA.Y));
-                                    drawable.Draw(canvas);
-                                }
-
-                                /*************************************Конец дублирование**********************************************/
+                                DrawEmpty();
                             }
                         }
                     }
@@ -459,44 +421,7 @@ namespace GRPO
                         }
                         else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                         {
-                            RefreshCanvas();
-                            /*************************************Начало дублирование**********************************************/
-                            List<IDrawable> drawables = new List<IDrawable>();
-                            foreach (IDrawable drawable in Interaction.DrawableFigures)
-                            {
-                                drawables.Add(drawable.Clone());
-                                if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                                {
-                                    _lineColor.Add(drawableWithLinePropertyble.LineProperty.LineColor);
-                                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Transparent;
-                                }
-
-                                if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                                {
-                                    _fillColor.Add(drawableWithFillPropertyble.FillProperty.FillColor);
-                                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Transparent;
-                                }
-                            }
-
-                            foreach (IDrawable drawable in drawables)
-                            {
-                                if (drawable is ILinePropertyble drawableWithLinePropertyble)
-                                {
-                                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Black;
-                                }
-
-                                if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                                {
-                                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
-                                }
-
-                                int x = drawable.Position.X;
-                                int y = drawable.Position.Y;
-                                drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
-                                drawable.Draw(canvas);
-                            }
-
-                            /*************************************Конец дублирование**********************************************/
+                            DrawEmpty();
                         }
                     }
                 }
@@ -517,7 +442,7 @@ namespace GRPO
                 }
             }
         }
-
+        
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
@@ -700,6 +625,48 @@ namespace GRPO
                 _flagMouseDown = false;
                 RefreshCanvas();
             }
+        }
+
+        private void DrawEmpty()
+        {
+            /*************************************Начало дублирование**********************************************/
+            RefreshCanvas();
+            List<IDrawable> drawables = new List<IDrawable>();
+            foreach (IDrawable drawable in Interaction.DrawableFigures)
+            {
+                drawables.Add(drawable.Clone());
+                if (drawable is ILinePropertyble drawableWithLinePropertyble)
+                {
+                    _lineColor.Add(drawableWithLinePropertyble.LineProperty.LineColor);
+                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Transparent;
+                }
+
+                if (drawable is IFillPropertyble drawableWithFillPropertyble)
+                {
+                    _fillColor.Add(drawableWithFillPropertyble.FillProperty.FillColor);
+                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Transparent;
+                }
+            }
+
+            foreach (IDrawable drawable in drawables)
+            {
+                if (drawable is ILinePropertyble drawableWithLinePropertyble)
+                {
+                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Black;
+                }
+
+                if (drawable is IFillPropertyble drawableWithFillPropertyble)
+                {
+                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
+                }
+
+                int x = drawable.Position.X;
+                int y = drawable.Position.Y;
+                drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
+                drawable.Draw(canvas);
+            }
+
+            /*************************************Конец дублирование**********************************************/
         }
 
         /// <summary>

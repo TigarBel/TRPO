@@ -142,11 +142,13 @@ namespace GRPO
             if (e.Control && e.KeyCode == Keys.Z)
             {
                 _controlUnit.Undo(1);
+                _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
                 _controlUnit.Redo(1);
+                _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
             else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
@@ -170,40 +172,6 @@ namespace GRPO
                 else if (e.Control)
                 {
                     //_canvasControl.Interaction.AddDrawableFigure();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Функция по отлову изменения свойства фигуры
-        /// </summary>
-        private void _toolsWithPropertyControl_FigurePropertyChanged()
-        {
-            _canvasControl.SelectTool = new Tools(_toolsWithPropertyControl.SelectTool.DrawingTools);
-            _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
-            _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
-            if (_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
-            {
-                if (_canvasControl.Interaction != null)
-                {
-                    if (_canvasControl.Interaction.DrawableFigures[0] is ILinePropertyble figureWithLineProperty)
-                    {
-                        _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[2],
-                            _canvasControl.ControlUnit.GraphicsEditor.Drawables.IndexOf(_canvasControl.Interaction
-                                .DrawableFigures[0]), figureWithLineProperty.LineProperty,
-                            _toolsWithPropertyControl.LineProperty, null, null);
-                    }
-
-                    if (_canvasControl.Interaction.DrawableFigures[0] is IFillPropertyble figureWithFillProperty)
-                    {
-                        _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[3],
-                            _canvasControl.ControlUnit.GraphicsEditor.Drawables.IndexOf(_canvasControl.Interaction
-                                .DrawableFigures[0]), null,
-                            null, figureWithFillProperty.FillProperty, _toolsWithPropertyControl.FillProperty);
-                    }
-
-                    _canvasControl.RefreshCanvas();
-                    _canvasControl.Interaction.EnablePoints = false;
                 }
             }
         }
