@@ -171,18 +171,19 @@ namespace GRPO.Commands
         /// Реконструировать фигуру
         /// </summary>
         /// <param name="keywords">Команда</param>
+        /// <param name="drawables">Список фигур(ы)</param>
         /// <param name="indexes">Список индексов фигур(ы)</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        public void Reconstruct(string keywords, List<IDrawable> drawables, Point selectPoint, Point newPoint)
+        public void Reconstruct(string keywords, List<IDrawable> drawables, List<int> indexes, Point selectPoint, Point newPoint)
         {
             switch (keywords)
             {
                 case "Изменить положение фигур(ы)":
-                    ChangePosition(drawables,selectPoint,newPoint);
+                    ChangePosition(indexes, selectPoint,newPoint);
                     break;
                 case "Изменить опорную точку":
-                    ChangePoint(drawables, selectPoint, newPoint);
+                    ChangePoint(indexes, selectPoint, newPoint);
                     break;
                 case "Добавить фигуру(ы)":
                     foreach (IDrawable drawable in drawables)
@@ -191,46 +192,50 @@ namespace GRPO.Commands
                     }
                     break;
                 case "Вернуть положение фигур(ы)":
-                    ChangePosition(drawables, newPoint, selectPoint);
+                    ChangePosition(indexes, newPoint, selectPoint);
                     break;
                 case "Вернуть назад опорную точку":
-                    ChangePoint(drawables, newPoint, selectPoint);
+                    ChangePoint(indexes, newPoint, selectPoint);
                     break;
                 case "Убрать фигуру(ы)":
-                    foreach (IDrawable drawable in drawables)
+                    indexes.Reverse();
+                    foreach (int index in indexes)
                     {
-                        _drawablesList.Remove(drawable);
+                        _drawablesList.RemoveAt(index);
                     }
+
+                    indexes.Reverse();
                     break;
             }
 
             Console.WriteLine(keywords);
         }
 
-        private void ChangePosition(List<IDrawable> drawables, Point selectPoint, Point newPoint)
+        private void ChangePosition(List<int> indexes, Point selectPoint, Point newPoint)
         {
-            foreach (IDrawable drawable in drawables)
+            foreach (int index in indexes)
             {
-                drawable.Position = new Point(
-                    drawable.Position.X - selectPoint.X + newPoint.X,
-                    drawable.Position.Y - selectPoint.Y + newPoint.Y);
+                _drawablesList[index].Position = new Point(
+                    _drawablesList[index].Position.X - selectPoint.X + newPoint.X,
+                    _drawablesList[index].Position.Y - selectPoint.Y + newPoint.Y);
             }
         }
+
         /// <summary>
         /// Изменить опорную точку
         /// </summary>
         /// <param name="drawables">Список с одной фигурой, которой меняем опорную точку</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        private void ChangePoint(List<IDrawable> drawables, Point selectPoint, Point newPoint)
+        private void ChangePoint(List<int> indexes, Point selectPoint, Point newPoint)
         {
             Checking checking = new Checking();
-            int indexSelectPoint = checking.GetNumberPoint(selectPoint, drawables[0], 4);
+            int indexSelectPoint = checking.GetNumberPoint(selectPoint, _drawablesList[indexes[0]], 4);
             if (indexSelectPoint != -1)
             {
-                List<Point> points = drawables[0].Points;
+                List<Point> points = _drawablesList[indexes[0]].Points;
                 points[indexSelectPoint] = newPoint;
-                drawables[0].Points = points;
+                _drawablesList[indexes[0]].Points = points;
             }
         }
 

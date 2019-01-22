@@ -44,13 +44,13 @@ namespace GRPO.Drawing
         /// </summary>
         /// <param name="pointA">Начальная точка</param>
         /// <param name="pointB">Конечная точка</param>
-        /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
-        /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigureEllipse(Point pointA, Point pointB, LineProperty extendedForLine, FillProperty extendedForFigure)
+        /// <param name="lineProperty">Дополнительные свойства отрисовки линии</param>
+        /// <param name="fillProperty">Дополнительные свойства отрисовки фигуры</param>
+        public DrawFigureEllipse(Point pointA, Point pointB, LineProperty lineProperty, FillProperty fillProperty)
         {
             Ellipse = new FigureEllipse(pointA, pointB);
-            LineProperty = extendedForLine;
-            FillProperty = extendedForFigure;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
+            FillProperty = new FillProperty(fillProperty.FillColor);
         }
         /// <summary>
         /// Векторный объект эллипса

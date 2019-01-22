@@ -43,13 +43,13 @@ namespace GRPO.Drawing
         /// Класс Отрисовки многоугольника
         /// </summary>
         /// <param name="points">Список существующих точек для многоугольника</param>
-        /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
-        /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigurePolygon(List<Point> points, LineProperty extendedForLine, FillProperty extendedForFigure)
+        /// <param name="lineProperty">Дополнительные свойства отрисовки линии</param>
+        /// <param name="fillProperty">Дополнительные свойства отрисовки фигуры</param>
+        public DrawFigurePolygon(List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
             Polygon = new FigurePolygon(points);
-            LineProperty = extendedForLine;
-            FillProperty = extendedForFigure;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
+            FillProperty = new FillProperty(fillProperty.FillColor);
         }
         /// <summary>
         /// Класс Отрисовки многоугольника
@@ -59,14 +59,14 @@ namespace GRPO.Drawing
         /// <param name="height">Высота многоугольника</param>
         /// <param name="countAngle">Количество углов многоугольника</param>
         /// <param name="phase">Угол поворота многоугольника</param>
-        /// <param name="extendedForLine">Дополнительные свойства отрисовки линии</param>
-        /// <param name="extendedForFigure">Дополнительные свойства отрисовки фигуры</param>
-        public DrawFigurePolygon(Point position, int width, int height, int countAngle, int phase, 
-            LineProperty extendedForLine, FillProperty extendedForFigure)
+        /// <param name="lineProperty">Дополнительные свойства отрисовки линии</param>
+        /// <param name="fillProperty">Дополнительные свойства отрисовки фигуры</param>
+        public DrawFigurePolygon(Point position, int width, int height, int countAngle, int phase,
+            LineProperty lineProperty, FillProperty fillProperty)
         {
             Polygon = new FigurePolygon(position, width, height, countAngle, phase);
-            LineProperty = extendedForLine;
-            FillProperty = extendedForFigure;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
+            FillProperty = new FillProperty(fillProperty.FillColor);
         }
         /// <summary>
         /// Векторный объект многоугольника

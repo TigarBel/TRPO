@@ -38,11 +38,11 @@ namespace GRPO.Drawing
         /// Класс Отрисовки полилинии
         /// </summary>
         /// <param name="points">Список точек полилиинии</param>
-        /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigurePolyline(List<Point> points, LineProperty extended)
+        /// <param name="lineProperty">Объект расширения для отрисовки</param>
+        public DrawFigurePolyline(List<Point> points, LineProperty lineProperty)
         {
             Polyline = new FigurePolyline(points);
-            LineProperty = extended;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
         }
         /// <summary>
         /// Векторный объект полилинии

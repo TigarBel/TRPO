@@ -84,7 +84,8 @@ namespace GRPO.Commands
         public void ChangeProperty(string keywords, int index, LineProperty _oldLineProperty,
             LineProperty _newLineProperty, FillProperty _oldFillProperty, FillProperty _newFillProperty)
         {
-            Command command = new CommandPropertyChanger(_graphicsEditor, keywords, index, _oldLineProperty, _newLineProperty,
+            Command command = new CommandPropertyChanger(_graphicsEditor, keywords, index, _oldLineProperty,
+                _newLineProperty,
                 _oldFillProperty, _newFillProperty);
             command.Execute();
             if (_current < _commands.Count)
@@ -96,7 +97,7 @@ namespace GRPO.Commands
             _current++;
         }
 
-        public void Clear(string keywords, List<IDrawable> drawables,List<int> indexes)
+        public void Clear(string keywords, List<IDrawable> drawables, List<int> indexes)
         {
             Command command = new CommandClear(_graphicsEditor, keywords, drawables, indexes);
             command.Execute();
@@ -109,9 +110,11 @@ namespace GRPO.Commands
             _current++;
         }
 
-        public void Reconstruction(string keywords, List<IDrawable> drawables, Point selectPoint, Point newPoint)
+        public void Reconstruction(string keywords, List<IDrawable> drawables, List<int> indexes, Point selectPoint,
+            Point newPoint)
         {
-            Command command = new CommandReconstruction(_graphicsEditor, keywords, drawables, selectPoint, newPoint);
+            Command command =
+                new CommandReconstruction(_graphicsEditor, keywords, drawables, indexes, selectPoint, newPoint);
             command.Execute();
             if (_current < _commands.Count)
             {

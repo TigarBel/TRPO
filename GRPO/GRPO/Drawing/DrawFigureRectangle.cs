@@ -48,8 +48,8 @@ namespace GRPO.Drawing
         public DrawFigureRectangle(Point pointA, Point pointB, LineProperty lineProperty, FillProperty fillProperty)
         {
             Rectangle = new FigureRectangle(pointA, pointB);
-            LineProperty = lineProperty;
-            FillProperty = fillProperty;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
+            FillProperty = new FillProperty(fillProperty.FillColor);
         }
         /// <summary>
         /// Векторный объект прямоугольника

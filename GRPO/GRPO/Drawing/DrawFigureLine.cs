@@ -39,11 +39,11 @@ namespace GRPO.Drawing
         /// </summary>
         /// <param name="a">Начальная точка</param>
         /// <param name="b">Конечная точка</param>
-        /// <param name="extended">Объект расширения для отрисовки</param>
-        public DrawFigureLine(Point a, Point b, LineProperty extended)
+        /// <param name="lineProperty">Объект расширения для отрисовки</param>
+        public DrawFigureLine(Point a, Point b, LineProperty lineProperty)
         {
             Line = new FigureLine(a, b);
-            LineProperty = extended;
+            LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
         }
         /// <summary>
         /// Векторный объект линии

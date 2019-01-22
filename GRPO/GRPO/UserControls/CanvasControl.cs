@@ -400,7 +400,7 @@ namespace GRPO
                                 RefreshCanvas();
                                 _pointA = new Point(e.X, e.Y);
                             }
-                            else
+                            else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y) 
                             {
                                 RefreshCanvas();
                                 /*************************************Начало дублирование**********************************************/
@@ -451,7 +451,7 @@ namespace GRPO
                                 new LineProperty(1, Color.Gray, DashStyle.Dash), new FillProperty(Color.Transparent));
                             drawFigureRectangle.Draw(canvas);
                         }
-                        else
+                        else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                         {
                             RefreshCanvas();
                             /*************************************Начало дублирование**********************************************/
@@ -646,27 +646,34 @@ namespace GRPO
                     }
                     else
                     {
-                        int idLineColor = 0;
-                        int idFillColor = 0;
-                        foreach (IDrawable drawable in Interaction.DrawableFigures)
+                        if (_lineColor.Count != 0)
                         {
-                            if (drawable is ILinePropertyble drawableWithLinePropertyble)
+                            int idLineColor = 0;
+                            int idFillColor = 0;
+                            foreach (IDrawable drawable in Interaction.DrawableFigures)
                             {
-                                drawableWithLinePropertyble.LineProperty.LineColor = _lineColor[idLineColor];
-                                idLineColor++;
+                                if (drawable is ILinePropertyble drawableWithLinePropertyble)
+                                {
+                                    drawableWithLinePropertyble.LineProperty.LineColor = _lineColor[idLineColor];
+                                    idLineColor++;
+                                }
+
+                                if (drawable is IFillPropertyble drawableWithFillPropertyble)
+                                {
+                                    drawableWithFillPropertyble.FillProperty.FillColor = _fillColor[idFillColor];
+                                    idFillColor++;
+                                }
                             }
 
-                            if (drawable is IFillPropertyble drawableWithFillPropertyble)
-                            {
-                                drawableWithFillPropertyble.FillProperty.FillColor = _fillColor[idFillColor];
-                                idFillColor++;
-                            }
+                            ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
+                                Interaction.DrawableFigures,
+                                GetIndexes(Interaction.DrawableFigures, Drawables),
+                                new Point(_pointA.X, _pointA.Y),
+                                new Point(_pointB.X, _pointB.Y));
+                            Interaction.EnablePoints = false;
+                            _lineColor = new List<Color>();
+                            _fillColor = new List<Color>();
                         }
-
-                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6], Interaction.DrawableFigures,
-                            new Point(_pointA.X, _pointA.Y),
-                            new Point(_pointB.X, _pointB.Y));
-                        Interaction.EnablePoints = false;
                     }
 
                     RefreshCanvas();
@@ -708,7 +715,7 @@ namespace GRPO
                         localPoints.Add(point);
                     }
                 }
-
+                List<IDrawable> drawables = new List<IDrawable>();
                 foreach (IDrawable drawable in BuferDraw)
                 {
                     if (_pointB.X > 0 && _pointB.X < GetWidthCanvas() && _pointB.Y > 0 && _pointB.Y < GetHeightCanvas())
@@ -716,15 +723,16 @@ namespace GRPO
                         int Width = drawable.Position.X - localPoints.Min(point => point.X);
                         int Height = drawable.Position.Y - localPoints.Min(point => point.Y);
                         drawable.Position = new Point(_pointB.X + Width, _pointB.Y + Height);
-                        //ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0],11111111111111111111111);
                     }
                     else
                     {
                         drawable.Position = new Point(10, 10);
                     }
 
-                    Drawables.Add(drawable.Clone());
+                    drawables.Add(drawable.Clone());
                 }
+                ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[8], drawables,GetIndexes(drawables,Drawables),
+                    new Point(), new Point());
 
                 RefreshCanvas();
                 Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count),
@@ -740,12 +748,8 @@ namespace GRPO
         {
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
             {
-                List<int> indexes = new List<int>();
-                foreach (IDrawable drawable in Interaction.DrawableFigures)
-                {
-                    indexes.Add(Drawables.IndexOf(drawable));
-                }
-                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures, indexes);
+                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures,
+                    GetIndexes(Interaction.DrawableFigures, Drawables));
                 Interaction = null;
                 RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
@@ -760,18 +764,28 @@ namespace GRPO
             BuferDraw.Clear();
             if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
             {
-                List<int> indexes = new List<int>();
                 foreach (IDrawable drawable in Interaction.DrawableFigures)
                 {
                     BuferDraw.Add(drawable.Clone());
-                    Drawables.Remove(drawable);
-                    indexes.Add(Drawables.IndexOf(drawable));
                 }
-                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures, indexes);
+
+                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures,
+                    GetIndexes(Interaction.DrawableFigures, Drawables));
                 Interaction = null;
                 RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
             }
+        }
+
+        private List<int> GetIndexes(List<IDrawable> localDrawables, List<IDrawable> globalDrawables)
+        {
+            List<int> indexes = new List<int>();
+            foreach (IDrawable drawable in localDrawables)
+            {
+                indexes.Add(globalDrawables.IndexOf(drawable));
+            }
+
+            return indexes;
         }
 
         /*public void AddFigureInInteractive()

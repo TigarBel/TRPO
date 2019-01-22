@@ -18,7 +18,7 @@ namespace GRPO.Commands
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
-            List<IDrawable> localDrawables = Drawables = new List<IDrawable>();
+            Drawables = new List<IDrawable>();
             foreach (var drawable in drawables)
             {
                 Drawables.Add(drawable.Clone());
