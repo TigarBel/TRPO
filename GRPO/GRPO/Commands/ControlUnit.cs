@@ -36,7 +36,10 @@ namespace GRPO.Commands
             set { _fileName = value; }
         }
 
-        public Image Image { get; set; }
+        public int Current
+        {
+            get { return _current; }
+        }
 
         public void Redo(int levels)
         {

@@ -20,7 +20,7 @@ namespace GRPO
     public partial class MainForm : System.Windows.Forms.Form
     {
 
-        private ControlUnit _controlUnit = new ControlUnit();
+        private int _currentBeginControlUnit = 0;
 
         public MainForm()
         {
@@ -43,9 +43,8 @@ namespace GRPO
 
             _canvasControl.SetSizeCanvas(640, 480);
 
-            _canvasControl.ControlUnit = _controlUnit;
-
-            //_toolsWithPropertyControl.FigurePropertyChanged += _toolsWithPropertyControl_FigurePropertyChanged;
+            _canvasControl.ControlUnit = new ControlUnit();
+            
             _toolsWithPropertyControl.ToolsChanged += _toolsWithPropertyControl_ToolsChanged;
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
@@ -75,7 +74,8 @@ namespace GRPO
                         using (var stream = saveFileDialog.OpenFile())
                         {
                             BinaryFormatter binaryFormatter = new BinaryFormatter();
-                            binaryFormatter.Serialize(stream, _controlUnit);
+                            _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
+                            binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
                         }
 
                             break;
@@ -110,8 +110,8 @@ namespace GRPO
                 using (var stream = openFileDialog.OpenFile())
                 {
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    _controlUnit = (ControlUnit)binaryFormatter.Deserialize(stream);
-                    _canvasControl.ControlUnit = _controlUnit;
+                    _canvasControl.ControlUnit = (ControlUnit)binaryFormatter.Deserialize(stream);
+                    _currentBeginControlUnit = _canvasControl.ControlUnit.Current;
                     _canvasControl.RefreshCanvas();
                 }
             }
@@ -141,13 +141,13 @@ namespace GRPO
             //MessageBox.Show(e.KeyCode.ToString());
             if (e.Control && e.KeyCode == Keys.Z)
             {
-                _controlUnit.Undo(1);
+                _canvasControl.ControlUnit.Undo(1);
                 _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
             else if (e.Control && e.KeyCode == Keys.Y)
             {
-                _controlUnit.Redo(1);
+                _canvasControl.ControlUnit.Redo(1);
                 _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
