@@ -330,7 +330,7 @@ namespace GRPO
             {
                 if (Interaction != null)
                 {
-                    
+
                     if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                     {
                         if (Interaction.EnablePoints)
@@ -403,7 +403,7 @@ namespace GRPO
                                 Interaction.ChangePoint(_pointB);
                                 RefreshCanvas();
                             }
-                            else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y) 
+                            else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                             {
                                 RefreshCanvas();
                                 /*************************************Начало дублирование**********************************************/
@@ -435,11 +435,14 @@ namespace GRPO
                                     {
                                         drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
                                     }
+
                                     int x = drawable.Position.X;
                                     int y = drawable.Position.Y;
-                                    drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
+                                    drawable.Position = new Point(x + (_pointB.X - _pointA.X),
+                                        y + (_pointB.Y - _pointA.Y));
                                     drawable.Draw(canvas);
                                 }
+
                                 /*************************************Конец дублирование**********************************************/
                             }
                         }
@@ -486,11 +489,13 @@ namespace GRPO
                                 {
                                     drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
                                 }
+
                                 int x = drawable.Position.X;
                                 int y = drawable.Position.Y;
                                 drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
                                 drawable.Draw(canvas);
                             }
+
                             /*************************************Конец дублирование**********************************************/
                         }
                     }
@@ -528,7 +533,7 @@ namespace GRPO
                         points, LineProperty, FillProperty);
                     //
                     RefreshCanvas();
-                    
+
                 }
 
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
@@ -541,7 +546,7 @@ namespace GRPO
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
                             SelectTool.DrawingTools));
                         RefreshCanvas();
-                        
+
                     }
                 }
 
@@ -689,7 +694,7 @@ namespace GRPO
                     }
 
                     RefreshCanvas();
-                    
+
                 }
 
                 _flagMouseDown = false;
@@ -727,6 +732,7 @@ namespace GRPO
                         localPoints.Add(point);
                     }
                 }
+
                 List<IDrawable> drawables = new List<IDrawable>();
                 foreach (IDrawable drawable in BuferDraw)
                 {
@@ -743,7 +749,9 @@ namespace GRPO
 
                     drawables.Add(drawable.Clone());
                 }
-                ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[8], drawables,GetIndexes(drawables,Drawables),
+
+                ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[8], drawables,
+                    GetIndexes(drawables, Drawables),
                     new Point(), new Point());
 
                 RefreshCanvas();
@@ -792,9 +800,17 @@ namespace GRPO
         private List<int> GetIndexes(List<IDrawable> localDrawables, List<IDrawable> globalDrawables)
         {
             List<int> indexes = new List<int>();
+            int count = 0;
             foreach (IDrawable drawable in localDrawables)
             {
-                indexes.Add(globalDrawables.IndexOf(drawable));
+                if (globalDrawables.IndexOf(drawable) != -1)
+                    indexes.Add(globalDrawables.IndexOf(drawable));
+                else
+                {
+                    indexes.Add(count + Drawables.Count);
+                    count++;
+                }
+
             }
 
             return indexes;
