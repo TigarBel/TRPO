@@ -172,8 +172,10 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureEllipse(Ellipse.Position,
-                new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y + Ellipse.HeightEllipse), LineProperty, FillProperty);
+            return new DrawFigureEllipse(new Point(Ellipse.Position.X, Ellipse.Position.Y),
+                new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y + Ellipse.HeightEllipse),
+                new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType),
+                new FillProperty(FillProperty.FillColor));
         }
     }
 }

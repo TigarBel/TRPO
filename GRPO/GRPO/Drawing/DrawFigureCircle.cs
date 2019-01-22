@@ -172,8 +172,10 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureCircle(Circle.Position, new Point(Circle.Position.X + Circle.Radius, Circle.Position.Y + Circle.Radius),
-                LineProperty, FillProperty);
+            return new DrawFigureCircle(new Point(Circle.Position.X, Circle.Position.Y),
+                new Point(Circle.Position.X + Circle.Radius, Circle.Position.Y + Circle.Radius),
+                new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType),
+                new FillProperty(FillProperty.FillColor));
         }
     }
 }

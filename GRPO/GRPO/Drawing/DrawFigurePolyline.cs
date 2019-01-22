@@ -158,7 +158,14 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigurePolyline(Points, LineProperty);
+            List<Point> points = new List<Point>();
+            foreach (Point point in Points)
+            {
+                points.Add(new Point(point.X, point.Y));
+            }
+
+            return new DrawFigurePolyline(points,
+                new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType));
         }
     }
 }

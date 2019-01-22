@@ -175,8 +175,10 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureRectangle(new Point(Rectangle.PointLeftUp.X, Rectangle.PointLeftUp.Y), 
-                new Point(Rectangle.PointRightDown.X, Rectangle.PointRightDown.Y), LineProperty, FillProperty);
+            return new DrawFigureRectangle(new Point(Rectangle.PointLeftUp.X, Rectangle.PointLeftUp.Y),
+                new Point(Rectangle.PointRightDown.X, Rectangle.PointRightDown.Y),
+                new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType),
+                new FillProperty(FillProperty.FillColor));
         }
     }
 }

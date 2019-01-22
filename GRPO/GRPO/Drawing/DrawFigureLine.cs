@@ -149,7 +149,8 @@ namespace GRPO.Drawing
         /// <returns>Новая копия объекта</returns>
         public IDrawable Clone()
         {
-            return new DrawFigureLine(Line.PointA, Line.PointB, LineProperty);
+            return new DrawFigureLine(new Point(Line.PointA.X, Line.PointA.Y), new Point(Line.PointB.X, Line.PointB.Y),
+                new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType));
         }
     }
 }

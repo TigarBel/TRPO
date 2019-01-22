@@ -23,8 +23,11 @@ namespace GRPO.Commands
         /// </summary>
         private List<string> _keywords = new List<string>()
         {
-            "Создать фигуру"/*0*/, "Удалить фигуру"/*1*/, "Изменить свойство линии"/*2*/, "Изменить свойство заливки"/*3*/,
-            "Удалить весь список"/*4*/, "Удалить элемент(ы)"/*5*/,"Изменить положение фигур(ы)"/*6*/,"Изменить опорную точку"/*7*/
+            "Создать фигуру" /*0*/, "Удалить фигуру" /*1*/, "Изменить свойство линии" /*2*/,
+            "Изменить свойство заливки" /*3*/,
+            "Удалить весь список" /*4*/, "Удалить элемент(ы)" /*5*/, "Изменить положение фигур(ы)" /*6*/,
+            "Изменить опорную точку" /*7*/,
+            "Добавить фигуру(ы)" /*8*/
         };
         /// <summary>
         /// Список фигур
@@ -171,51 +174,63 @@ namespace GRPO.Commands
         /// <param name="indexes">Список индексов фигур(ы)</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        public void Reconstruct(string keywords, List<int> indexes, Point selectPoint, Point newPoint)
+        public void Reconstruct(string keywords, List<IDrawable> drawables, Point selectPoint, Point newPoint)
         {
             switch (keywords)
             {
                 case "Изменить положение фигур(ы)":
-                    foreach (int index in indexes)
-                    {
-                        _drawablesList[index].Position = new Point(
-                            _drawablesList[index].Position.X - selectPoint.X + newPoint.X,
-                            _drawablesList[index].Position.Y - selectPoint.Y + newPoint.Y);
-                    }
+                    ChangePosition(drawables,selectPoint,newPoint);
                     break;
                 case "Изменить опорную точку":
-                    ChangePoint(indexes, selectPoint, newPoint);
+                    ChangePoint(drawables, selectPoint, newPoint);
                     break;
-                case "Вернуть положение фигур(ы)":
-                    foreach (int index in indexes)
+                case "Добавить фигуру(ы)":
+                    foreach (IDrawable drawable in drawables)
                     {
-                        _drawablesList[index].Position = new Point(
-                            _drawablesList[index].Position.X + selectPoint.X - newPoint.X,
-                            _drawablesList[index].Position.Y + selectPoint.Y - newPoint.Y);
+                        _drawablesList.Add(drawable);
                     }
                     break;
+                case "Вернуть положение фигур(ы)":
+                    ChangePosition(drawables, newPoint, selectPoint);
+                    break;
                 case "Вернуть назад опорную точку":
-                    ChangePoint(indexes, newPoint, selectPoint);
+                    ChangePoint(drawables, newPoint, selectPoint);
+                    break;
+                case "Убрать фигуру(ы)":
+                    foreach (IDrawable drawable in drawables)
+                    {
+                        _drawablesList.Remove(drawable);
+                    }
                     break;
             }
 
             Console.WriteLine(keywords);
         }
+
+        private void ChangePosition(List<IDrawable> drawables, Point selectPoint, Point newPoint)
+        {
+            foreach (IDrawable drawable in drawables)
+            {
+                drawable.Position = new Point(
+                    drawable.Position.X - selectPoint.X + newPoint.X,
+                    drawable.Position.Y - selectPoint.Y + newPoint.Y);
+            }
+        }
         /// <summary>
         /// Изменить опорную точку
         /// </summary>
-        /// <param name="indexes">Индекс фигуры</param>
+        /// <param name="drawables">Список с одной фигурой, которой меняем опорную точку</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        private void ChangePoint(List<int> indexes, Point selectPoint, Point newPoint)
+        private void ChangePoint(List<IDrawable> drawables, Point selectPoint, Point newPoint)
         {
             Checking checking = new Checking();
-            int indexSelectPoint = checking.GetNumberPoint(selectPoint, _drawablesList[indexes[0]], 4);
+            int indexSelectPoint = checking.GetNumberPoint(selectPoint, drawables[0], 4);
             if (indexSelectPoint != -1)
             {
-                List<Point> points = _drawablesList[indexes[0]].Points;
+                List<Point> points = drawables[0].Points;
                 points[indexSelectPoint] = newPoint;
-                _drawablesList[indexes[0]].Points = points;
+                drawables[0].Points = points;
             }
         }
 
