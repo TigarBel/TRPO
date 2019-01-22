@@ -19,8 +19,14 @@ namespace GRPO
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
-
+        /// <summary>
+        /// Количество команд при загрузки проекта
+        /// </summary>
         private int _currentBeginControlUnit = 0;
+        /// <summary>
+        /// Имя проекта
+        /// </summary>
+        private string _fileNameOpenProject;
 
         public MainForm()
         {
@@ -58,8 +64,11 @@ namespace GRPO
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Displays a SaveFileDialog so the user can save the Image  
-            // assigned to Button2.  
+            ShowSaveFileDialog();
+        }
+
+        private void ShowSaveFileDialog()
+        {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "GraphicsPO Project|*.grpo|JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
             saveFileDialog.Title = "Save an Image File";
@@ -67,6 +76,7 @@ namespace GRPO
 
             if (saveFileDialog.FileName != "")
             {
+                _fileNameOpenProject = saveFileDialog.FileName;
                 switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
@@ -78,12 +88,12 @@ namespace GRPO
                             binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
                         }
 
-                            break;
+                        break;
                     }
                     case 2:
                     {
                         _canvasControl.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            break;
+                        break;
                     }
                     case 3:
                     {
@@ -94,7 +104,7 @@ namespace GRPO
                     case 4:
                     {
                         _canvasControl.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Gif);
-                            break;
+                        break;
                     }
                 }
             }
@@ -107,6 +117,7 @@ namespace GRPO
             openFileDialog.Filter = "GraphicsPO Project|*.grpo";
             if (openFileDialog.ShowDialog() != DialogResult.Cancel && openFileDialog.FileName != "")
             {
+                _fileNameOpenProject = openFileDialog.FileName;
                 using (var stream = openFileDialog.OpenFile())
                 {
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -151,6 +162,24 @@ namespace GRPO
                 _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
+            else if (e.Control && e.KeyCode == Keys.S)
+            {
+                if (_fileNameOpenProject != null)
+                {
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.FileName = _fileNameOpenProject;
+                    using (var stream = saveFileDialog.OpenFile())
+                    {
+                        BinaryFormatter binaryFormatter = new BinaryFormatter();
+                        _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
+                        binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
+                    }
+                }
+                else
+                {
+                    ShowSaveFileDialog();
+                }
+            }
             else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
             {
                 if (e.Control && e.KeyCode == Keys.C)
@@ -171,7 +200,7 @@ namespace GRPO
                 }
                 else if (e.Control)
                 {
-                    //_canvasControl.Interaction.AddDrawableFigure();
+                     //_canvasControl.Interaction.AddDrawableFigure();
                 }
             }
         }

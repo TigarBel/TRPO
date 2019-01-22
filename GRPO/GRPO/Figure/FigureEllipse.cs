@@ -20,6 +20,7 @@ namespace GRPO.Figure
         {
 
         }
+
         /// <summary>
         /// Класс фигуры Эллипс
         /// </summary>
@@ -32,6 +33,7 @@ namespace GRPO.Figure
             PointB = pointB;
             Init();
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
@@ -46,6 +48,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
@@ -60,6 +63,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Список точек описывающих эллипс
         /// </summary>

@@ -180,11 +180,7 @@ namespace GRPO
         public Image Image
         {
             get { return new Bitmap(canvas.Image); }
-            set
-            {
-                _image = new Bitmap(value);
-                ControlUnit.Image = new Bitmap(value);
-            }
+            set { _image = new Bitmap(value); }
         }
 
         /// <summary>
@@ -335,16 +331,23 @@ namespace GRPO
                     {
                         if (Interaction.EnablePoints)
                         {
-                            Interaction.SelectPoint = _pointA;
                             Checking checking = new Checking();
                             if (checking.GetNumberPoint(_pointA, Interaction.DrawableFigures[0],
                                     4 /*см. в интерактиве*/) != -1 || _pointA.X == _pointB.X ||
-                                _pointA.Y == _pointB.Y) _flagSelectPoint = true;
+                                _pointA.Y == _pointB.Y)
+                            {
+                                Interaction.SelectPoint = _pointA;
+                                _flagSelectPoint = true;
+                            }
+                            else
+                            {
+                                Interaction = null;
+                            }
                         }
-                        else if (Interaction.DrawableFigures[0].Position.X > _pointA.X ||
-                                 Interaction.DrawableFigures[0].Position.Y > _pointA.Y ||
+                        else if (Interaction.DrawableFigures[0].Position.X > _pointA.X &&
+                                 Interaction.DrawableFigures[0].Position.Y > _pointA.Y &&
                                  Interaction.DrawableFigures[0].Position.X + Interaction.DrawableFigures[0].Width <
-                                 _pointA.X ||
+                                 _pointA.X &&
                                  Interaction.DrawableFigures[0].Position.Y + Interaction.DrawableFigures[0].Height <
                                  _pointA.Y)
                         {
@@ -629,7 +632,6 @@ namespace GRPO
 
         private void DrawEmpty()
         {
-            /*************************************Начало дублирование**********************************************/
             RefreshCanvas();
             List<IDrawable> drawables = new List<IDrawable>();
             foreach (IDrawable drawable in Interaction.DrawableFigures)
@@ -650,14 +652,19 @@ namespace GRPO
 
             foreach (IDrawable drawable in drawables)
             {
+                int idLineProperty = 0;
+                int idFillProperty = 0;
+
                 if (drawable is ILinePropertyble drawableWithLinePropertyble)
                 {
-                    drawableWithLinePropertyble.LineProperty.LineColor = Color.Black;
+                    drawableWithLinePropertyble.LineProperty.LineColor = _lineColor[idLineProperty];
+                    idLineProperty++;
                 }
 
                 if (drawable is IFillPropertyble drawableWithFillPropertyble)
                 {
-                    drawableWithFillPropertyble.FillProperty.FillColor = Color.Black;
+                    drawableWithFillPropertyble.FillProperty.FillColor = _fillColor[idFillProperty];
+                    idFillProperty++;
                 }
 
                 int x = drawable.Position.X;
@@ -665,8 +672,6 @@ namespace GRPO
                 drawable.Position = new Point(x + (_pointB.X - _pointA.X), y + (_pointB.Y - _pointA.Y));
                 drawable.Draw(canvas);
             }
-
-            /*************************************Конец дублирование**********************************************/
         }
 
         /// <summary>

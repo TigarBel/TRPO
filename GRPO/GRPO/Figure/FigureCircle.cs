@@ -89,8 +89,6 @@ namespace GRPO.Figure
             get
             {
                 List<Point> points = new List<Point>();
-                /*points.Add(Position);
-                points.Add(new Point(Position.X + Width, Position.Y + Height));*/
                 points.Add(PointA);
                 points.Add(PointB);
                 return points;
