@@ -19,84 +19,118 @@ namespace GRPO.InteractionFrame
     public abstract class FrameForInteraction
     {
         /// <summary>
+        /// Рисуемые объекты
+        /// </summary>
+        private List<IDrawable> _drawables = new List<IDrawable>();
+
+        /// <summary>
         /// Радиус точек отображения габаритов
         /// </summary>
         protected int _radiusDrawPoint = 4;
+
+        /// <summary>
+        /// Разрашение изменять опорные точки
+        /// </summary>
+        protected bool EnablePointsForDraw { get; set; }
+
+        /// <summary>
+        /// Рисуемые объекты
+        /// </summary>
+        protected List<IDrawable> Drawables
+        {
+            get { return _drawables; }
+            set { _drawables = value; }
+        }
+
         /// <summary>
         /// Отрисовка выделения
         /// </summary>
         /// <param name="pictureBox">Холст на котором рисуют</param>
-        public void DrawSelcet(PictureBox pictureBox, bool enablePoints, List<IDrawable> drawableFigures)
+        public void DrawSelcet(PictureBox pictureBox)
         {
-            if (enablePoints)
+            if (EnablePointsForDraw)
             {
-                if (drawableFigures.Count == 1)
+                if (Drawables.Count == 1)
                 {
-                    DrawPoints(pictureBox, drawableFigures);
+                    DrawPoints(pictureBox, Drawables);
                 }
                 else
                 {
-                    throw new ArgumentException("Режим изменения опорных точек разрешен только при выделении одной фигуры!");
+                    throw new ArgumentException(
+                        "Режим изменения опорных точек разрешен только при выделении одной фигуры!");
                 }
             }
             else
             {
-                if (drawableFigures.Count == 1)
-                {
-                    DrawInteraction(pictureBox, drawableFigures);
-                }
-                else
-                {
-                    foreach (IDrawable drawable in drawableFigures)
-                    {
-                        DrawSquare(drawableFigures.IndexOf(drawable), pictureBox, drawableFigures);
-                    }
-                }
+                DrawInteraction(pictureBox, Drawables);
             }
         }
+
         /// <summary>
         /// Отрисовка интерактивного квадрата без опорных точек
         /// </summary>
-        public void DrawInteraction(PictureBox pictureBox, List<IDrawable> drawableFigures)
+        private void DrawInteraction(PictureBox pictureBox, List<IDrawable> drawableFigures)
         {
-            DrawSquare(0, pictureBox, drawableFigures);
-            DrawPointsSize(0, pictureBox, drawableFigures);
+            List<Point> points = new List<Point>();
+            foreach (IDrawable drawable in drawableFigures)
+            {
+                foreach (Point point in drawable.Points)
+                {
+                    points.Add(point);
+                }
+            }
+
+            int minX = points.Min(point => point.X);
+            int maxX = points.Max(point => point.X);
+            int minY = points.Min(point => point.Y);
+            int maxY = points.Max(point => point.Y);
+
+            points.Clear();
+            Point pointA = new Point(minX, minY);
+            Point pointB = new Point(maxX, maxY);
+
+            DrawSquare(pictureBox, pointA, pointB);
+            DrawPointsSize(pictureBox, pointA, pointB);
         }
+
         /// <summary>
         /// Отрисовка квадрата границ объекта
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
-        public void DrawSquare(int index, PictureBox pictureBox, List<IDrawable> drawableFigures)
+        private void DrawSquare(PictureBox pictureBox, Point pointA, Point pointB)
         {
-            List<Point> points = GetBorderPoints(index, drawableFigures);
-            DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, new LineProperty(1, Color.Black, DashStyle.Dash),
+            DrawFigureRectangle drawFigure = new DrawFigureRectangle(pointA, pointB,
+                new LineProperty(1, Color.Black, DashStyle.Dash),
                 new FillProperty(Color.Transparent));
             drawFigure.Draw(pictureBox);
         }
+
         /// <summary>
         /// Точки размера объекта
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
-        public void DrawPointsSize(int index, PictureBox pictureBox, List<IDrawable> drawableFigures)
+        private void DrawPointsSize(PictureBox pictureBox, Point pointA, Point pointB)
         {
-            List<Point> points = GetBorderPoints(index, drawableFigures);
-            DrawFigureCircle drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y),
-                new Point(points[0].X + (points[1].X - points[0].X) / 2 + _radiusDrawPoint, points[0].Y + _radiusDrawPoint),
+            DrawFigureCircle drawFigure = new DrawFigureCircle(
+                new Point(pointA.X + (pointB.X - pointA.X) / 2, pointA.Y),
+                new Point(pointA.X + (pointB.X - pointA.X) / 2 + _radiusDrawPoint,
+                    pointA.Y),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
-            drawFigure = new DrawFigureCircle(new Point(points[1].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                new Point(points[1].X + _radiusDrawPoint, points[1].Y + (points[2].Y - points[1].Y) / 2 + _radiusDrawPoint),
+            drawFigure = new DrawFigureCircle(new Point(pointB.X, pointA.Y + (pointB.Y - pointA.Y) / 2),
+                new Point(pointB.X + _radiusDrawPoint, pointA.Y + (pointB.Y - pointA.Y) / 2),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
-            drawFigure = new DrawFigureCircle(new Point(points[0].X + (points[1].X - points[0].X) / 2, points[2].Y),
-                new Point(points[0].X + (points[1].X - points[0].X) / 2 + _radiusDrawPoint, points[2].Y + _radiusDrawPoint),
+            drawFigure = new DrawFigureCircle(new Point(pointA.X + (pointB.X - pointA.X) / 2, pointB.Y),
+                new Point(pointA.X + (pointB.X - pointA.X) / 2 + _radiusDrawPoint, pointB.Y),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
-            drawFigure = new DrawFigureCircle(new Point(points[0].X, points[1].Y + (points[2].Y - points[1].Y) / 2),
-                new Point(points[0].X + _radiusDrawPoint, points[1].Y + (points[2].Y - points[1].Y) / 2 + _radiusDrawPoint),
+            drawFigure = new DrawFigureCircle(new Point(pointA.X, pointA.Y + (pointB.Y - pointA.Y) / 2 + _radiusDrawPoint),
+                new Point(pointA.X, pointA.Y + (pointB.Y - pointA.Y) / 2),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
         }
+
         /// <summary>
         /// Отрисовка угловых точек
         /// </summary>
@@ -106,33 +140,38 @@ namespace GRPO.InteractionFrame
             List<Point> points = GetBorderPoints(index, drawableFigures);
             for (int i = 0; i < 4; i++)
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i],
+                    new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
                     new LineProperty(), new FillProperty());
                 drawFigure.Draw(pictureBox);
             }
         }
+
         /// <summary>
         /// Функция возвращающая список угловыч точек
         /// </summary>
         /// <param name="index">Номер фигуры из списка фигур</param>
         /// <returns>Угловые точки</returns>
-        public List<Point> GetBorderPoints(int index, List<IDrawable> drawableFigures)
+        private List<Point> GetBorderPoints(int index, List<IDrawable> drawableFigures)
         {
             int minX = drawableFigures[index].Points.Min(point => point.X);
             int maxX = drawableFigures[index].Points.Max(point => point.X);
             int minY = drawableFigures[index].Points.Min(point => point.Y);
             int maxY = drawableFigures[index].Points.Max(point => point.Y);
-            return new List<Point>() { new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY) };
+            return new List<Point>()
+                {new Point(minX, minY), new Point(maxX, minY), new Point(maxX, maxY), new Point(minX, maxY)};
         }
+
         /// <summary>
         /// Отрисовка опорных точек
         /// </summary>
-        public void DrawPoints(PictureBox pictureBox, List<IDrawable> drawableFigures)
+        private void DrawPoints(PictureBox pictureBox, List<IDrawable> drawableFigures)
         {
             List<Point> points = drawableFigures[0].Points;
             for (int i = 0; i < points.Count; i++)
             {
-                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i], new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
+                DrawFigureCircle drawFigure = new DrawFigureCircle(points[i],
+                    new Point(points[i].X + _radiusDrawPoint, points[i].Y + _radiusDrawPoint),
                     new LineProperty(), new FillProperty(Color.Transparent));
                 drawFigure.Draw(pictureBox);
             }

@@ -132,7 +132,7 @@ namespace GRPO.UserControls.CanvasMouseActions
             }
 
             if (SelectToolMouseAction.TypeTools == TypeTools.PolyFigure)
-            {
+            {/*
                 if (_flagPolyFigure)
                 {
                     List<Point> points = DrawablesMouseAction[DrawablesMouseAction.Count - 1].Points;
@@ -169,10 +169,10 @@ namespace GRPO.UserControls.CanvasMouseActions
 
                     _flagPolyFigure = false;
                 }
-            }
+            */}
 
             if (SelectToolMouseAction.TypeTools == TypeTools.SelectFigure)
-            {
+            {/*
                 if (InteractionMouseAction != null)
                 {
 
@@ -182,7 +182,7 @@ namespace GRPO.UserControls.CanvasMouseActions
                         {
                             Checking checking = new Checking();
                             if (checking.GetNumberPoint(_pointA, InteractionMouseAction.DrawableFigures[0],
-                                    4 /*см. в интерактиве*/) != -1 || _pointA.X == _pointB.X ||
+                                    4) != -1 || _pointA.X == _pointB.X ||
                                 _pointA.Y == _pointB.Y)
                             {
                                 InteractionMouseAction.SelectPoint = _pointA;
@@ -229,7 +229,7 @@ namespace GRPO.UserControls.CanvasMouseActions
                         }
                     }
                 }
-            }
+            */}
         }
 
         protected void canvas_MouseMove(object sender, MouseEventArgs e)
@@ -248,7 +248,7 @@ namespace GRPO.UserControls.CanvasMouseActions
                 }
 
                 if (SelectToolMouseAction.TypeTools == TypeTools.SelectFigure)
-                {
+                {/*
                     if (SelectToolMouseAction.DrawingTools == DrawingTools.CursorSelect)
                     {
                         if (InteractionMouseAction != null)
@@ -281,13 +281,13 @@ namespace GRPO.UserControls.CanvasMouseActions
                             DrawEmpty();
                         }
                     }
-                }
+                */}
             }
 
             if (_flagPolyFigure)
             {
                 if (SelectToolMouseAction.TypeTools == TypeTools.PolyFigure)
-                {
+                {/*
                     List<Point> points = DrawablesMouseAction[DrawablesMouseAction.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointB);
@@ -297,7 +297,7 @@ namespace GRPO.UserControls.CanvasMouseActions
                         FillPropertyMouseAction,
                         SelectToolMouseAction.DrawingTools));
                     if (RefreshCanvasEvent != null) RefreshCanvasEvent();
-                }
+                */}
             }
         }
 
@@ -319,7 +319,7 @@ namespace GRPO.UserControls.CanvasMouseActions
 
                 if (SelectToolMouseAction.TypeTools == TypeTools.PolyFigure)
                 {
-                    if (e.Button == MouseButtons.Left)
+                    /*if (e.Button == MouseButtons.Left)
                     {
                         List<Point> points = DrawablesMouseAction[DrawablesMouseAction.Count - 1].Points;
                         points.Add(_pointB);
@@ -329,11 +329,11 @@ namespace GRPO.UserControls.CanvasMouseActions
                             SelectToolMouseAction.DrawingTools));
                         if (RefreshCanvasEvent != null) RefreshCanvasEvent();
 
-                    }
+                    }*/
                 }
 
                 if (SelectToolMouseAction.TypeTools == TypeTools.SelectFigure)
-                {
+                {/*
                     if (InteractionMouseAction == null)
                     {
                         if (SelectToolMouseAction.DrawingTools == DrawingTools.CursorSelect)
@@ -360,7 +360,7 @@ namespace GRPO.UserControls.CanvasMouseActions
                                     else if (e.Button == MouseButtons.Right)
                                     {
                                         InteractionMouseAction = new Interaction(DrawablesMouseAction[i], true);
-                                        InteractionMouseAction.DrawSelcet(CnavasMouseAction,
+                                        InteractionMouseAction.DrawPoints(CnavasMouseAction,
                                             InteractionMouseAction.EnablePoints,
                                             InteractionMouseAction.DrawableFigures);
                                     }
@@ -483,7 +483,7 @@ namespace GRPO.UserControls.CanvasMouseActions
 
                     if (RefreshCanvasEvent != null) RefreshCanvasEvent();
 
-                }
+                */}
 
                 _flagMouseDown = false;
                 if (RefreshCanvasEvent != null) RefreshCanvasEvent();

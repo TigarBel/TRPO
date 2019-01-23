@@ -209,7 +209,7 @@ namespace GRPO
 
             if (Interaction != null && !FlagMouseDown)
             {
-                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                /*Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);*/
             }
         }
 
@@ -276,9 +276,9 @@ namespace GRPO
                     new Point(), new Point());
 
                 RefreshCanvas();
-                Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count),
+                /*Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count),
                     false);
-                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);*/
             }
         }
 
