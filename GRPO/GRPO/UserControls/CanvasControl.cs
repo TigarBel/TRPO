@@ -224,6 +224,11 @@ namespace GRPO
                 drawable.Draw(canvas);
             }
 
+            foreach (IDrawable drawable in Drawables)
+            {
+                drawable.Draw(canvas);
+            }
+
             if (Interaction != null)
             {
                 if (!FlagMouseDown) Interaction.DrawSelcet(canvas);
@@ -242,6 +247,8 @@ namespace GRPO
             ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], ControlUnit.GraphicsEditor.Drawables, null);
             RefreshCanvas();
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            Interaction = null;
+            Drawables.Clear();
         }
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)

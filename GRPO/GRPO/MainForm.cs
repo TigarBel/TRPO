@@ -243,19 +243,17 @@ namespace GRPO
         private void _toolsWithPropertyControl_LinePropertyChanged()
         {
             _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
-            if (_canvasControl.Interaction.DrawableFigures.Count == 1)
+            if (_canvasControl.Interaction != null)
             {
-                if (_canvasControl.Interaction != null)
+                if (_canvasControl.ControlUnit.GraphicsEditor.Drawables[_canvasControl.Interaction.Indexes[0]] is
+                    ILinePropertyble figureWithLineProperty)
                 {
-                    if (_canvasControl.Interaction.DrawableFigures[0] is ILinePropertyble figureWithLineProperty)
-                    {
-                        _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[2],
-                            _canvasControl.Interaction.Indexes[0], figureWithLineProperty.LineProperty,
-                            _toolsWithPropertyControl.LineProperty, null, null);
-                    }
-
-                    _canvasControl.RefreshCanvas();
+                    _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[2],
+                        _canvasControl.Interaction.Indexes[0], figureWithLineProperty.LineProperty,
+                        _toolsWithPropertyControl.LineProperty, null, null);
                 }
+
+                _canvasControl.RefreshCanvas();
             }
         }
         /// <summary>
@@ -264,19 +262,17 @@ namespace GRPO
         private void _toolsWithPropertyControl_FillPropertyChanged()
         {
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
-            if (_canvasControl.Interaction.DrawableFigures.Count == 1)
+            if (_canvasControl.Interaction != null)
             {
-                if (_canvasControl.Interaction != null)
+                if (_canvasControl.ControlUnit.GraphicsEditor.Drawables[_canvasControl.Interaction.Indexes[0]] is
+                    IFillPropertyble figureWithFillProperty)
                 {
-                    if (_canvasControl.Interaction.DrawableFigures[0] is IFillPropertyble figureWithFillProperty)
-                    {
-                        _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[3],
-                            _canvasControl.Interaction.Indexes[0], null,
-                            null, figureWithFillProperty.FillProperty, _toolsWithPropertyControl.FillProperty);
-                    }
-
-                    _canvasControl.RefreshCanvas();
+                    _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[3],
+                        _canvasControl.Interaction.Indexes[0], null,
+                        null, figureWithFillProperty.FillProperty, _toolsWithPropertyControl.FillProperty);
                 }
+
+                _canvasControl.RefreshCanvas();
             }
         }
 

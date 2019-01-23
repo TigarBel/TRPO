@@ -21,10 +21,17 @@ namespace GRPO.Commands
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
             Index = index;
-            OldLineProperty = oldLineProperty;
-            NewLineProperty = newLineProperty;
-            OldFillProperty = oldFillProperty;
-            NewFillProperty = newFillProperty;
+            if(oldLineProperty!=null && newLineProperty != null)
+            {
+                OldLineProperty = new LineProperty(oldLineProperty.LineThickness, oldLineProperty.LineColor, oldLineProperty.LineType);
+                NewLineProperty = new LineProperty(newLineProperty.LineThickness, newLineProperty.LineColor, newLineProperty.LineType);
+            }
+
+            if (oldFillProperty != null && newFillProperty != null)
+            {
+                OldFillProperty = new FillProperty(oldFillProperty.FillColor);
+                NewFillProperty = new FillProperty(newFillProperty.FillColor);
+            }
         }
 
         private GraphicsEditor GraphicsEditor { get; set; }
