@@ -149,74 +149,90 @@ namespace GRPO
         /// <param name="e">Объект события</param>
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            //MessageBox.Show(e.KeyCode.ToString());
-            if (e.Control && e.KeyCode == Keys.Z)
+            if (e.KeyCode == Keys.Escape)
             {
-                _canvasControl.ControlUnit.Undo(1);
-                _canvasControl.Interaction = null;
-                _canvasControl.RefreshCanvas();
+                _canvasControl.FlagPolyFigure = false;
             }
-            else if (e.Control && e.KeyCode == Keys.Y)
+
+            if (!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
             {
-                _canvasControl.ControlUnit.Redo(1);
-                _canvasControl.Interaction = null;
-                _canvasControl.RefreshCanvas();
-            }
-            else if (e.Control && e.KeyCode == Keys.S)
-            {
-                if (_fileNameOpenProject != null)
+                //MessageBox.Show(e.KeyCode.ToString());
+                if (e.Control && e.KeyCode == Keys.Z)
                 {
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.FileName = _fileNameOpenProject;
-                    using (var stream = saveFileDialog.OpenFile())
+                    _canvasControl.ControlUnit.Undo(1);
+                    _canvasControl.Interaction = null;
+                    _canvasControl.RefreshCanvas();
+                }
+                else if (e.Control && e.KeyCode == Keys.Y)
+                {
+                    _canvasControl.ControlUnit.Redo(1);
+                    _canvasControl.Interaction = null;
+                    _canvasControl.RefreshCanvas();
+                }
+                else if (e.Control && e.KeyCode == Keys.S)
+                {
+                    if (_fileNameOpenProject != null)
                     {
-                        BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
-                        binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.FileName = _fileNameOpenProject;
+                        using (var stream = saveFileDialog.OpenFile())
+                        {
+                            BinaryFormatter binaryFormatter = new BinaryFormatter();
+                            _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
+                            binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
+                        }
+                    }
+                    else
+                    {
+                        ShowSaveFileDialog();
                     }
                 }
-                else
+                else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
                 {
-                    ShowSaveFileDialog();
-                }
-            }
-            else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
-            {
-                if (e.Control && e.KeyCode == Keys.C)
-                {
-                    _canvasControl.Copy();
-                }
-                else if (e.Control && e.KeyCode == Keys.V)
-                {
-                    _canvasControl.Paste();
-                }
-                else if (e.KeyCode == Keys.Delete)
-                {
-                    _canvasControl.Delete();
-                }
-                else if (e.Control && e.KeyCode == Keys.X)
-                {
-                    _canvasControl.Cut();
-                }
-                else if (e.Control)
-                {
-                     //_canvasControl.Interaction.AddDrawableFigure();
+                    if (e.Control && e.KeyCode == Keys.C)
+                    {
+                        _canvasControl.Copy();
+                    }
+                    else if (e.Control && e.KeyCode == Keys.V)
+                    {
+                        _canvasControl.Paste();
+                    }
+                    else if (e.KeyCode == Keys.Delete)
+                    {
+                        _canvasControl.Delete();
+                    }
+                    else if (e.Control && e.KeyCode == Keys.X)
+                    {
+                        _canvasControl.Cut();
+                    }
+                    else if (e.Control)
+                    {
+                        //_canvasControl.Interaction.AddDrawableFigure();
+                    }
                 }
             }
         }
+
         /// <summary>
         /// Функция по отлову изменения инструмента
         /// </summary>
         private void _toolsWithPropertyControl_ToolsChanged()
         {
-            _canvasControl.SelectTool = new Tools(_toolsWithPropertyControl.SelectTool.DrawingTools);
-            if (_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
+            if (!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
             {
-                if (_canvasControl.Interaction != null)
+                _canvasControl.SelectTool = new Tools(_toolsWithPropertyControl.SelectTool.DrawingTools);
+                if (_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
                 {
-                    _canvasControl.RefreshCanvas();
-                    _canvasControl.Interaction.EnablePoints = false;
+                    if (_canvasControl.Interaction != null)
+                    {
+                        _canvasControl.RefreshCanvas();
+                        //_canvasControl.Interaction.EnablePoints = false;
+                    }
                 }
+            }
+            else
+            {
+                _toolsWithPropertyControl.SelectTool.DrawingTools = _canvasControl.SelectTool.DrawingTools;
             }
         }
         /// <summary>
@@ -238,7 +254,7 @@ namespace GRPO
                     }
 
                     _canvasControl.RefreshCanvas();
-                    _canvasControl.Interaction.EnablePoints = false;
+                    //_canvasControl.Interaction.EnablePoints = false;
                 }
             }
         }
@@ -261,7 +277,7 @@ namespace GRPO
                     }
 
                     _canvasControl.RefreshCanvas();
-                    _canvasControl.Interaction.EnablePoints = false;
+                    //_canvasControl.Interaction.EnablePoints = false;
                 }
             }
         }

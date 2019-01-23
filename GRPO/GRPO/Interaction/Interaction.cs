@@ -21,11 +21,6 @@ namespace GRPO
     {
 
         /// <summary>
-        /// Рисуемые объекты
-        /// </summary>
-        private List<IDrawable> _drawables = new List<IDrawable>();
-
-        /// <summary>
         /// Индекс выбранной габоритной точки
         /// </summary>
         private int _indexSelectPoint;
@@ -41,23 +36,36 @@ namespace GRPO
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
-        /// <param name="drawableFigure">Рисуемый объект</param>
-        /// <param name="enablePoints">Разрашение измять опортные точки</param>
-        public Interaction(IDrawable drawableFigure, bool enablePoints)
+        /// <param name="drawables">Весь список фигур</param>
+        /// <param name="point">Точка нахождения фигуры</param>
+        /// <param name="enablePoints">Разрашение изменять опорные точки(только для одной фигуры)</param>
+        public Interaction(List<IDrawable> drawables, Point point, bool enablePoints)
         {
-            DrawableFigures.Add(drawableFigure);
-            EnablePoints = enablePoints;
+            for (int i = drawables.Count; i > 0; i--)
+            {
+                int minX = drawables[i].Points.Min(localPoint => point.X);
+                int maxX = drawables[i].Points.Max(localPoint => point.X);
+                int minY = drawables[i].Points.Min(localPoint => point.Y);
+                int maxY = drawables[i].Points.Max(localPoint => point.Y);
+                if (point.X >= minX && point.X <= maxX && point.Y >= minY && point.Y <= maxY)
+                {
+                    DrawableFigures.Add(drawables[i]);
+                    EnablePoints = enablePoints;
+                    break;
+                }
+            }
         }
 
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
-        /// <param name="drawables">Список фигур</param>
-        /// <param name="enablePoints">Разрашение измять опортные точки</param>
-        public Interaction(List<IDrawable> drawables, bool enablePoints)
+        /// <param name="drawables">Весь список фигур</param>
+        /// <param name="pointA">Первая крайняя точка диапозона по нахождению фигур</param>
+        /// <param name="pointB">Вторая крайняя точка диапозона по нахождению фигур</param>
+        public Interaction(List<IDrawable> drawables, Point pointA, Point pointB)
         {
             DrawableFigures = drawables;
-            EnablePoints = enablePoints;
+            EnablePoints = false;
         }
 
         /// <summary>
@@ -65,39 +73,49 @@ namespace GRPO
         /// </summary>
         public List<IDrawable> DrawableFigures
         {
-            get { return _drawables; }
-            set { _drawables = value; }
+            get { return Drawables; }
+            set { Drawables = value; }
         }
 
         /// <summary>
-        /// Разрашение изменять опортные точки
+        /// Разрашение изменять опорные точки
         /// </summary>
-        public bool EnablePoints { get; set; }
+        public bool EnablePoints
+        {
+            get { return EnablePointsForDraw; }
+            private set { EnablePointsForDraw = value; }
+        }
 
         /// <summary>
-        /// Выбранная габаритная точка
+        /// Выбранная опорная точка
         /// </summary>
         public Point SelectPoint
         {
             set
             {
-                Checking _checking = new Checking();
-                _indexSelectPoint =
-                    _checking.GetNumberPoint(new Point(value.X, value.Y), DrawableFigures[0], _radiusDrawPoint);
+                if (EnablePoints)
+                {
+                    Checking _checking = new Checking();
+                    _indexSelectPoint =
+                        _checking.GetNumberPoint(new Point(value.X, value.Y), DrawableFigures[0], _radiusDrawPoint);
+                }
             }
         }
 
         /// <summary>
-        /// Изменить габаритную точку
+        /// Изменить опорную точку
         /// </summary>
         /// <param name="pointDeviation">Подредактированная точка</param>
         public void ChangePoint(Point pointDeviation)
         {
-            if (_indexSelectPoint != -1)
+            if (EnablePoints)
             {
-                List<Point> points = DrawableFigures[0].Points;
-                points[_indexSelectPoint] = pointDeviation;
-                DrawableFigures[0].Points = points;
+                if (_indexSelectPoint != -1)
+                {
+                    List<Point> points = DrawableFigures[0].Points;
+                    points[_indexSelectPoint] = pointDeviation;
+                    DrawableFigures[0].Points = points;
+                }
             }
         }
 

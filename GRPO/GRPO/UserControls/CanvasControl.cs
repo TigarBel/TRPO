@@ -41,17 +41,30 @@ namespace GRPO
         /// </summary>
         private Point _pointB;
 
-        private bool _flagSelectPoint = false;
+        private bool _flagPolyFigure = false;
 
         /// <summary>
         /// Флаг устанавливаемый при зажатии кнопки мыши
         /// </summary>
-        private bool _flagMouseDown;
+        public bool FlagMouseDown { get; private set; }
 
         /// <summary>
         /// Флаг при создании полифигур
         /// </summary>
-        private bool _flagPolyFigure;
+        public bool FlagPolyFigure
+        {
+            get { return _flagPolyFigure;}
+            set
+            {
+                if (!value)
+                {
+                    Drawables.Clear();
+                    RefreshCanvas();
+                }
+
+                _flagPolyFigure = value;
+            }
+        }
 
         /// <summary>
         /// Буфер для цвета линии фигуры
@@ -103,11 +116,7 @@ namespace GRPO
         public ControlUnit ControlUnit
         {
             get { return _controlUnit; }
-            set
-            {
-                _controlUnit = value;
-                Drawables = _controlUnit.GraphicsEditor.Drawables;
-            }
+            set { _controlUnit = value; }
         }
 
         /// <summary>
@@ -117,19 +126,9 @@ namespace GRPO
         {
             get
             {
-                return ControlUnit.GraphicsEditor.Drawables; //_drawables;
+                return _drawables; //ControlUnit.GraphicsEditor.Drawables;
             }
-            set
-            {
-                _drawables = value;
-                if (_drawables != null)
-                {
-                    if (_drawables.Count > 0)
-                    {
-                        RefreshCanvas();
-                    }
-                }
-            }
+            set { _drawables = value; }
         }
 
         /// <summary>
@@ -140,19 +139,6 @@ namespace GRPO
             get { return _selectTool; }
             set
             {
-                _flagMouseDown = false;
-                if (_flagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointB);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-                    _flagPolyFigure = false;
-                }
-
                 Interaction = null;
                 _selectTool = value;
                 RefreshCanvas();
@@ -253,14 +239,20 @@ namespace GRPO
         public void RefreshCanvas()
         {
             canvas.Image = new Bitmap(_image);
+
+            foreach (IDrawable drawable in ControlUnit.GraphicsEditor.Drawables)
+            {
+                drawable.Draw(canvas);
+            }
+
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw(canvas);
             }
 
-            if (Interaction != null && !_flagMouseDown)
+            if (Interaction != null && !FlagMouseDown)
             {
-                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
             }
         }
 
@@ -276,7 +268,7 @@ namespace GRPO
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            _flagMouseDown = true;
+            FlagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
             if (SelectTool.TypeTools == TypeTools.SimpleFigure)
@@ -287,43 +279,41 @@ namespace GRPO
 
             if (SelectTool.TypeTools == TypeTools.PolyFigure)
             {
-                if (_flagPolyFigure)
+                if (FlagPolyFigure)
                 {
                     List<Point> points = Drawables[Drawables.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
                     points.Add(_pointA);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
+                            points, LineProperty, FillProperty);
+                        Drawables.Clear();
+
+                        FlagPolyFigure = false;
+                    }
+                    else
+                    {
+                        Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
+                            SelectTool.DrawingTools));
+                    }
                 }
 
-                if (!_flagPolyFigure)
+                if (!FlagPolyFigure && e.Button == MouseButtons.Left)
                 {
                     List<Point> points = new List<Point>()
                         {new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y)};
                     Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
 
-                    _flagPolyFigure = true;
-                }
-
-                if (e.Button == MouseButtons.Right && _flagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointA);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-
-                    _flagPolyFigure = false;
+                    FlagPolyFigure = true;
                 }
             }
 
             if (SelectTool.TypeTools == TypeTools.SelectFigure)
-            {
+            {/*
                 if (Interaction != null)
                 {
 
@@ -333,7 +323,7 @@ namespace GRPO
                         {
                             Checking checking = new Checking();
                             if (checking.GetNumberPoint(_pointA, Interaction.DrawableFigures[0],
-                                    4 /*см. в интерактиве*/) != -1 || _pointA.X == _pointB.X ||
+                                    4 ) != -1 || _pointA.X == _pointB.X ||
                                 _pointA.Y == _pointB.Y)
                             {
                                 Interaction.SelectPoint = _pointA;
@@ -378,14 +368,14 @@ namespace GRPO
                         }
                     }
                 }
-            }
+            */}
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
 
-            if (_flagMouseDown)
+            if (FlagMouseDown)
             {
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
@@ -396,7 +386,7 @@ namespace GRPO
                 }
 
                 if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
+                {/*
                     if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                     {
                         if (Interaction != null)
@@ -408,7 +398,7 @@ namespace GRPO
                             }
                             else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                             {
-                                DrawEmpty();
+                                //DrawEmpty();
                             }
                         }
                     }
@@ -424,13 +414,13 @@ namespace GRPO
                         }
                         else if (_pointA.X != _pointB.X || _pointA.Y != _pointB.Y)
                         {
-                            DrawEmpty();
+                            //DrawEmpty();
                         }
                     }
-                }
+                */}
             }
 
-            if (_flagPolyFigure)
+            if (FlagPolyFigure)
             {
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
@@ -449,17 +439,15 @@ namespace GRPO
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
-            if (_flagMouseDown)
+            if (FlagMouseDown)
             {
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    //Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty, SelectTool.DrawingTools));
-                    //
                     List<Point> points = new List<Point>() {_pointA, _pointB};
                     ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
                         points, LineProperty, FillProperty);
-                    //
+                    Drawables.Clear();
                     RefreshCanvas();
 
                 }
@@ -479,7 +467,7 @@ namespace GRPO
                 }
 
                 if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
+                {/*
                     if (Interaction == null)
                     {
                         if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
@@ -498,18 +486,16 @@ namespace GRPO
                                     if (DragProperty != null) DragProperty(Drawables[i]);
                                     if (e.Button == MouseButtons.Left)
                                     {
-                                        Interaction = new Interaction(Drawables[i], false);
-                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                            Interaction.DrawableFigures);
+                                        //Interaction = new Interaction(Drawables[i], false);
+                                        //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                     }
                                     else if (e.Button == MouseButtons.Right)
                                     {
-                                        Interaction = new Interaction(Drawables[i], true);
-                                        Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                            Interaction.DrawableFigures);
+                                        //Interaction = new Interaction(Drawables[i], true);
+                                        //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                     }
 
-                                    break;
+                                    //break;
                                 }
                             }
                         }
@@ -542,8 +528,8 @@ namespace GRPO
 
                             if (localDrawables.Count > 0)
                             {
-                                Interaction = new Interaction(localDrawables, false);
-                                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                                //Interaction = new Interaction(localDrawables, false);
+                                //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                 //
                             }
 
@@ -571,8 +557,7 @@ namespace GRPO
                                 }
                                 else
                                 {
-                                    Interaction.DrawSelcet(canvas, Interaction.EnablePoints,
-                                        Interaction.DrawableFigures);
+                                    //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
                                 }
                             }
                         }
@@ -602,7 +587,7 @@ namespace GRPO
                             ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                 Interaction.DrawableFigures,
                                 GetIndexes(Interaction.DrawableFigures, Drawables), _pointA, _pointB);
-                            Interaction.EnablePoints = false;
+                            //Interaction.EnablePoints = false;
                             _lineColor = new List<Color>();
                             _fillColor = new List<Color>();
                         }
@@ -623,9 +608,9 @@ namespace GRPO
 
                     RefreshCanvas();
 
-                }
+                */}
 
-                _flagMouseDown = false;
+                FlagMouseDown = false;
                 RefreshCanvas();
             }
         }
@@ -727,9 +712,8 @@ namespace GRPO
                     new Point(), new Point());
 
                 RefreshCanvas();
-                Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count),
-                    false);
-                Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                //Interaction = new Interaction(Drawables.GetRange(Drawables.Count - BuferDraw.Count, BuferDraw.Count), false);
+                //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
             }
         }
 
