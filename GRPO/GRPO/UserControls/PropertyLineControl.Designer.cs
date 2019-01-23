@@ -84,7 +84,7 @@
             // 
             this.numericUpDownLineThickness.Location = new System.Drawing.Point(87, 84);
             this.numericUpDownLineThickness.Maximum = new decimal(new int[] {
-            30,
+            24,
             0,
             0,
             0});

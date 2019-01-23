@@ -229,7 +229,6 @@ namespace GRPO
                     if (_canvasControl.Interaction != null)
                     {
                         _canvasControl.RefreshCanvas();
-                        //_canvasControl.Interaction.EnablePoints = false;
                     }
                 }
             }
@@ -251,13 +250,11 @@ namespace GRPO
                     if (_canvasControl.Interaction.DrawableFigures[0] is ILinePropertyble figureWithLineProperty)
                     {
                         _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[2],
-                            _canvasControl.ControlUnit.GraphicsEditor.Drawables.IndexOf(_canvasControl.Interaction
-                                .DrawableFigures[0]), figureWithLineProperty.LineProperty,
+                            _canvasControl.Interaction.Indexes[0], figureWithLineProperty.LineProperty,
                             _toolsWithPropertyControl.LineProperty, null, null);
                     }
 
                     _canvasControl.RefreshCanvas();
-                    //_canvasControl.Interaction.EnablePoints = false;
                 }
             }
         }
@@ -274,13 +271,11 @@ namespace GRPO
                     if (_canvasControl.Interaction.DrawableFigures[0] is IFillPropertyble figureWithFillProperty)
                     {
                         _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[3],
-                            _canvasControl.ControlUnit.GraphicsEditor.Drawables.IndexOf(_canvasControl.Interaction
-                                .DrawableFigures[0]), null,
+                            _canvasControl.Interaction.Indexes[0], null,
                             null, figureWithFillProperty.FillProperty, _toolsWithPropertyControl.FillProperty);
                     }
 
                     _canvasControl.RefreshCanvas();
-                    //_canvasControl.Interaction.EnablePoints = false;
                 }
             }
         }

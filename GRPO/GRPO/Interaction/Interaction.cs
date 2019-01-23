@@ -36,29 +36,6 @@ namespace GRPO
         }
 
         /// <summary>
-        /// Рисуемые объекты
-        /// </summary>
-        public List<IDrawable> DrawableFigures
-        {
-            get { return Drawables; }
-            set { Drawables = value; }
-        }
-
-        public int MinX { get; set; }
-
-        public int MaxX { get; set; }
-
-        public int MinY { get; set; }
-
-        public int MaxY { get; set; }
-
-        public List<int> Indexes
-        {
-            get { return _indexes; }
-            set { _indexes = value; }
-        }
-
-        /// <summary>
         /// Класс взаимодействия
         /// </summary>
         /// <param name="drawables">Весь список фигур</param>
@@ -68,14 +45,14 @@ namespace GRPO
         {
             for (int i = drawables.Count - 1; i >= 0; i--)
             {
-                MinX = drawables[i].Points.Min(point => point.X) - 5;
-                MaxX = drawables[i].Points.Max(point => point.X) + 5;
-                MinY = drawables[i].Points.Min(point => point.Y) - 5;
-                MaxY = drawables[i].Points.Max(point => point.Y) + 5;
-                if (pointMouse.X >= MinX && pointMouse.X <= MaxX && pointMouse.Y >= MinY && pointMouse.Y <= MaxY)
+                if (pointMouse.X >= drawables[i].Points.Min(point => point.X) - 5 &&
+                    pointMouse.X <= drawables[i].Points.Max(point => point.X) + 5 &&
+                    pointMouse.Y >= drawables[i].Points.Min(point => point.Y) - 5 && 
+                    pointMouse.Y <= drawables[i].Points.Max(point => point.Y) + 5)
                 {
                     Indexes.Add(drawables.IndexOf(drawables[i]));
                     DrawableFigures.Add(drawables[i].Clone());
+                    GetMaxMinXY();
                     EnablePoints = enablePoints;
                     break;
                 }
@@ -137,16 +114,54 @@ namespace GRPO
             if (localDrawables.Count != 0)
             {
                 DrawableFigures = localDrawables;
-                foreach (IDrawable drawable in DrawableFigures)
-                {
-                    MinX = drawable.Points.Min(point => point.X) - 5;
-                    MaxX = drawable.Points.Max(point => point.X) + 5;
-                    MinY = drawable.Points.Min(point => point.Y) - 5;
-                    MaxY = drawable.Points.Max(point => point.Y) + 5;
-                }
+                GetMaxMinXY();
             }
 
             EnablePoints = false;
+        }
+
+        /// <summary>
+        /// Рисуемые объекты
+        /// </summary>
+        public List<IDrawable> DrawableFigures
+        {
+            get { return Drawables; }
+            set { Drawables = value; }
+        }
+
+        public int MinX { get; set; }
+
+        public int MaxX { get; set; }
+
+        public int MinY { get; set; }
+
+        public int MaxY { get; set; }
+
+        public void GetMaxMinXY()
+        {
+            List<Point> points = new List<Point>();
+            foreach (IDrawable drawable in DrawableFigures)
+            {
+                foreach (Point point in drawable.Points)
+                {
+                    points.Add(point);
+                }
+            }
+
+            MinX = points.Min(point => point.X) - 5;
+            MaxX = points.Max(point => point.X) + 5;
+            MinY = points.Min(point => point.Y) - 5;
+            MaxY = points.Max(point => point.Y) + 5;
+        }
+
+        public List<int> Indexes
+        {
+            get { return _indexes; }
+            set { _indexes = value; }
+        }
+        public int IndexSelectPoint
+        {
+            get { return _indexSelectPoint; }
         }
 
         /// <summary>

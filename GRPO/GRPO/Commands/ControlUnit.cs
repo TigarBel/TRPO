@@ -43,7 +43,7 @@ namespace GRPO.Commands
 
         public void Redo(int levels)
         {
-            Console.WriteLine("levels " + levels);
+            Console.WriteLine("levels " + levels + " current " + _current);
 
             // Делаем возврат операций
             for (int i = 0; i < levels; i++)
@@ -57,7 +57,7 @@ namespace GRPO.Commands
 
         public void Undo(int levels)
         {
-            Console.WriteLine("levels " + levels);
+            Console.WriteLine("levels " + levels + " current " + _current);
 
             // Делаем отмену операций
             for (int i = 0; i < levels; i++)
@@ -113,11 +113,12 @@ namespace GRPO.Commands
             _current++;
         }
 
-        public void Reconstruction(string keywords, List<IDrawable> drawables, List<int> indexes, Point selectPoint,
-            Point newPoint)
+        public void Reconstruction(string keywords, List<IDrawable> drawables, List<int> indexes, int pointIndex,
+            Point selectPoint, Point newPoint)
         {
             Command command =
-                new CommandReconstruction(_graphicsEditor, keywords, drawables, indexes, selectPoint, newPoint);
+                new CommandReconstruction(_graphicsEditor, keywords, drawables, indexes, pointIndex, selectPoint,
+                    newPoint);
             command.Execute();
             if (_current < _commands.Count)
             {

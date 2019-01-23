@@ -15,7 +15,7 @@ namespace GRPO.Commands
     class CommandReconstruction : Command
     {
         public CommandReconstruction(GraphicsEditor graphicsEditor,
-            string keywords, List<IDrawable> drawables,List<int>indexes, Point selectPoint,Point newPoint)
+            string keywords, List<IDrawable> drawables,List<int>indexes, int pointIndex, Point selectPoint,Point newPoint)
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
@@ -25,6 +25,7 @@ namespace GRPO.Commands
                 Drawables.Add(drawable.Clone());
             }
 
+            PointIndex = pointIndex;
             Indexes = indexes;
             SelectPoint = new Point(selectPoint.X, selectPoint.Y);
             NewPoint = new Point(newPoint.X, newPoint.Y);
@@ -38,18 +39,20 @@ namespace GRPO.Commands
 
         private List<int> Indexes { get; set; }
 
+        private int PointIndex { get; set; }
+
         private Point SelectPoint { get; set; }
 
         private Point NewPoint { get; set; }
 
         public override void Execute()
         {
-            GraphicsEditor.Reconstruct(Keywords, Drawables, Indexes, SelectPoint, NewPoint);
+            GraphicsEditor.Reconstruct(Keywords, Drawables, Indexes,PointIndex, SelectPoint, NewPoint);
         }
 
         public override void UnExecute()
         {
-            GraphicsEditor.Reconstruct(Undo(), Drawables, Indexes, SelectPoint, NewPoint);
+            GraphicsEditor.Reconstruct(Undo(), Drawables, Indexes, PointIndex, SelectPoint, NewPoint);
         }
 
         // Private helper function : приватные вспомогательные функции

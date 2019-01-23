@@ -175,7 +175,7 @@ namespace GRPO.Commands
         /// <param name="indexes">Список индексов фигур(ы)</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        public void Reconstruct(string keywords, List<IDrawable> drawables, List<int> indexes, Point selectPoint, Point newPoint)
+        public void Reconstruct(string keywords, List<IDrawable> drawables, List<int> indexes, int PointIndex, Point selectPoint, Point newPoint)
         {
             switch (keywords)
             {
@@ -183,7 +183,7 @@ namespace GRPO.Commands
                     ChangePosition(indexes, selectPoint,newPoint);
                     break;
                 case "Изменить опорную точку":
-                    ChangePoint(indexes, selectPoint, newPoint);
+                    ChangePoint(indexes, PointIndex, newPoint);
                     break;
                 case "Добавить фигуру(ы)":
                     foreach (IDrawable drawable in drawables)
@@ -195,7 +195,7 @@ namespace GRPO.Commands
                     ChangePosition(indexes, newPoint, selectPoint);
                     break;
                 case "Вернуть назад опорную точку":
-                    ChangePoint(indexes, newPoint, selectPoint);
+                    ChangePoint(indexes, PointIndex, selectPoint);
                     break;
                 case "Убрать фигуру(ы)":
                     indexes.Reverse();
@@ -227,16 +227,11 @@ namespace GRPO.Commands
         /// <param name="drawables">Список с одной фигурой, которой меняем опорную точку</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        private void ChangePoint(List<int> indexes, Point selectPoint, Point newPoint)
+        private void ChangePoint(List<int> indexes, int pointIndex, Point newPoint)
         {
-            Checking checking = new Checking();
-            int indexSelectPoint = checking.GetNumberPoint(selectPoint, _drawablesList[indexes[0]], 4);
-            if (indexSelectPoint != -1)
-            {
-                List<Point> points = _drawablesList[indexes[0]].Points;
-                points[indexSelectPoint] = newPoint;
-                _drawablesList[indexes[0]].Points = points;
-            }
+            List<Point> points = _drawablesList[indexes[0]].Points;
+            points[pointIndex] = newPoint;
+            _drawablesList[indexes[0]].Points = points;
         }
 
         /// <summary>
