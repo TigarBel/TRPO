@@ -62,7 +62,10 @@ namespace GRPO.InteractionFrame
             }
             else
             {
-                DrawInteraction(pictureBox, Drawables);
+                if (Drawables.Count > 0)
+                {
+                    DrawInteraction(pictureBox, Drawables);
+                }
             }
         }
 
@@ -125,8 +128,8 @@ namespace GRPO.InteractionFrame
                 new Point(pointA.X + (pointB.X - pointA.X) / 2 + _radiusDrawPoint, pointB.Y),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
-            drawFigure = new DrawFigureCircle(new Point(pointA.X, pointA.Y + (pointB.Y - pointA.Y) / 2 + _radiusDrawPoint),
-                new Point(pointA.X, pointA.Y + (pointB.Y - pointA.Y) / 2),
+            drawFigure = new DrawFigureCircle(new Point(pointA.X, pointA.Y + (pointB.Y - pointA.Y) / 2),
+                new Point(pointA.X + _radiusDrawPoint, pointA.Y + (pointB.Y - pointA.Y) / 2),
                 new LineProperty(), new FillProperty());
             drawFigure.Draw(pictureBox);
         }

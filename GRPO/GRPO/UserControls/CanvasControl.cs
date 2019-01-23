@@ -252,7 +252,7 @@ namespace GRPO
 
             if (Interaction != null && !FlagMouseDown)
             {
-                //Interaction.DrawSelcet(canvas, Interaction.EnablePoints, Interaction.DrawableFigures);
+                Interaction.DrawSelcet(canvas);
             }
         }
 
@@ -313,7 +313,19 @@ namespace GRPO
             }
 
             if (SelectTool.TypeTools == TypeTools.SelectFigure)
-            {/*
+            {
+                if (SelectTool.DrawingTools == DrawingTools.MassSelect)
+                {
+                    if (Interaction != null)
+                    {
+                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X || Interaction.MinY > _pointA.Y ||
+                            Interaction.MaxY < _pointA.Y)
+                        {
+                            Interaction = null;
+                        }
+                    }
+                }
+                /*
                 if (Interaction != null)
                 {
 
@@ -374,6 +386,7 @@ namespace GRPO
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
+            RefreshCanvas();
 
             if (FlagMouseDown)
             {
@@ -382,11 +395,21 @@ namespace GRPO
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
-                    RefreshCanvas();
                 }
 
                 if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {/*
+                {
+                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
+                    {
+                        if (Interaction == null)
+                        {
+                            DrawFigureRectangle rectangle = new DrawFigureRectangle(_pointA, _pointB,
+                                new LineProperty(1, Color.Gray, DashStyle.Dash),
+                                new FillProperty(Color.Transparent));
+                            rectangle.Draw(canvas);
+                        }
+                    }
+                    /*
                     if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
                     {
                         if (Interaction != null)
@@ -431,7 +454,6 @@ namespace GRPO
                     Drawables.RemoveAt(Drawables.Count - 1);
                     Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
-                    RefreshCanvas();
                 }
             }
         }
@@ -439,6 +461,7 @@ namespace GRPO
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
+            RefreshCanvas();
             if (FlagMouseDown)
             {
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
@@ -448,8 +471,6 @@ namespace GRPO
                     ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
                         points, LineProperty, FillProperty);
                     Drawables.Clear();
-                    RefreshCanvas();
-
                 }
 
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
@@ -461,13 +482,20 @@ namespace GRPO
                         Drawables.RemoveAt(Drawables.Count - 1);
                         Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
                             SelectTool.DrawingTools));
-                        RefreshCanvas();
-
                     }
                 }
 
                 if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {/*
+                {
+                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
+                    {
+                        if (Interaction == null)
+                        {
+                            Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointA, _pointB);
+                            if (Interaction.DrawableFigures.Count == 0) Interaction = null;
+                        }
+                    }
+                    /*
                     if (Interaction == null)
                     {
                         if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
