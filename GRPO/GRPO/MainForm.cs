@@ -55,6 +55,7 @@ namespace GRPO
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
+            this.Size = new Size(1000,600);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -152,6 +153,8 @@ namespace GRPO
             if (e.KeyCode == Keys.Escape)
             {
                 _canvasControl.FlagPolyFigure = false;
+                _canvasControl.Interaction = null;
+                _canvasControl.RefreshCanvas();
             }
 
             if (!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
