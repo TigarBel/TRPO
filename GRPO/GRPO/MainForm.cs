@@ -210,7 +210,7 @@ namespace GRPO
                     }
                     else if (e.Control)
                     {
-                        //_canvasControl.Interaction.AddDrawableFigure();
+                        _canvasControl.AddFigureInInteractive();
                     }
                 }
             }
@@ -243,7 +243,7 @@ namespace GRPO
         private void _toolsWithPropertyControl_LinePropertyChanged()
         {
             _canvasControl.LineProperty = _toolsWithPropertyControl.LineProperty;
-            if (_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
+            if (_canvasControl.Interaction.DrawableFigures.Count == 1)
             {
                 if (_canvasControl.Interaction != null)
                 {
@@ -264,7 +264,7 @@ namespace GRPO
         private void _toolsWithPropertyControl_FillPropertyChanged()
         {
             _canvasControl.FillProperty = _toolsWithPropertyControl.FillProperty;
-            if (_toolsWithPropertyControl.SelectTool.DrawingTools == DrawingTools.CursorSelect)
+            if (_canvasControl.Interaction.DrawableFigures.Count == 1)
             {
                 if (_canvasControl.Interaction != null)
                 {

@@ -78,7 +78,7 @@ namespace GRPO
         private ControlUnit _controlUnit = new ControlUnit();
 
         /// <summary>
-        /// Список фигур
+        /// Локальный список фигур
         /// </summary>
         private List<IDrawable> _drawables = new List<IDrawable>();
 
@@ -110,15 +110,9 @@ namespace GRPO
             set { _controlUnit = value; }
         }
 
-        /// <summary>
-        /// Список фигур
-        /// </summary>
         public List<IDrawable> Drawables
         {
-            get
-            {
-                return _drawables; //ControlUnit.GraphicsEditor.Drawables;
-            }
+            get { return _drawables; }
             set { _drawables = value; }
         }
 
@@ -197,13 +191,7 @@ namespace GRPO
 
             canvas.Size = new Size(width, height);
             canvas.Image = new Bitmap(width, height);
-            if (Drawables.Count > 0)
-            {
-                foreach (IDrawable draw in Drawables)
-                {
-                    draw.Draw(canvas);
-                }
-            }
+            RefreshCanvas();
         }
 
         /// <summary>
@@ -236,11 +224,6 @@ namespace GRPO
                 drawable.Draw(canvas);
             }
 
-            foreach (IDrawable drawable in Drawables)
-            {
-                drawable.Draw(canvas);
-            }
-
             if (Interaction != null)
             {
                 if (!FlagMouseDown) Interaction.DrawSelcet(canvas);
@@ -256,7 +239,7 @@ namespace GRPO
         /// </summary>
         public void ClearCanvas()
         {
-            ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], Drawables, null);
+            ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], ControlUnit.GraphicsEditor.Drawables, null);
             RefreshCanvas();
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
         }
@@ -472,7 +455,16 @@ namespace GRPO
                         if (Interaction == null)
                         {
                             Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointA, _pointB);
-                            if (Interaction.DrawableFigures.Count == 0) Interaction = null;
+                            if (Interaction.DrawableFigures.Count == 1)
+                            {
+                                if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
+                            }
+
+                            if (Interaction.DrawableFigures.Count == 0)
+                            {
+                                Interaction = null;
+                                if (DragProperty != null) DragProperty(null);
+                            }
                         }
                         else
                         {
@@ -497,14 +489,22 @@ namespace GRPO
                             if (e.Button == MouseButtons.Left)
                             {
                                 Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointB, false);
-                                if (Interaction.DrawableFigures.Count == 0) Interaction = null;
+                                if (Interaction.DrawableFigures.Count == 0)
+                                {
+                                    Interaction = null;
+                                    if (DragProperty != null) DragProperty(null);
+                                }
                                 else if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
                             }
 
                             if (e.Button == MouseButtons.Right)
                             {
                                 Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointB, true);
-                                if (Interaction.DrawableFigures.Count == 0) Interaction = null;
+                                if (Interaction.DrawableFigures.Count == 0)
+                                {
+                                    Interaction = null;
+                                    if (DragProperty != null) DragProperty(null);
+                                }
                                 else if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
                             }
                         }
@@ -586,7 +586,7 @@ namespace GRPO
                     }
 
                     drawables.Add(drawable.Clone());
-                    Interaction.AddDrawableFigure(drawable.Clone());
+                    Interaction.AddDrawableFigure(drawable);
                 }
                 Interaction.Indexes = GetIndexes(drawables, ControlUnit.GraphicsEditor.Drawables);
                 Interaction.GetMaxMinXY();
@@ -603,10 +603,10 @@ namespace GRPO
         /// </summary>
         public void Delete()
         {
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 && Interaction != null)
             {
                 ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures,
-                    GetIndexes(Interaction.DrawableFigures, Drawables));
+                    Interaction.Indexes);
                 Interaction = null;
                 RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
@@ -619,7 +619,7 @@ namespace GRPO
         public void Cut()
         {
             BuferDraw.Clear();
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && Drawables.Count > 0 && Interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 && Interaction != null)
             {
                 foreach (IDrawable drawable in Interaction.DrawableFigures)
                 {
@@ -627,7 +627,7 @@ namespace GRPO
                 }
 
                 ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures,
-                    GetIndexes(Interaction.DrawableFigures, Drawables));
+                    Interaction.Indexes);
                 Interaction = null;
                 RefreshCanvas();
                 if (DragProperty != null) DragProperty(null);
@@ -653,9 +653,9 @@ namespace GRPO
             return indexes;
         }
 
-        /*public void AddFigureInInteractive()
+        public void AddFigureInInteractive()
         {
-
-        }*/
+            Console.WriteLine("Ctrl");
+        }
     }
 }

@@ -214,7 +214,7 @@ namespace GRPO
         {
             if (!DrawableFigures.Contains(drawable))
             {
-                DrawableFigures.Add(drawable);
+                DrawableFigures.Add(drawable.Clone());
                 EnablePoints = false;
             }
         }
