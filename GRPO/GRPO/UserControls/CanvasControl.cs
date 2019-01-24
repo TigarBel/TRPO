@@ -12,7 +12,6 @@ using GRPO.Drawing;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
 using GRPO.Commands;
-using GRPO.InteractionFrame;
 
 namespace GRPO
 {

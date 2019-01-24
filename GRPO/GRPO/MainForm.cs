@@ -44,14 +44,12 @@ namespace GRPO
         /// </summary>
         private void Init()
         {
-
             foreach (Control control in Controls)
             {
                 typeof(Control).InvokeMember("DoubleBuffered",
                     BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                    null, control, new object[] {true});
+                    null, control, new object[] { true });
             }
-
             _canvasControl.SetSizeCanvas(640, 480);
 
             _canvasControl.ControlUnit = new ControlUnit();
