@@ -60,6 +60,8 @@ namespace GRPO
             _canvasControl.DragProperty += _canvasControl_SetProperty;
             this.Size = new Size(1000,600);
             this.FormClosing += MainForm_FormClosing;
+            textBox1.TextChanged += textBox_TextChanged;
+            textBox2.TextChanged += textBox_TextChanged;
         }
         /// <summary>
         /// Событие вызываемое при закрытии формы
@@ -207,10 +209,23 @@ namespace GRPO
         /// <param name="e">Объект события</param>
         private void buttonAcceptSizePictureBox_Click(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1920 &&
-                Convert.ToInt32(textBox2.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1000)
+            if(!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
             {
-                _canvasControl.SetSizeCanvas(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
+                if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1920 &&
+                    Convert.ToInt32(textBox2.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1000)
+                {
+                    _canvasControl.SetSizeCanvas(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
+                }
+            }
+        }
+
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            
+            if (System.Text.RegularExpressions.Regex.IsMatch(((TextBox)sender).Text, "[^0-9]"))
+            {
+                MessageBox.Show("Ввод только числа!");
+                ((TextBox)sender).Text = ((TextBox)sender).Text.Remove(((TextBox)sender).Text.Length - 1);
             }
         }
 
