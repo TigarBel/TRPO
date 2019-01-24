@@ -252,11 +252,16 @@ namespace GRPO
         /// </summary>
         public void ClearCanvas()
         {
-            ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], ControlUnit.GraphicsEditor.Drawables, null);
-            RefreshCanvas();
+            if(ControlUnit.GraphicsEditor.Drawables.Count != 0)
+            {
+                ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], ControlUnit.GraphicsEditor.Drawables, null);
+            }
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
             Interaction = null;
             Drawables.Clear();
+            FlagMouseDown = false;
+            FlagPolyFigure = false;
+            RefreshCanvas();
         }
         /// <summary>
         /// Событие при нажатии на холст
