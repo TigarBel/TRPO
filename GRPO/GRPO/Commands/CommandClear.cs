@@ -8,12 +8,18 @@ using System.Threading.Tasks;
 namespace GRPO.Commands
 {
     /// <summary>
-    /// 
+    /// Класс команд отвечающих за очистку холста
     /// </summary>
     [Serializable]
     class CommandClear : Command
     {
-
+        /// <summary>
+        /// Инициализация класса
+        /// </summary>
+        /// <param name="graphicsEditor">Объект хранения реализации команд</param>
+        /// <param name="keywords">Команда</param>
+        /// <param name="drawables">Список удаляемых фигур</param>
+        /// <param name="indexes">Список индексов удаляемых фигур</param>
         public CommandClear(GraphicsEditor graphicsEditor, string keywords, List<IDrawable> drawables, List<int> indexes)
         {
             GraphicsEditor = graphicsEditor;
@@ -25,26 +31,41 @@ namespace GRPO.Commands
             }
             Indexes = indexes;
         }
-
+        /// <summary>
+        /// Объект хранения реализации команд
+        /// </summary>
         private GraphicsEditor GraphicsEditor { get; set; }
-
+        /// <summary>
+        /// Команда
+        /// </summary>
         private string Keywords { get; set; }
-
+        /// <summary>
+        /// Список удаляемых фигур
+        /// </summary>
         private List<IDrawable> Drawables  { get; set; }
-
+        /// <summary>
+        /// Список индексов удаляемых фигур
+        /// </summary>
         private List<int> Indexes { get; set; }
-
+        /// <summary>
+        /// Исполнить комнаду
+        /// </summary>
         public override void Execute()
         {
             GraphicsEditor.DrawablesCleaer(Keywords, Drawables, Indexes);
         }
-
+        /// <summary>
+        /// Исполнить команду наоборот
+        /// </summary>
         public override void UnExecute()
         {
             GraphicsEditor.DrawablesCleaer(Undo(), Drawables, Indexes);
         }
 
-        // Private helper function : приватные вспомогательные функции
+        /// <summary>
+        /// Выдать обратную команду
+        /// </summary>
+        /// <returns>Обратная команда</returns>
         private string Undo()
         {
             switch (Keywords)

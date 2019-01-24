@@ -41,6 +41,11 @@ namespace GRPO.Commands
             get { return _current; }
         }
 
+        public void CommandsCountDecrement()
+        {//Опасная функция
+            _commands.RemoveAt(_commands.Count - 1);
+        }
+
         public void Redo(int levels)
         {
             Console.WriteLine("levels " + levels + " current " + _current);

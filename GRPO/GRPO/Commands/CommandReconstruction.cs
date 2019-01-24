@@ -14,6 +14,16 @@ namespace GRPO.Commands
     [Serializable]
     class CommandReconstruction : Command
     {
+        /// <summary>
+        /// Иницализация класса
+        /// </summary>
+        /// <param name="graphicsEditor">Объект хранения реализации команд</param>
+        /// <param name="keywords">Команда</param>
+        /// <param name="drawables">Список реконструируемых фигур</param>
+        /// <param name="indexes">Список индексов фигур</param>
+        /// <param name="pointIndex">Индекс изменяемой опорной точки фигуры</param>
+        /// <param name="selectPoint">Выбранная точка</param>
+        /// <param name="newPoint">Новая точка</param>
         public CommandReconstruction(GraphicsEditor graphicsEditor,
             string keywords, List<IDrawable> drawables,List<int>indexes, int pointIndex, Point selectPoint,Point newPoint)
         {
@@ -30,32 +40,52 @@ namespace GRPO.Commands
             SelectPoint = new Point(selectPoint.X, selectPoint.Y);
             NewPoint = new Point(newPoint.X, newPoint.Y);
         }
-
+        /// <summary>
+        /// Объект хранения реализации команд
+        /// </summary>
         private GraphicsEditor GraphicsEditor { get; set; }
-
+        /// <summary>
+        /// Команда
+        /// </summary>
         private string Keywords { get; set; }
-
+        /// <summary>
+        /// Список реконструируемых фигур
+        /// </summary>
         private List<IDrawable> Drawables { get; set; }
-
+        /// <summary>
+        /// Список индексов фигур
+        /// </summary>
         private List<int> Indexes { get; set; }
-
+        /// <summary>
+        /// Индекс изменяемой опорной точки фигуры
+        /// </summary>
         private int PointIndex { get; set; }
-
+        /// <summary>
+        /// Выбранная точка
+        /// </summary>
         private Point SelectPoint { get; set; }
-
+        /// <summary>
+        /// Новая точка
+        /// </summary>
         private Point NewPoint { get; set; }
-
+        /// <summary>
+        /// Исполнить комнаду
+        /// </summary>
         public override void Execute()
         {
             GraphicsEditor.Reconstruct(Keywords, Drawables, Indexes,PointIndex, SelectPoint, NewPoint);
         }
-
+        /// <summary>
+        /// Исполнить команду наоборот
+        /// </summary>
         public override void UnExecute()
         {
             GraphicsEditor.Reconstruct(Undo(), Drawables, Indexes, PointIndex, SelectPoint, NewPoint);
         }
-
-        // Private helper function : приватные вспомогательные функции
+        /// <summary>
+        /// Выдать обратную команду
+        /// </summary>
+        /// <returns>Обратная команда</returns>
         private string Undo()
         {
             switch (Keywords)

@@ -128,15 +128,25 @@ namespace GRPO
             get { return Drawables; }
             set { Drawables = value; }
         }
-
+        /// <summary>
+        /// Минимальное значение по X
+        /// </summary>
         public int MinX { get; set; }
-
+        /// <summary>
+        /// Максимальное значение по X
+        /// </summary>
         public int MaxX { get; set; }
-
+        /// <summary>
+        /// Минимальное значение по Y
+        /// </summary>
         public int MinY { get; set; }
-
+        /// <summary>
+        /// Максимальное значение по Y
+        /// </summary>
         public int MaxY { get; set; }
-
+        /// <summary>
+        /// Обновить габариты интерактива
+        /// </summary>
         public void GetMaxMinXY()
         {
             List<Point> points = new List<Point>();
@@ -153,12 +163,17 @@ namespace GRPO
             MinY = points.Min(point => point.Y) - 5;
             MaxY = points.Max(point => point.Y) + 5;
         }
-
+        /// <summary>
+        /// Список индексов взятых фигур
+        /// </summary>
         public List<int> Indexes
         {
             get { return _indexes; }
             set { _indexes = value; }
         }
+        /// <summary>
+        /// Индекс выбранной опорной точки
+        /// </summary>
         public int IndexSelectPoint
         {
             get { return _indexSelectPoint; }

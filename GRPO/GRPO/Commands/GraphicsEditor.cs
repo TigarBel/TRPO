@@ -173,9 +173,10 @@ namespace GRPO.Commands
         /// <param name="keywords">Команда</param>
         /// <param name="drawables">Список фигур(ы)</param>
         /// <param name="indexes">Список индексов фигур(ы)</param>
+        /// <param name="pointIndex">Индекс изменяемой опорной точки фигуры</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        public void Reconstruct(string keywords, List<IDrawable> drawables, List<int> indexes, int PointIndex, Point selectPoint, Point newPoint)
+        public void Reconstruct(string keywords, List<IDrawable> drawables, List<int> indexes, int pointIndex, Point selectPoint, Point newPoint)
         {
             switch (keywords)
             {
@@ -183,7 +184,7 @@ namespace GRPO.Commands
                     ChangePosition(indexes, selectPoint,newPoint);
                     break;
                 case "Изменить опорную точку":
-                    ChangePoint(indexes, PointIndex, newPoint);
+                    ChangePoint(indexes, pointIndex, newPoint);
                     break;
                 case "Добавить фигуру(ы)":
                     foreach (IDrawable drawable in drawables)
@@ -195,7 +196,7 @@ namespace GRPO.Commands
                     ChangePosition(indexes, newPoint, selectPoint);
                     break;
                 case "Вернуть назад опорную точку":
-                    ChangePoint(indexes, PointIndex, selectPoint);
+                    ChangePoint(indexes, pointIndex, selectPoint);
                     break;
                 case "Убрать фигуру(ы)":
                     indexes.Reverse();
@@ -210,7 +211,12 @@ namespace GRPO.Commands
 
             Console.WriteLine(keywords);
         }
-
+        /// <summary>
+        /// Изменить положение фигур(ы)
+        /// </summary>
+        /// <param name="indexes">Спиксок индексов фигур</param>
+        /// <param name="selectPoint">Начальная точка</param>
+        /// <param name="newPoint">Результирующая точка</param>
         private void ChangePosition(List<int> indexes, Point selectPoint, Point newPoint)
         {
             foreach (int index in indexes)

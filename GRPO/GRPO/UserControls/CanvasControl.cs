@@ -389,7 +389,9 @@ namespace GRPO
                                     drawable.Position.X + _pointB.X - _pointC.X,
                                     drawable.Position.Y + _pointB.Y - _pointC.Y);
                             }
+
                             ControlUnit.Undo(1);
+                            ControlUnit.CommandsCountDecrement();
                             ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                 ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
                             _pointC = new Point(e.X, e.Y);
@@ -413,6 +415,7 @@ namespace GRPO
                                     Interaction.DrawableFigures[0].Position.X + _pointB.X - _pointC.X,
                                     Interaction.DrawableFigures[0].Position.Y + _pointB.Y - _pointC.Y);
                                 ControlUnit.Undo(1);
+                                ControlUnit.CommandsCountDecrement();
                                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                     ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
                                 _pointC = new Point(e.X, e.Y);
@@ -421,6 +424,7 @@ namespace GRPO
                             {
                                 Interaction.ChangePoint(_pointB);
                                 ControlUnit.Undo(1);
+                                ControlUnit.CommandsCountDecrement();
                                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
                                     ControlUnit.GraphicsEditor.Drawables,
                                     Interaction.Indexes,Interaction.IndexSelectPoint, _pointA, _pointB);
@@ -497,6 +501,7 @@ namespace GRPO
                         else
                         {
                             ControlUnit.Undo(1);
+                            ControlUnit.CommandsCountDecrement();
                             if (_pointA.X != _pointB.X && _pointA.Y != _pointB.Y)
                             {
                                 if (!Interaction.EnablePoints)
@@ -539,6 +544,7 @@ namespace GRPO
                         else
                         {
                             ControlUnit.Undo(1);
+                            ControlUnit.CommandsCountDecrement();
                             if (_pointA.X != _pointB.X && _pointA.Y != _pointB.Y)
                             {
                                 if (!Interaction.EnablePoints)
