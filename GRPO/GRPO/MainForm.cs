@@ -55,6 +55,7 @@ namespace GRPO
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
+            this.KeyDown += _canvasControl.AddFigureInInteractive;
             this.Size = new Size(1000,600);
         }
 
@@ -153,6 +154,7 @@ namespace GRPO
             if (e.KeyCode == Keys.Escape)
             {
                 _canvasControl.FlagPolyFigure = false;
+                //_canvasControl.FlagMouseDown = false;
                 _canvasControl.Interaction = null;
                 _canvasControl.RefreshCanvas();
             }
@@ -207,10 +209,6 @@ namespace GRPO
                     else if (e.Control && e.KeyCode == Keys.X)
                     {
                         _canvasControl.Cut();
-                    }
-                    else if (e.Control)
-                    {
-                        _canvasControl.AddFigureInInteractive();
                     }
                 }
             }

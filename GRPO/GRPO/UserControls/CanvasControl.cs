@@ -45,10 +45,12 @@ namespace GRPO
 
         private bool _flagPolyFigure = false;
 
+        private bool _eControl = false;
+
         /// <summary>
         /// Флаг устанавливаемый при зажатии кнопки мыши
         /// </summary>
-        public bool FlagMouseDown { get; private set; }
+        public bool FlagMouseDown { get; set; }
 
         /// <summary>
         /// Флаг при создании полифигур
@@ -658,11 +660,6 @@ namespace GRPO
             }
 
             return indexes;
-        }
-
-        public void AddFigureInInteractive()
-        {
-            Console.WriteLine("Ctrl");
         }
     }
 }
