@@ -55,8 +55,34 @@ namespace GRPO
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
-            this.KeyDown += _canvasControl.AddFigureInInteractive;
             this.Size = new Size(1000,600);
+            this.FormClosing += MainForm_FormClosing;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_canvasControl.ControlUnit.Current != _currentBeginControlUnit)
+            {
+                var dialogResult = MessageBox.Show("Есть несохраненные изменения. Сохранить перед выходом!?",
+                    "Внимание", MessageBoxButtons.YesNoCancel);
+                bool checkedSave = false;
+                switch (dialogResult)
+                {
+                    case DialogResult.Yes: SaveProject();
+                        checkedSave = false;
+                        // еще раз проверка, а то вдруг юзер закрыл окно сохранения
+                        if(_currentBeginControlUnit != _canvasControl.ControlUnit.Current) checkedSave = true;
+                        break;
+                    case DialogResult.Cancel:
+                        checkedSave = true;
+                        break;
+                    default:
+                        checkedSave = false;
+                        break;
+                }
+
+                e.Cancel = checkedSave;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -69,11 +95,31 @@ namespace GRPO
             ShowSaveFileDialog();
         }
 
+        private void SaveProject()
+        {
+            if (_fileNameOpenProject != null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = _fileNameOpenProject;
+                using (var stream = saveFileDialog.OpenFile())
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
+                    binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
+                }
+            }
+            else
+            {
+                ShowSaveFileDialog();
+            }
+        }
+
         private void ShowSaveFileDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "GraphicsPO Project|*.grpo|JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
-            saveFileDialog.Title = "Save an Image File";
+            saveFileDialog.Title = "Сохранение";
+            saveFileDialog.FileName = _canvasControl.ControlUnit.FileName;
             saveFileDialog.ShowDialog();
 
             if (saveFileDialog.FileName != "")
@@ -117,6 +163,7 @@ namespace GRPO
             //mainPictureBox.Image.Save("111lol.jpg");
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "GraphicsPO Project|*.grpo";
+            openFileDialog.Title = "Открытие проекта";
             if (openFileDialog.ShowDialog() != DialogResult.Cancel && openFileDialog.FileName != "")
             {
                 _fileNameOpenProject = openFileDialog.FileName;
@@ -176,21 +223,7 @@ namespace GRPO
                 }
                 else if (e.Control && e.KeyCode == Keys.S)
                 {
-                    if (_fileNameOpenProject != null)
-                    {
-                        SaveFileDialog saveFileDialog = new SaveFileDialog();
-                        saveFileDialog.FileName = _fileNameOpenProject;
-                        using (var stream = saveFileDialog.OpenFile())
-                        {
-                            BinaryFormatter binaryFormatter = new BinaryFormatter();
-                            _canvasControl.ControlUnit.FileName = saveFileDialog.FileName;
-                            binaryFormatter.Serialize(stream, _canvasControl.ControlUnit);
-                        }
-                    }
-                    else
-                    {
-                        ShowSaveFileDialog();
-                    }
+                    SaveProject();
                 }
                 else if (_toolsWithPropertyControl.SelectTool.TypeTools == TypeTools.SelectFigure)
                 {
