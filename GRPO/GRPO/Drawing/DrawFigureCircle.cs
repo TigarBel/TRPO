@@ -16,7 +16,7 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - круг
     /// </summary>
     [Serializable]
-    class DrawFigureCircle : IDrawable, ILinePropertyble, IFillPropertyble
+    public class DrawFigureCircle : IDrawable, ILinePropertyble, IFillPropertyble
     {
         /// <summary>
         /// Объект круга

@@ -11,7 +11,7 @@ namespace GRPO.Figure
     /// Класс фигуры - круг
     /// </summary>
     [Serializable]
-    class FigureCircle : FigureEllipse
+    public class FigureCircle : FigureEllipse
     {
         /// <summary>
         /// Радиус фигуры Окружность

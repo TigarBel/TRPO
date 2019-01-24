@@ -57,6 +57,12 @@
     <Compile Include="Example.cs" />
     <Compile Include="InteractionFrame\Checking.cs" />
     <Compile Include="InteractionFrame\FrameForInteraction.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\DownPointInteraction.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\InteractionPoints.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\LeftPointInteraction.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\PointInteraction.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\RightPointInteraction.cs" />
+    <Compile Include="InteractionFrame\PointInteractions\UpPointInteraction.cs" />
     <Compile Include="UserControls\CanvasControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -85,7 +91,6 @@
     <Compile Include="HistoryManagers\HistoryManager.cs" />
     <Compile Include="HistoryManagers\HistoryManagerCanvasControl.cs" />
     <Compile Include="HistoryManagers\HistoryManagerToolsControl.cs" />
-    <Compile Include="UserControls\CanvasMouseActions\MouseAction.cs" />
     <Compile Include="UserControls\ToolsIncludeButtons\ToolIncludeButton.cs" />
     <Compile Include="UserControls\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
@@ -185,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\polygon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UserControls\CanvasMouseActions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

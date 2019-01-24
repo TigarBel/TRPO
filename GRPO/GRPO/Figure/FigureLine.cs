@@ -11,7 +11,7 @@ namespace GRPO.Figure
     /// Класс фигуры - линия
     /// </summary>
     [Serializable]
-    class FigureLine
+    public class FigureLine
     {
         /// <summary>
         /// Первая точка линии

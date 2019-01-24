@@ -11,7 +11,7 @@ namespace GRPO.Figure
     /// Класс фигуры - эллипс
     /// </summary>
     [Serializable]
-    class FigureEllipse : FigureLine
+    public class FigureEllipse : FigureLine
     {
         /// <summary>
         ///  Пустой класс фигуры Эллипс
