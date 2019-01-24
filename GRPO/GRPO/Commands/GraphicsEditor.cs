@@ -46,39 +46,44 @@ namespace GRPO.Commands
             switch (keywords)
             {
                 case "Создать фигуру":
+                {
+                    switch (tools.DrawingTools)
                     {
-                        switch (tools.DrawingTools)
+                        case DrawingTools.DrawFigureLine:
                         {
-                            case DrawingTools.DrawFigureLine:
-                                {
-                                    _drawablesList.Add(new DrawFigureLine(points[0], points[1], lineProperty));
-                                    break;
-                                }
-                            case DrawingTools.DrawFigurePolyline:
-                                {
-                                    _drawablesList.Add(new DrawFigurePolyline(points, lineProperty));
-                                    break;
-                                }
-                            case DrawingTools.DrawFigureRectangle:
-                                {
-                                    _drawablesList.Add(
-                                        new DrawFigureRectangle(points[0], points[1], lineProperty, fillProperty));
-                                    break;
-                                }
-                            case DrawingTools.DrawFigureCircle:
-                                {
-                                    _drawablesList.Add(new DrawFigureCircle(points[0], points[1], lineProperty, fillProperty));
-                                    break;
-                                }
-                            case DrawingTools.DrawFigureEllipse:
-                                {
-                                    _drawablesList.Add(new DrawFigureEllipse(points[0], points[1], lineProperty, fillProperty));
-                                    break;
-                                }
+                            _drawablesList.Add(new DrawFigureLine(points[0], points[1], lineProperty));
+                            break;
                         }
-
-                        break;
+                        case DrawingTools.DrawFigurePolyline:
+                        {
+                            _drawablesList.Add(new DrawFigurePolyline(points, lineProperty));
+                            break;
+                        }
+                        case DrawingTools.DrawFigurePolygon:
+                        {
+                            _drawablesList.Add(new DrawFigurePolygon(points, lineProperty, fillProperty));
+                            break;
+                        }
+                        case DrawingTools.DrawFigureRectangle:
+                        {
+                            _drawablesList.Add(
+                                new DrawFigureRectangle(points[0], points[1], lineProperty, fillProperty));
+                            break;
+                        }
+                        case DrawingTools.DrawFigureCircle:
+                        {
+                            _drawablesList.Add(new DrawFigureCircle(points[0], points[1], lineProperty, fillProperty));
+                            break;
+                        }
+                        case DrawingTools.DrawFigureEllipse:
+                        {
+                            _drawablesList.Add(new DrawFigureEllipse(points[0], points[1], lineProperty, fillProperty));
+                            break;
+                        }
                     }
+
+                    break;
+                }
                 case "Удалить фигуру":
                     {
                         _drawablesList.Remove(_drawablesList[_drawablesList.Count - 1]);

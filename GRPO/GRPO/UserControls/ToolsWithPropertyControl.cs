@@ -63,51 +63,57 @@ namespace GRPO
             switch (_toolsControl.SelectTool.DrawingTools)
             {
                 case DrawingTools.CursorSelect:
-                    {
-                        _propertyLineControl.Visible = false;
-                        _fillFigureControl.Visible = false;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = false;
+                    _fillFigureControl.Visible = false;
+                    break;
+                }
                 case DrawingTools.MassSelect:
-                    {
-                        _propertyLineControl.Visible = false;
-                        _fillFigureControl.Visible = false;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = false;
+                    _fillFigureControl.Visible = false;
+                    break;
+                }
                 case DrawingTools.DrawFigureLine:
-                    {
-                        _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = false;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = false;
+                    break;
+                }
                 case DrawingTools.DrawFigurePolyline:
-                    {
-                        _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = false;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = false;
+                    break;
+                }
                 case DrawingTools.DrawFigureRectangle:
-                    {
-                        _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = true;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = true;
+                    break;
+                }
                 case DrawingTools.DrawFigureCircle:
-                    {
-                        _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = true;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = true;
+                    break;
+                }
                 case DrawingTools.DrawFigureEllipse:
-                    {
-                        _propertyLineControl.Visible = true;
-                        _fillFigureControl.Visible = true;
-                        break;
-                    }
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = true;
+                    break;
+                }
+                case DrawingTools.DrawFigurePolygon:
+                {
+                    _propertyLineControl.Visible = true;
+                    _fillFigureControl.Visible = true;
+                    break;
+                }
                 default:
-                    {
-                        throw new ArgumentException("Данный инструмент отсутсвует!");
-                    }
+                {
+                    throw new ArgumentException("Данный инструмент отсутсвует!");
+                }
             }
         }
         /// <summary>

@@ -63,11 +63,17 @@ namespace GRPO.Drawing
             switch (selectTool)
             {
                 case DrawingTools.DrawFigurePolyline:
-                    {
-                        DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, lineProperty);
-                        return drawFigure;
-                    }
+                {
+                    DrawFigurePolyline drawFigure = new DrawFigurePolyline(points, lineProperty);
+                    return drawFigure;
+                }
+                case DrawingTools.DrawFigurePolygon:
+                {
+                    DrawFigurePolygon drawFigure = new DrawFigurePolygon(points, lineProperty, fillProperty);
+                    return drawFigure;
+                }
             }
+
             return null;
         }
     }

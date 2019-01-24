@@ -37,6 +37,7 @@ namespace GRPO
         /// Событие при изменении состояния кнопки
         /// </summary>
         public event ButtonStateHandler ButtonClick;
+
         /// <summary>
         /// Конструктор класса пользовательский интерфейс для выбора инструмента
         /// </summary>
@@ -46,14 +47,24 @@ namespace GRPO
 
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
 
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonCursorSelect, DrawingTools.CursorSelect, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonMassSelect, DrawingTools.MassSelect, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureLine, DrawingTools.DrawFigureLine, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolyline, DrawingTools.DrawFigurePolyline, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureRectangle, DrawingTools.DrawFigureRectangle, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureCircle, DrawingTools.DrawFigureCircle, ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureEllips, DrawingTools.DrawFigureEllipse, ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonCursorSelect, DrawingTools.CursorSelect, ref _tools,
+                _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonMassSelect, DrawingTools.MassSelect, ref _tools,
+                _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureLine, DrawingTools.DrawFigureLine, ref _tools,
+                _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolyline, DrawingTools.DrawFigurePolyline,
+                ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureRectangle, DrawingTools.DrawFigureRectangle,
+                ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureCircle, DrawingTools.DrawFigureCircle, ref _tools,
+                _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureEllips, DrawingTools.DrawFigureEllipse,
+                ref _tools, _buttons, RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolygon,DrawingTools.DrawFigurePolygon,
+                ref _tools, _buttons,RefreshSelectTool));
         }
+
         /// <summary>
         /// Выбранный тип класса IDrawable
         /// </summary>

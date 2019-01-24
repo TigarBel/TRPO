@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.buttonFigurePolygon = new System.Windows.Forms.Button();
             this.buttonMassSelect = new System.Windows.Forms.Button();
             this.buttonCursorSelect = new System.Windows.Forms.Button();
             this.buttonFigureEllips = new System.Windows.Forms.Button();
@@ -36,6 +37,16 @@
             this.buttonFigurePolyline = new System.Windows.Forms.Button();
             this.buttonFigureLine = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // buttonFigurePolygon
+            // 
+            this.buttonFigurePolygon.BackColor = System.Drawing.Color.White;
+            this.buttonFigurePolygon.Image = global::GRPO.Properties.Resources.polygon;
+            this.buttonFigurePolygon.Location = new System.Drawing.Point(126, 44);
+            this.buttonFigurePolygon.Name = "buttonFigurePolygon";
+            this.buttonFigurePolygon.Size = new System.Drawing.Size(35, 35);
+            this.buttonFigurePolygon.TabIndex = 8;
+            this.buttonFigurePolygon.UseVisualStyleBackColor = false;
             // 
             // buttonMassSelect
             // 
@@ -111,6 +122,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonFigurePolygon);
             this.Controls.Add(this.buttonMassSelect);
             this.Controls.Add(this.buttonCursorSelect);
             this.Controls.Add(this.buttonFigureEllips);
@@ -133,5 +145,6 @@
         private System.Windows.Forms.Button buttonFigureEllips;
         private System.Windows.Forms.Button buttonCursorSelect;
         private System.Windows.Forms.Button buttonMassSelect;
+        private System.Windows.Forms.Button buttonFigurePolygon;
     }
 }
