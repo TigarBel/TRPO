@@ -12,14 +12,34 @@ using GRPO.Drawing.Property;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Пользовательский элемент инструментов со свойствами отрисовки
+    /// </summary>
     public partial class ToolsWithPropertyControl : UserControl
     {
+        /// <summary>
+        /// Делегат для события изменения элемента
+        /// </summary>
         public delegate void FigurePropertyEventHandler();
+        /// <summary>
+        /// Событие при изменении любого элемента
+        /// </summary>
         public event FigurePropertyEventHandler FigurePropertyChanged;
+        /// <summary>
+        /// Событие при изменении инструмента
+        /// </summary>
         public event FigurePropertyEventHandler ToolsChanged;
+        /// <summary>
+        /// Событие при изменении свойства линии
+        /// </summary>
         public event FigurePropertyEventHandler LinePropertyChanged;
+        /// <summary>
+        /// Событие при изменении заливки
+        /// </summary>
         public event FigurePropertyEventHandler FillPropertyChanged;
-
+        /// <summary>
+        /// Инициализация класса
+        /// </summary>
         public ToolsWithPropertyControl()
         {
             InitializeComponent();
@@ -35,7 +55,9 @@ namespace GRPO
             _toolsControl.ButtonClick += HidingUserControl;
             HidingUserControl();
         }
-
+        /// <summary>
+        /// Процедура исчезновения элемента при изменении инструмента
+        /// </summary>
         public void HidingUserControl()
         {
             switch (_toolsControl.SelectTool.DrawingTools)

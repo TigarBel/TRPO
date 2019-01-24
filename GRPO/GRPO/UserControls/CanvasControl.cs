@@ -21,9 +21,14 @@ namespace GRPO
     /// </summary>
     public partial class CanvasControl : UserControl
     {
-
+        /// <summary>
+        /// Делегат для события собрать
+        /// </summary>
+        /// <param name="drawable">Собираемая фигура</param>
         public delegate void Drag(IDrawable drawable);
-
+        /// <summary>
+        /// Событие собрать свойства
+        /// </summary>
         public event Drag DragProperty;
 
         /// <summary>
@@ -40,12 +45,14 @@ namespace GRPO
         /// Конечная точка / Точка в момент отжатия кнопки мыши
         /// </summary>
         private Point _pointB;
-
+        /// <summary>
+        /// Промежуточная точка, для изменения положения
+        /// </summary>
         private Point _pointC;
-
+        /// <summary>
+        /// Флаг полифигур, для составения полифигур
+        /// </summary>
         private bool _flagPolyFigure = false;
-
-        private bool _eControl = false;
 
         /// <summary>
         /// Флаг устанавливаемый при зажатии кнопки мыши
@@ -105,13 +112,17 @@ namespace GRPO
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
-
+        /// <summary>
+        /// Пользовательский элемнт
+        /// </summary>
         public ControlUnit ControlUnit
         {
             get { return _controlUnit; }
             set { _controlUnit = value; }
         }
-
+        /// <summary>
+        /// Локальный список фигур
+        /// </summary>
         public List<IDrawable> Drawables
         {
             get { return _drawables; }
@@ -234,10 +245,6 @@ namespace GRPO
             if (Interaction != null)
             {
                 if (!FlagMouseDown) Interaction.DrawSelcet(canvas);
-                /*foreach (IDrawable drawable in Interaction.DrawableFigures)
-                {
-                    drawable.Draw(canvas);
-                }*/
             }
         }
 
@@ -252,7 +259,11 @@ namespace GRPO
             Interaction = null;
             Drawables.Clear();
         }
-
+        /// <summary>
+        /// Событие при нажатии на холст
+        /// </summary>
+        /// <param name="sender">объект(холст)</param>
+        /// <param name="e">событие(нажатие кнопки мыши)</param>
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
             FlagMouseDown = true;
@@ -347,7 +358,11 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Событие при движении мыши по холсту
+        /// </summary>
+        /// <param name="sender">объект(холст)</param>
+        /// <param name="e">событие(движение мышью)</param>
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
@@ -429,7 +444,11 @@ namespace GRPO
                 }
             }
         }
-        
+        /// <summary>
+        /// Событие при отжатия кнопки по холсту
+        /// </summary>
+        /// <param name="sender">объект(холст)</param>
+        /// <param name="e">событие(отжатие кнопки мыши)</param>
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
@@ -642,7 +661,12 @@ namespace GRPO
                 if (DragProperty != null) DragProperty(null);
             }
         }
-
+        /// <summary>
+        /// Метод для получения списка индексов фигур
+        /// </summary>
+        /// <param name="localDrawables">Проверяемы список фигур</param>
+        /// <param name="globalDrawables">Глобальный список фигур</param>
+        /// <returns>Список индексов фигур</returns>
         private List<int> GetIndexes(List<IDrawable> localDrawables, List<IDrawable> globalDrawables)
         {
             List<int> indexes = new List<int>();

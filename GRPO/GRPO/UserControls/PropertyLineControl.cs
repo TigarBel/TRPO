@@ -12,14 +12,26 @@ using GRPO.Drawing.Property;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Пользовательский элемент свойства линии
+    /// </summary>
     public partial class PropertyLineControl : UserControl
     {
+        /// <summary>
+        /// Делегат для события по изменению свойств
+        /// </summary>
         public delegate void LinePropertyEventHandler();
+        /// <summary>
+        /// Событие при изменении свойств
+        /// </summary>
         public event LinePropertyEventHandler LinePropertyChanged;
-
+        /// <summary>
+        /// Инциализация класса
+        /// </summary>
         public PropertyLineControl()
         {
             InitializeComponent();
+            LineProperty = new LineProperty();/*добавлено*/
             comboBoxLineType.Items.Add(DashStyle.Solid);
             comboBoxLineType.Items.Add(DashStyle.Dash);
             comboBoxLineType.Items.Add(DashStyle.Dot);
@@ -50,22 +62,38 @@ namespace GRPO
                 comboBoxLineType.SelectedIndex = comboBoxLineType.FindStringExact(value.LineType.ToString());
             }
         }
-
+        /// <summary>
+        /// Событие при нажатии и отпуск на кнопку с черным фоном
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие и отпуск)</param>
         private void buttonBlackColorLine_Click(object sender, EventArgs e)
         {
             buttonSelectColorLine.BackColor = buttonBlackColorLine.BackColor;
         }
-
+        /// <summary>
+        /// Событие при нажатии и отпуск на кнопку с белым фоном
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие и отпуск)</param>
         private void buttonWhiteColorLine_Click(object sender, EventArgs e)
         {
             buttonSelectColorLine.BackColor = buttonWhiteColorLine.BackColor;
         }
-
+        /// <summary>
+        /// Событие при нажатии и отпуск на кнопку с красным фоном
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие и отпуск)</param>
         private void buttonRedColorLine_Click(object sender, EventArgs e)
         {
             buttonSelectColorLine.BackColor = buttonRedColorLine.BackColor;
         }
-
+        /// <summary>
+        /// Событие при нажатии и отпуск на кнопку выбора цвета
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие и отпуск)</param>
         private void buttonColorLine_Click(object sender, EventArgs e)
         {
             ColorDialog MyDialog = new ColorDialog();
@@ -74,17 +102,29 @@ namespace GRPO
                 buttonSelectColorLine.BackColor = MyDialog.Color;
             }
         }
-
+        /// <summary>
+        /// Событие при изменении заднего фона
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(изменение заднего фона)</param>
         private void buttonSelectColorLine_BackColorChanged(object sender, EventArgs e)
         {
             if (LinePropertyChanged != null) LinePropertyChanged();
         }
-
+        /// <summary>
+        /// Событие при изменении значения толщины линии
+        /// </summary>
+        /// <param name="sender">объект(числовой вверх вниз)</param>
+        /// <param name="e">событие(изменение значения)</param>
         private void numericUpDownLineThickness_ValueChanged(object sender, EventArgs e)
         {
             if (LinePropertyChanged != null) LinePropertyChanged();
         }
-
+        /// <summary>
+        /// Событие при изменении значения типа линии
+        /// </summary>
+        /// <param name="sender">объект(коомбинировый элемент)</param>
+        /// <param name="e">событие(изменение значения)</param>
         private void comboBoxLineType_SelectedValueChanged(object sender, EventArgs e)
         {
             if (LinePropertyChanged != null) LinePropertyChanged();

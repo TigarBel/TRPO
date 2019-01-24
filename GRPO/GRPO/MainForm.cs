@@ -17,6 +17,9 @@ using System.Windows.Forms;
 
 namespace GRPO
 {
+    /// <summary>
+    /// Основная форма программы
+    /// </summary>
     public partial class MainForm : System.Windows.Forms.Form
     {
         /// <summary>
@@ -27,7 +30,9 @@ namespace GRPO
         /// Имя проекта
         /// </summary>
         private string _fileNameOpenProject;
-
+        /// <summary>
+        /// Инициализация формы
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -58,7 +63,11 @@ namespace GRPO
             this.Size = new Size(1000,600);
             this.FormClosing += MainForm_FormClosing;
         }
-
+        /// <summary>
+        /// Событие вызываемое при закрытии формы
+        /// </summary>
+        /// <param name="sender">объект(форма)</param>
+        /// <param name="e">событие(закрытие)</param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_canvasControl.ControlUnit.Current != _currentBeginControlUnit)
@@ -84,17 +93,27 @@ namespace GRPO
                 e.Cancel = checkedSave;
             }
         }
-
+        /// <summary>
+        /// Событие при очистке холста
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие)</param>
         private void button1_Click(object sender, EventArgs e)
         {
             _canvasControl.ClearCanvas();
         }
-
+        /// <summary>
+        /// Событие при сохрании проекта/картинки
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие)</param>
         private void button2_Click(object sender, EventArgs e)
         {
             ShowSaveFileDialog();
         }
-
+        /// <summary>
+        /// Функция автоматического сохранения проекта
+        /// </summary>
         private void SaveProject()
         {
             if (_fileNameOpenProject != null)
@@ -113,7 +132,9 @@ namespace GRPO
                 ShowSaveFileDialog();
             }
         }
-
+        /// <summary>
+        /// Функция открытия окна сохранения проекта/картинки
+        /// </summary>
         private void ShowSaveFileDialog()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -157,7 +178,11 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Событие при открытии проекта
+        /// </summary>
+        /// <param name="sender">объект(кнопка)</param>
+        /// <param name="e">событие(нажатие)</param>
         private void button3_Click(object sender, EventArgs e)
         {
             //mainPictureBox.Image.Save("111lol.jpg");
