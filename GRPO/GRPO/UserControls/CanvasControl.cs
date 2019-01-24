@@ -438,9 +438,9 @@ namespace GRPO
                 }
             }
 
-            if (FlagPolyFigure)
+            if (SelectTool.TypeTools == TypeTools.PolyFigure)
             {
-                if (SelectTool.TypeTools == TypeTools.PolyFigure)
+                if (FlagPolyFigure)
                 {
                     List<Point> points = Drawables[Drawables.Count - 1].Points;
                     points.RemoveAt(points.Count - 1);
@@ -474,7 +474,7 @@ namespace GRPO
 
                 if (SelectTool.TypeTools == TypeTools.PolyFigure)
                 {
-                    if (e.Button == MouseButtons.Left)
+                    if (e.Button == MouseButtons.Left && Drawables.Count != 0)
                     {
                         List<Point> points = Drawables[Drawables.Count - 1].Points;
                         points.Add(_pointB);
