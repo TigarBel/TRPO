@@ -9,7 +9,7 @@ namespace GRPO.InteractionFrame.PointInteractions
 {
     public class InteractionPoints
     {
-        InteractionPoints(List<IDrawable> drawables, int radiusPoints)
+        public InteractionPoints(List<IDrawable> drawables, int radiusPoints)
         {
             UpPointInteraction = new UpPointInteraction(drawables, radiusPoints);
             RightPointInteraction = new RightPointInteraction(drawables, radiusPoints);

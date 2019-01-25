@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO
 {
@@ -61,6 +62,7 @@ namespace GRPO
                     MinX = MaxX = MinY = MaxY = 0;
                 }
             }
+            /*InteractionPoints = new InteractionPoints(drawables, _radiusDrawPoint);*/
         }
 
         /// <summary>
@@ -118,6 +120,7 @@ namespace GRPO
             }
 
             EnablePoints = false;
+            /*InteractionPoints = new InteractionPoints(drawables, _radiusDrawPoint);*/
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO.InteractionFrame
 {
@@ -41,6 +42,8 @@ namespace GRPO.InteractionFrame
             get { return _drawables; }
             set { _drawables = value; }
         }
+
+        public InteractionPoints InteractionPoints { get; set; }
 
         /// <summary>
         /// Отрисовка выделения
@@ -114,6 +117,10 @@ namespace GRPO.InteractionFrame
         /// <param name="index">Номер фигуры из списка фигур</param>
         private void DrawPointsSize(PictureBox pictureBox, Point pointA, Point pointB)
         {
+            /*InteractionPoints.UpPointInteraction.PointInteraction.Draw(pictureBox);
+            InteractionPoints.RightPointInteraction.PointInteraction.Draw(pictureBox);
+            InteractionPoints.DownPointInteraction.PointInteraction.Draw(pictureBox);
+            InteractionPoints.LeftPointInteraction.PointInteraction.Draw(pictureBox);*/
             DrawFigureCircle drawFigure = new DrawFigureCircle(
                 new Point(pointA.X + (pointB.X - pointA.X) / 2, pointA.Y),
                 new Point(pointA.X + (pointB.X - pointA.X) / 2 + _radiusDrawPoint,

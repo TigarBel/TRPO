@@ -424,7 +424,7 @@ namespace GRPO
                                     ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
                                 _pointC = new Point(e.X, e.Y);
                             }
-                            else
+                            else if (Interaction.IndexSelectPoint != -1)
                             {
                                 Interaction.ChangePoint(_pointB);
                                 ControlUnit.Undo(1);
@@ -558,7 +558,7 @@ namespace GRPO
                                     Interaction.GetMaxMinXY();
 
                                 }
-                                else
+                                else if (Interaction.IndexSelectPoint != -1)
                                 {
                                     ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
                                         ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes,

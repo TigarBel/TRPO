@@ -31,6 +31,8 @@ namespace GRPO.InteractionFrame
                     return number;
                 }
 
+                Console.WriteLine("point.X: " + point.X + " sizePoint.X: " + sizePoint.X + " point.Y: " + point.Y +
+                                  " sizePoint.Y: " + sizePoint.Y);
                 number++;
             }
 

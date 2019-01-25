@@ -26,6 +26,10 @@ namespace GRPO
         /// </summary>
         public event LinePropertyEventHandler LinePropertyChanged;
         /// <summary>
+        /// Список выбранных цветов
+        /// </summary>
+        private int[] colorInts = new int[16];
+        /// <summary>
         /// Инциализация класса
         /// </summary>
         public PropertyLineControl()
@@ -97,9 +101,12 @@ namespace GRPO
         private void buttonColorLine_Click(object sender, EventArgs e)
         {
             ColorDialog MyDialog = new ColorDialog();
+            MyDialog.CustomColors = colorInts;
+            MyDialog.Color = buttonSelectColorLine.BackColor;
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 buttonSelectColorLine.BackColor = MyDialog.Color;
+                colorInts = MyDialog.CustomColors;
             }
         }
         /// <summary>

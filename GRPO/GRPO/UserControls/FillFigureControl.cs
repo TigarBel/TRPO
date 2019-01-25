@@ -24,6 +24,11 @@ namespace GRPO
         /// События для изменения свойства заливки
         /// </summary>
         public event FillPropertyEventHandler FillPropertyChanged;
+
+        /// <summary>
+        /// Список выбранных цветов
+        /// </summary>
+        private int[] colorInts = new int[16];
         /// <summary>
         /// Инициализация класса
         /// </summary>
@@ -83,9 +88,12 @@ namespace GRPO
         private void buttonColorFill_Click(object sender, EventArgs e)
         {
             ColorDialog MyDialog = new ColorDialog();
+            MyDialog.CustomColors = colorInts;
+            MyDialog.Color = buttonSelectColorFill.BackColor;
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 buttonSelectColorFill.BackColor = MyDialog.Color;
+                colorInts = MyDialog.CustomColors;
             }
         }
         /// <summary>
