@@ -46,9 +46,9 @@
             // 
             fillProperty1.FillColor = System.Drawing.Color.White;
             this._fillFigureControl.FillProperty = fillProperty1;
-            this._fillFigureControl.Location = new System.Drawing.Point(3, 245);
+            this._fillFigureControl.Location = new System.Drawing.Point(3, 185);
             this._fillFigureControl.Name = "_fillFigureControl";
-            this._fillFigureControl.Size = new System.Drawing.Size(182, 81);
+            this._fillFigureControl.Size = new System.Drawing.Size(182, 31);
             this._fillFigureControl.TabIndex = 5;
             this._fillFigureControl.Visible = false;
             // 
@@ -60,7 +60,7 @@
             this._propertyLineControl.LineProperty = lineProperty1;
             this._propertyLineControl.Location = new System.Drawing.Point(3, 93);
             this._propertyLineControl.Name = "_propertyLineControl";
-            this._propertyLineControl.Size = new System.Drawing.Size(190, 146);
+            this._propertyLineControl.Size = new System.Drawing.Size(190, 86);
             this._propertyLineControl.TabIndex = 4;
             // 
             // ToolsWithPropertyControl
@@ -71,7 +71,7 @@
             this.Controls.Add(this._fillFigureControl);
             this.Controls.Add(this._propertyLineControl);
             this.Name = "ToolsWithPropertyControl";
-            this.Size = new System.Drawing.Size(207, 325);
+            this.Size = new System.Drawing.Size(207, 219);
             this.ResumeLayout(false);
 
         }
