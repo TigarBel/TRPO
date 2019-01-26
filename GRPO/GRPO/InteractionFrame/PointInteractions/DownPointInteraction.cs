@@ -10,7 +10,6 @@ namespace GRPO.InteractionFrame.PointInteractions
 {
     public class DownPointInteraction
     {
-
         public DownPointInteraction(List<IDrawable> drawables, int pointRadius)
         {
             List<Point> points = new List<Point>();

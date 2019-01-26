@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace GRPO.Figure
@@ -17,14 +15,17 @@ namespace GRPO.Figure
         /// Первая точка линии
         /// </summary>
         private Point _pointA;
+
         /// <summary>
         /// Вторая точка линии
         /// </summary>
         private Point _pointB;
+
         /// <summary>
         /// Точка расположения
         /// </summary>
         private Point _position;
+
         /// <summary>
         /// Изменение параметров: расположения, ширины и высоты фигуры
         /// </summary>
@@ -36,6 +37,7 @@ namespace GRPO.Figure
             _position.X = points.Min(point => point.X);
             _position.Y = points.Min(point => point.Y);
         }
+
         /// <summary>
         /// Пустой класс фигуры Линия
         /// </summary>
@@ -47,6 +49,7 @@ namespace GRPO.Figure
             PointA = new Point(Position.X, Position.Y);
             PointB = new Point(Position.X + Width, Position.Y + Height);
         }
+
         /// <summary>
         /// Класс фигуры Линия
         /// </summary>
@@ -58,6 +61,7 @@ namespace GRPO.Figure
             PointB = b;
             Init();
         }
+
         /// <summary>
         /// Первая точка линии
         /// </summary>
@@ -70,6 +74,7 @@ namespace GRPO.Figure
                 Init();
             }
         }
+
         /// <summary>
         /// Вторая точка линии
         /// </summary>
@@ -82,6 +87,7 @@ namespace GRPO.Figure
                 Init();
             }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
@@ -95,6 +101,7 @@ namespace GRPO.Figure
                 Init();
             }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
@@ -107,8 +114,12 @@ namespace GRPO.Figure
                 {
                     if (Width != 0)
                     {
-                        PointA = new Point(Position.X + Convert.ToInt32((float)(PointA.X - Position.X) / (float)Width * (float)value), PointA.Y);
-                        PointB = new Point(Position.X + Convert.ToInt32((float)(PointB.X - Position.X) / (float)Width * (float)value), PointB.Y);
+                        PointA = new Point(
+                            Position.X +
+                            Convert.ToInt32((float) (PointA.X - Position.X) / (float) Width * (float) value), PointA.Y);
+                        PointB = new Point(
+                            Position.X +
+                            Convert.ToInt32((float) (PointB.X - Position.X) / (float) Width * (float) value), PointB.Y);
                     }
                     else
                     {
@@ -117,6 +128,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
@@ -129,8 +141,12 @@ namespace GRPO.Figure
                 {
                     if (Height != 0)
                     {
-                        PointA = new Point(PointA.X, Position.Y + Convert.ToInt32((float)(PointA.Y - Position.Y) / (float)Height * (float)value));
-                        PointB = new Point(PointB.X, Position.Y + Convert.ToInt32((float)(PointB.Y - Position.Y) / (float)Height * (float)value));
+                        PointA = new Point(PointA.X,
+                            Position.Y +
+                            Convert.ToInt32((float) (PointA.Y - Position.Y) / (float) Height * (float) value));
+                        PointB = new Point(PointB.X,
+                            Position.Y +
+                            Convert.ToInt32((float) (PointB.Y - Position.Y) / (float) Height * (float) value));
                     }
                     else
                     {
@@ -139,6 +155,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Список точек описывающих линию
         /// </summary>
@@ -160,12 +177,18 @@ namespace GRPO.Figure
                         PointA = value[0];
                         PointB = value[1];
                     }
-                    else if (PointA != value[0]) PointA = value[0];
-                    else if (PointB != value[1]) PointB = value[1];
+                    else if (PointA != value[0])
+                    {
+                        PointA = value[0];
+                    }
+                    else if (PointB != value[1])
+                    {
+                        PointB = value[1];
+                    }
                 }
                 else
                 {
-                    throw new ArgumentException("Линия описывает строго 2 точки!");
+                    throw new ArgumentException(  this.GetType().ToString() + " описывает строго 2 точки!");
                 }
             }
         }

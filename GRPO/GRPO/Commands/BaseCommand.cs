@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
@@ -10,12 +6,13 @@ namespace GRPO.Commands
     /// Класс команды
     /// </summary>
     [Serializable]
-    abstract class Command
+    abstract internal class BaseCommand
     {
         /// <summary>
         /// Использовать команду
         /// </summary>
         public abstract void Execute();
+
         /// <summary>
         /// Отменить команду
         /// </summary>

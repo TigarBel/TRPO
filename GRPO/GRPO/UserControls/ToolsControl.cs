@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using GRPO.Drawing;
 using GRPO.UserControls.ToolsIncludeButtons;
@@ -21,18 +14,22 @@ namespace GRPO
         /// Объект инструмента
         /// </summary>
         private Tools _tools = new Tools();
+
         /// <summary>
         /// Списко объектов инструментов в кнопках
         /// </summary>
         private List<ToolIncludeButton> _toolIncludeButtons = new List<ToolIncludeButton>();
+
         /// <summary>
         /// Список кнопок
         /// </summary>
         private List<Button> _buttons = new List<Button>();
+
         /// <summary>
         /// Делегат для события изменения состояния кнопка
         /// </summary>
         public delegate void ButtonStateHandler();
+
         /// <summary>
         /// Событие при изменении состояния кнопки
         /// </summary>
@@ -61,8 +58,8 @@ namespace GRPO
                 _buttons, RefreshSelectTool));
             _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigureEllips, DrawingTools.DrawFigureEllipse,
                 ref _tools, _buttons, RefreshSelectTool));
-            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolygon,DrawingTools.DrawFigurePolygon,
-                ref _tools, _buttons,RefreshSelectTool));
+            _toolIncludeButtons.Add(new ToolIncludeButton(buttonFigurePolygon, DrawingTools.DrawFigurePolygon,
+                ref _tools, _buttons, RefreshSelectTool));
         }
 
         /// <summary>
@@ -70,23 +67,24 @@ namespace GRPO
         /// </summary>
         public Tools SelectTool
         {
-            get
-            {
-                return _tools;
-            }
+            get { return _tools; }
             set
             {
                 _tools = value;
                 if (ButtonClick != null) ButtonClick();
-                foreach(ToolIncludeButton toolIncludeButton in _toolIncludeButtons)
+                foreach (ToolIncludeButton toolIncludeButton in _toolIncludeButtons)
                 {
                     toolIncludeButton.PaintOver();
                 }
             }
         }
+
         /// <summary>
         /// Процедура для события, при изменении ссылки
         /// </summary>
-        private void RefreshSelectTool() { SelectTool = SelectTool; }
+        private void RefreshSelectTool()
+        {
+            SelectTool = SelectTool;
+        }
     }
 }

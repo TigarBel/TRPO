@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GRPO.UserControls.ToolsIncludeButtons
@@ -18,14 +15,17 @@ namespace GRPO.UserControls.ToolsIncludeButtons
         /// Делегат для события вызывающегося при изменении ссылки
         /// </summary>
         public delegate void ToolsHandler();
+
         /// <summary>
         /// События при изменении ссылки на объект инструмента
         /// </summary>
         public event ToolsHandler ToolsChanged;
+
         /// <summary>
         /// Ссылка на изменяемы инструмент
         /// </summary>
         Tools _tools;
+
         /// <summary>
         /// Конструктор кнопки со встроенным инструментом
         /// </summary>
@@ -34,7 +34,8 @@ namespace GRPO.UserControls.ToolsIncludeButtons
         /// <param name="tools">Ссылка на изменяемы инструмент</param>
         /// <param name="buttons">Список кнопок</param>
         /// <param name="toolsHandler">Событие при изменении содержания в ссылке</param>
-        public ToolIncludeButton(Button button, DrawingTools drawingTools, ref Tools tools, List<Button> buttons, ToolsHandler toolsHandler)
+        public ToolIncludeButton(Button button, DrawingTools drawingTools, ref Tools tools, List<Button> buttons,
+            ToolsHandler toolsHandler)
         {
             Button = button;
             Button.Click += buttonIncludeTool;
@@ -44,18 +45,22 @@ namespace GRPO.UserControls.ToolsIncludeButtons
             Buttons.Add(Button);
             ToolsChanged += toolsHandler;
         }
+
         /// <summary>
         /// Заданная кнопка
         /// </summary>
         private Button Button { get; set; }
+
         /// <summary>
         /// Заданный инструмент
         /// </summary>
         private DrawingTools DrawingTools { get; set; }
+
         /// <summary>
         /// Список закрашиваемых кнопок
         /// </summary>
         private List<Button> Buttons { get; set; }
+
         /// <summary>
         /// Событие при нажатии выбранной кнопки
         /// </summary>
@@ -66,8 +71,9 @@ namespace GRPO.UserControls.ToolsIncludeButtons
             AllButtonBackColorWhite();
             _tools.DrawingTools = DrawingTools;
             //((Button)sender).BackColor = Color.Black;
-            if (ToolsChanged != null) ToolsChanged();
+            ToolsChanged?.Invoke();
         }
+
         /// <summary>
         /// Метод по закрашиванию кнопок в белый цвет
         /// </summary>
@@ -81,8 +87,9 @@ namespace GRPO.UserControls.ToolsIncludeButtons
                 }
             }
         }
+
         /// <summary>
-        /// Залипание кнопки
+        /// Закрашивание кнопки
         /// </summary>
         public void PaintOver()
         {

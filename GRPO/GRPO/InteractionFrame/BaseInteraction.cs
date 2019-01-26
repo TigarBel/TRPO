@@ -6,10 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO.InteractionFrame
 {
@@ -17,7 +14,7 @@ namespace GRPO.InteractionFrame
     /// Класс отрисовки рамок для класса интерактив
     /// </summary>
     [Serializable]
-    public abstract class FrameForInteraction
+    public abstract class BaseInteraction
     {
         /// <summary>
         /// Рисуемые объекты
@@ -43,7 +40,7 @@ namespace GRPO.InteractionFrame
             set { _drawables = value; }
         }
 
-        public InteractionPoints InteractionPoints { get; set; }
+        //public InteractionPoints InteractionPoints { get; set; }
 
         /// <summary>
         /// Отрисовка выделения

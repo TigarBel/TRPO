@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GRPO.Drawing.Interface;
 
 namespace GRPO.Commands
@@ -12,7 +9,7 @@ namespace GRPO.Commands
     /// Класс команды реконструирования фигуры
     /// </summary>
     [Serializable]
-    class CommandReconstruction : Command
+    internal class Reconstruction : BaseCommand
     {
         /// <summary>
         /// Иницализация класса
@@ -24,8 +21,9 @@ namespace GRPO.Commands
         /// <param name="pointIndex">Индекс изменяемой опорной точки фигуры</param>
         /// <param name="selectPoint">Выбранная точка</param>
         /// <param name="newPoint">Новая точка</param>
-        public CommandReconstruction(GraphicsEditor graphicsEditor,
-            string keywords, List<IDrawable> drawables,List<int>indexes, int pointIndex, Point selectPoint,Point newPoint)
+        public Reconstruction(GraphicsEditor graphicsEditor,
+            string keywords, List<IDrawable> drawables, List<int> indexes, int pointIndex, Point selectPoint,
+            Point newPoint)
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
@@ -40,41 +38,50 @@ namespace GRPO.Commands
             SelectPoint = new Point(selectPoint.X, selectPoint.Y);
             NewPoint = new Point(newPoint.X, newPoint.Y);
         }
+
         /// <summary>
         /// Объект хранения реализации команд
         /// </summary>
         private GraphicsEditor GraphicsEditor { get; set; }
+
         /// <summary>
         /// Команда
         /// </summary>
         private string Keywords { get; set; }
+
         /// <summary>
         /// Список реконструируемых фигур
         /// </summary>
         private List<IDrawable> Drawables { get; set; }
+
         /// <summary>
         /// Список индексов фигур
         /// </summary>
         private List<int> Indexes { get; set; }
+
         /// <summary>
         /// Индекс изменяемой опорной точки фигуры
         /// </summary>
         private int PointIndex { get; set; }
+
         /// <summary>
         /// Выбранная точка
         /// </summary>
         private Point SelectPoint { get; set; }
+
         /// <summary>
         /// Новая точка
         /// </summary>
         private Point NewPoint { get; set; }
+
         /// <summary>
         /// Исполнить комнаду
         /// </summary>
         public override void Execute()
         {
-            GraphicsEditor.Reconstruct(Keywords, Drawables, Indexes,PointIndex, SelectPoint, NewPoint);
+            GraphicsEditor.Reconstruct(Keywords, Drawables, Indexes, PointIndex, SelectPoint, NewPoint);
         }
+
         /// <summary>
         /// Исполнить команду наоборот
         /// </summary>
@@ -82,6 +89,7 @@ namespace GRPO.Commands
         {
             GraphicsEditor.Reconstruct(Undo(), Drawables, Indexes, PointIndex, SelectPoint, NewPoint);
         }
+
         /// <summary>
         /// Выдать обратную команду
         /// </summary>
@@ -90,10 +98,14 @@ namespace GRPO.Commands
         {
             switch (Keywords)
             {
-                case "Изменить положение фигур(ы)": return "Вернуть положение фигур(ы)";
-                case "Изменить опорную точку": return "Вернуть назад опорную точку";
-                case "Добавить фигуру(ы)": return "Убрать фигуру(ы)";
+                case "Изменить положение фигур(ы)":
+                    return "Вернуть положение фигур(ы)";
+                case "Изменить опорную точку":
+                    return "Вернуть назад опорную точку";
+                case "Добавить фигуру(ы)":
+                    return "Убрать фигуру(ы)";
             }
+
             return null;
         }
     }

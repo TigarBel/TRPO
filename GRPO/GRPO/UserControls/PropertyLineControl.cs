@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using GRPO.Drawing.Property;
@@ -21,21 +14,24 @@ namespace GRPO
         /// Делегат для события по изменению свойств
         /// </summary>
         public delegate void LinePropertyEventHandler();
+
         /// <summary>
         /// Событие при изменении свойств
         /// </summary>
         public event LinePropertyEventHandler LinePropertyChanged;
+
         /// <summary>
         /// Список выбранных цветов
         /// </summary>
         private int[] colorInts = new int[16];
+
         /// <summary>
         /// Инциализация класса
         /// </summary>
         public PropertyLineControl()
         {
             InitializeComponent();
-            LineProperty = new LineProperty();/*добавлено*/
+            LineProperty = new LineProperty(); /*добавлено*/
             comboBoxLineType.Items.Add(DashStyle.Solid);
             comboBoxLineType.Items.Add(DashStyle.Dash);
             comboBoxLineType.Items.Add(DashStyle.Dot);
@@ -47,6 +43,7 @@ namespace GRPO
             numericUpDownLineThickness.ValueChanged += numericUpDownLineThickness_ValueChanged;
             comboBoxLineType.SelectedValueChanged += comboBoxLineType_SelectedValueChanged;
         }
+
         /// <summary>
         /// Свойство линии
         /// </summary>
@@ -55,50 +52,23 @@ namespace GRPO
             get
             {
                 return new LineProperty(
-                    (float)numericUpDownLineThickness.Value,
+                    (float) numericUpDownLineThickness.Value,
                     buttonSelectColorLine.BackColor,
-                    (DashStyle)comboBoxLineType.Items[comboBoxLineType.SelectedIndex]);
+                    (DashStyle) comboBoxLineType.Items[comboBoxLineType.SelectedIndex]);
             }
             set
             {
-                numericUpDownLineThickness.Value = (decimal)value.LineThickness;
+                numericUpDownLineThickness.Value = (decimal) value.LineThickness;
                 buttonSelectColorLine.BackColor = value.LineColor;
                 comboBoxLineType.SelectedIndex = comboBoxLineType.FindStringExact(value.LineType.ToString());
             }
         }
         /// <summary>
-        /// Событие при нажатии и отпуск на кнопку с черным фоном
+        /// Событие при нажатии кнопки выбора цвета
         /// </summary>
         /// <param name="sender">объект(кнопка)</param>
-        /// <param name="e">событие(нажатие и отпуск)</param>
-        private void buttonBlackColorLine_Click(object sender, EventArgs e)
-        {
-            buttonSelectColorLine.BackColor = buttonBlackColorLine.BackColor;
-        }
-        /// <summary>
-        /// Событие при нажатии и отпуск на кнопку с белым фоном
-        /// </summary>
-        /// <param name="sender">объект(кнопка)</param>
-        /// <param name="e">событие(нажатие и отпуск)</param>
-        private void buttonWhiteColorLine_Click(object sender, EventArgs e)
-        {
-            buttonSelectColorLine.BackColor = buttonWhiteColorLine.BackColor;
-        }
-        /// <summary>
-        /// Событие при нажатии и отпуск на кнопку с красным фоном
-        /// </summary>
-        /// <param name="sender">объект(кнопка)</param>
-        /// <param name="e">событие(нажатие и отпуск)</param>
-        private void buttonRedColorLine_Click(object sender, EventArgs e)
-        {
-            buttonSelectColorLine.BackColor = buttonRedColorLine.BackColor;
-        }
-        /// <summary>
-        /// Событие при нажатии и отпуск на кнопку выбора цвета
-        /// </summary>
-        /// <param name="sender">объект(кнопка)</param>
-        /// <param name="e">событие(нажатие и отпуск)</param>
-        private void buttonColorLine_Click(object sender, EventArgs e)
+        /// <param name="e">событие(нажатие)</param>
+        private void buttonSelectColorLine_Click(object sender, EventArgs e)
         {
             ColorDialog MyDialog = new ColorDialog();
             MyDialog.CustomColors = colorInts;
@@ -109,6 +79,7 @@ namespace GRPO
                 colorInts = MyDialog.CustomColors;
             }
         }
+
         /// <summary>
         /// Событие при изменении заднего фона
         /// </summary>
@@ -118,6 +89,7 @@ namespace GRPO
         {
             if (LinePropertyChanged != null) LinePropertyChanged();
         }
+
         /// <summary>
         /// Событие при изменении значения толщины линии
         /// </summary>
@@ -127,6 +99,7 @@ namespace GRPO
         {
             if (LinePropertyChanged != null) LinePropertyChanged();
         }
+
         /// <summary>
         /// Событие при изменении значения типа линии
         /// </summary>

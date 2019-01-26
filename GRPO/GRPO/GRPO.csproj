@@ -35,28 +35,25 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\CommandClear.cs" />
-    <Compile Include="Commands\CommandReconstruction.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\Clear.cs" />
+    <Compile Include="Commands\Reconstruction.cs" />
     <Compile Include="Commands\ControlUnit.cs" />
-    <Compile Include="Commands\CommandDrawing.cs" />
+    <Compile Include="Commands\Drawing.cs" />
     <Compile Include="Commands\GraphicsEditor.cs" />
-    <Compile Include="Commands\CommandPropertyChanger.cs" />
+    <Compile Include="Commands\PropertyChanger.cs" />
+    <Compile Include="Drawing\EnumDrawingTools.cs" />
+    <Compile Include="Drawing\EnumTypeTools.cs" />
     <Compile Include="Drawing\FactoryDrawFigure.cs" />
     <Compile Include="Example.cs" />
     <Compile Include="InteractionFrame\Checking.cs" />
-    <Compile Include="InteractionFrame\FrameForInteraction.cs" />
+    <Compile Include="InteractionFrame\BaseInteraction.cs" />
     <Compile Include="InteractionFrame\PointInteractions\DownPointInteraction.cs" />
     <Compile Include="InteractionFrame\PointInteractions\InteractionPoints.cs" />
     <Compile Include="InteractionFrame\PointInteractions\LeftPointInteraction.cs" />
@@ -78,19 +75,16 @@
     <Compile Include="Drawing\Property\LineProperty.cs" />
     <Compile Include="Drawing\Property\FillProperty.cs" />
     <Compile Include="Figure\FigureRectangle.cs" />
-    <Compile Include="Figure\Figure.cs" />
+    <Compile Include="Figure\BaseFigure.cs" />
     <Compile Include="Figure\FigureCircle.cs" />
     <Compile Include="Figure\FigureEllipse.cs" />
     <Compile Include="Figure\FigureLine.cs" />
     <Compile Include="Figure\FigurePolygon.cs" />
     <Compile Include="Figure\FigurePolyline.cs" />
-    <Compile Include="Drawing\Interface\IFillPropertyble.cs" />
-    <Compile Include="Drawing\Interface\ILinePropertyble.cs" />
+    <Compile Include="Drawing\Interface\IFillProperty.cs" />
+    <Compile Include="Drawing\Interface\ILineProperty.cs" />
     <Compile Include="Interaction\Interaction.cs" />
     <Compile Include="Drawing\Tools.cs" />
-    <Compile Include="HistoryManagers\HistoryManager.cs" />
-    <Compile Include="HistoryManagers\HistoryManagerCanvasControl.cs" />
-    <Compile Include="HistoryManagers\HistoryManagerToolsControl.cs" />
     <Compile Include="UserControls\ToolsIncludeButtons\ToolIncludeButton.cs" />
     <Compile Include="UserControls\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>

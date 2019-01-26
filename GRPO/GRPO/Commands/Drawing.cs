@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GRPO.Drawing;
 
 namespace GRPO.Commands
@@ -13,7 +10,7 @@ namespace GRPO.Commands
     /// Класс команды создания фигуры
     /// </summary>
     [Serializable]
-    class CommandDrawing : Command
+    internal class Drawing : BaseCommand
     {
         /// <summary>
         /// Инициализация класса
@@ -24,7 +21,7 @@ namespace GRPO.Commands
         /// <param name="points">Список точек образующих фигуру</param>
         /// <param name="lineProperty">Свойство линии фигуры</param>
         /// <param name="fillProperty">Свойство заливки фигуры</param>
-        public CommandDrawing(GraphicsEditor graphicsEditor,
+        public Drawing(GraphicsEditor graphicsEditor,
             string keywords, Tools tools, List<Point> points, LineProperty lineProperty, FillProperty fillProperty)
         {
             GraphicsEditor = graphicsEditor;
@@ -34,30 +31,37 @@ namespace GRPO.Commands
             LineProperty = lineProperty;
             FillProperty = fillProperty;
         }
+
         /// <summary>
         /// Объект хранения реализации команд
         /// </summary>
         private GraphicsEditor GraphicsEditor { get; set; }
+
         /// <summary>
         /// Команда
         /// </summary>
         private string Keywords { get; set; }
+
         /// <summary>
         /// Инструмент рисования
         /// </summary>
         private Tools Tools { get; set; }
+
         /// <summary>
         /// Список точек образующих фигуру
         /// </summary>
         private List<Point> Points { get; set; }
+
         /// <summary>
         /// Свойство линии фигуры
         /// </summary>
         private LineProperty LineProperty { get; set; }
+
         /// <summary>
         /// Свойство заливки фигуры
         /// </summary>
         private FillProperty FillProperty { get; set; }
+
         /// <summary>
         /// Исполнить комнаду
         /// </summary>
@@ -65,6 +69,7 @@ namespace GRPO.Commands
         {
             GraphicsEditor.CreateFigure(Keywords, Tools, Points, LineProperty, FillProperty);
         }
+
         /// <summary>
         /// Исполнить команду наоборот
         /// </summary>
@@ -72,6 +77,7 @@ namespace GRPO.Commands
         {
             GraphicsEditor.CreateFigure(Undo(), Tools, Points, LineProperty, FillProperty);
         }
+
         /// <summary>
         /// Выдать обратную команду
         /// </summary>

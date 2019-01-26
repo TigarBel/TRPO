@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using GRPO.Figure;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
@@ -16,20 +12,23 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - многоугольник
     /// </summary>
     [Serializable]
-    class DrawFigurePolygon : IDrawable, ILinePropertyble, IFillPropertyble
+    public class DrawFigurePolygon : IDrawable, ILineProperty, IFillProperty
     {
         /// <summary>
         /// Объект многоугольника
         /// </summary>
         private FigurePolygon _figurePolygon;
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         private FillProperty _fillProperty;
+
         /// <summary>
         /// Пустой класс Отрисовки многоугольника
         /// </summary>
@@ -39,6 +38,7 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
+
         /// <summary>
         /// Класс Отрисовки многоугольника
         /// </summary>
@@ -51,7 +51,8 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
             FillProperty = new FillProperty(fillProperty.FillColor);
         }
-        /// <summary>
+
+        /*/// <summary>
         /// Класс Отрисовки многоугольника
         /// </summary>
         /// <param name="position">Позиция многоугольника</param>
@@ -67,49 +68,35 @@ namespace GRPO.Drawing
             Polygon = new FigurePolygon(position, width, height, countAngle, phase);
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
             FillProperty = new FillProperty(fillProperty.FillColor);
-        }
+        }*/
+
         /// <summary>
         /// Векторный объект многоугольника
         /// </summary>
         public FigurePolygon Polygon
         {
-            get
-            {
-                return _figurePolygon;
-            }
-            set
-            {
-                _figurePolygon = value;
-            }
+            get { return _figurePolygon; }
+            set { _figurePolygon = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
+            get { return _lineProperty; }
+            set { _lineProperty = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         public FillProperty FillProperty
         {
-            get
-            {
-                return _fillProperty;
-            }
-            set
-            {
-                _fillProperty = value;
-            }
+            get { return _fillProperty; }
+            set { _fillProperty = value; }
         }
+
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
@@ -128,6 +115,7 @@ namespace GRPO.Drawing
                     {
                         graphics.DrawLine(pen, Polygon.Points[i - 1], Polygon.Points[i]);
                     }
+
                     graphics.DrawLine(pen, Polygon.Points[Polygon.Points.Count - 1], Polygon.Points[0]);
                     graphics.Dispose();
                     pictureBox.Invalidate();
@@ -142,6 +130,7 @@ namespace GRPO.Drawing
                 throw new Exception("Не выбран холст!");
             }
         }
+
         /// <summary>
         /// Cписок точек
         /// </summary>
@@ -150,48 +139,34 @@ namespace GRPO.Drawing
             get { return Polygon.Points; }
             set { Polygon.Points = value; }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return Polygon.Position;
-            }
-            set
-            {
-                Polygon.Position = value;
-            }
+            get { return Polygon.Position; }
+            set { Polygon.Position = value; }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Polygon.WidthPolygon;
-            }
-            set
-            {
-                Polygon.WidthPolygon = value;
-            }
+            get { return Polygon.WidthPolygon; }
+            set { Polygon.WidthPolygon = value; }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Polygon.HeightPolygon;
-            }
-            set
-            {
-                Polygon.HeightPolygon = value;
-            }
+            get { return Polygon.HeightPolygon; }
+            set { Polygon.HeightPolygon = value; }
         }
+
         /// <summary>
         /// Клонировать объект
         /// </summary>

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using GRPO.Drawing;
@@ -25,6 +21,7 @@ namespace GRPO
         /// </summary>
         /// <param name="drawable">Собираемая фигура</param>
         public delegate void Drag(IDrawable drawable);
+
         /// <summary>
         /// Событие собрать свойства
         /// </summary>
@@ -44,10 +41,12 @@ namespace GRPO
         /// Конечная точка / Точка в момент отжатия кнопки мыши
         /// </summary>
         private Point _pointB;
+
         /// <summary>
         /// Промежуточная точка, для изменения положения
         /// </summary>
         private Point _pointC;
+
         /// <summary>
         /// Флаг полифигур, для составения полифигур
         /// </summary>
@@ -63,7 +62,7 @@ namespace GRPO
         /// </summary>
         public bool FlagPolyFigure
         {
-            get { return _flagPolyFigure;}
+            get { return _flagPolyFigure; }
             set
             {
                 if (!value)
@@ -111,6 +110,7 @@ namespace GRPO
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
+
         /// <summary>
         /// Пользовательский элемнт
         /// </summary>
@@ -119,6 +119,7 @@ namespace GRPO
             get { return _controlUnit; }
             set { _controlUnit = value; }
         }
+
         /// <summary>
         /// Локальный список фигур
         /// </summary>
@@ -252,10 +253,11 @@ namespace GRPO
         /// </summary>
         public void ClearCanvas()
         {
-            if(ControlUnit.GraphicsEditor.Drawables.Count != 0)
+            if (ControlUnit.GraphicsEditor.Drawables.Count != 0)
             {
                 ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[4], ControlUnit.GraphicsEditor.Drawables, null);
             }
+
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
             Interaction = null;
             Drawables.Clear();
@@ -263,6 +265,7 @@ namespace GRPO
             FlagPolyFigure = false;
             RefreshCanvas();
         }
+
         /// <summary>
         /// Событие при нажатии на холст
         /// </summary>
@@ -275,7 +278,8 @@ namespace GRPO
 
             if (SelectTool.TypeTools == TypeTools.SimpleFigure)
             {
-                Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointA, LineProperty, FillProperty,
+                List<Point> localPoints = new List<Point>() {_pointA, _pointB};
+                Drawables.Add(_factoryDrawFigure.DrawFigure(localPoints, LineProperty, FillProperty,
                     SelectTool.DrawingTools));
             }
 
@@ -298,7 +302,7 @@ namespace GRPO
                     }
                     else
                     {
-                        Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
+                        Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
                             SelectTool.DrawingTools));
                     }
                 }
@@ -307,7 +311,7 @@ namespace GRPO
                 {
                     List<Point> points = new List<Point>()
                         {new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y)};
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
+                    Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
 
                     FlagPolyFigure = true;
@@ -320,7 +324,8 @@ namespace GRPO
                 {
                     if (Interaction != null)
                     {
-                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X || Interaction.MinY > _pointA.Y ||
+                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X ||
+                            Interaction.MinY > _pointA.Y ||
                             Interaction.MaxY < _pointA.Y)
                         {
                             Interaction = null;
@@ -338,7 +343,8 @@ namespace GRPO
                 {
                     if (Interaction != null)
                     {
-                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X || Interaction.MinY > _pointA.Y ||
+                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X ||
+                            Interaction.MinY > _pointA.Y ||
                             Interaction.MaxY < _pointA.Y)
                         {
                             Interaction = null;
@@ -362,6 +368,7 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Событие при движении мыши по холсту
         /// </summary>
@@ -377,7 +384,8 @@ namespace GRPO
                 if (SelectTool.TypeTools == TypeTools.SimpleFigure)
                 {
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.SimpleFigure(_pointA, _pointB, LineProperty, FillProperty,
+                    List<Point> localPoints = new List<Point>() { _pointA, _pointB };
+                    Drawables.Add(_factoryDrawFigure.DrawFigure(localPoints, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
                 }
 
@@ -431,7 +439,7 @@ namespace GRPO
                                 ControlUnit.CommandsCountDecrement();
                                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
                                     ControlUnit.GraphicsEditor.Drawables,
-                                    Interaction.Indexes,Interaction.IndexSelectPoint, _pointA, _pointB);
+                                    Interaction.Indexes, Interaction.IndexSelectPoint, _pointA, _pointB);
                             }
                         }
                     }
@@ -447,11 +455,12 @@ namespace GRPO
                     points.Add(_pointB);
 
                     Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
+                    Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
                         SelectTool.DrawingTools));
                 }
             }
         }
+
         /// <summary>
         /// Событие при отжатия кнопки по холсту
         /// </summary>
@@ -479,7 +488,7 @@ namespace GRPO
                         List<Point> points = Drawables[Drawables.Count - 1].Points;
                         points.Add(_pointB);
                         Drawables.RemoveAt(Drawables.Count - 1);
-                        Drawables.Add(_factoryDrawFigure.PolyFigure(points, LineProperty, FillProperty,
+                        Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
                             SelectTool.DrawingTools));
                     }
                 }
@@ -582,7 +591,8 @@ namespace GRPO
         public void Copy()
         {
             BuferDraw.Clear();
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 && Interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 &&
+                Interaction != null)
             {
                 foreach (int index in Interaction.Indexes)
                 {
@@ -626,10 +636,11 @@ namespace GRPO
                     drawables.Add(drawable.Clone());
                     Interaction.AddDrawableFigure(drawable);
                 }
+
                 Interaction.Indexes = GetIndexes(drawables, ControlUnit.GraphicsEditor.Drawables);
                 Interaction.GetMaxMinXY();
                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[8], drawables,
-                    GetIndexes(drawables, ControlUnit.GraphicsEditor.Drawables),0,
+                    GetIndexes(drawables, ControlUnit.GraphicsEditor.Drawables), 0,
                     new Point(), new Point());
 
                 RefreshCanvas();
@@ -641,7 +652,8 @@ namespace GRPO
         /// </summary>
         public void Delete()
         {
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 && Interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 &&
+                Interaction != null)
             {
                 ControlUnit.Clear(ControlUnit.GraphicsEditor.Keywords[5], Interaction.DrawableFigures,
                     Interaction.Indexes);
@@ -657,7 +669,8 @@ namespace GRPO
         public void Cut()
         {
             BuferDraw.Clear();
-            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 && Interaction != null)
+            if (SelectTool.TypeTools == TypeTools.SelectFigure && ControlUnit.GraphicsEditor.Drawables.Count > 0 &&
+                Interaction != null)
             {
                 foreach (IDrawable drawable in Interaction.DrawableFigures)
                 {
@@ -671,6 +684,7 @@ namespace GRPO
                 if (DragProperty != null) DragProperty(null);
             }
         }
+
         /// <summary>
         /// Метод для получения списка индексов фигур
         /// </summary>

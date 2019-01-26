@@ -1,9 +1,6 @@
 ﻿using GRPO.Drawing.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.Commands
 {
@@ -11,7 +8,7 @@ namespace GRPO.Commands
     /// Класс команд отвечающих за очистку холста
     /// </summary>
     [Serializable]
-    class CommandClear : Command
+    internal class Clear : BaseCommand
     {
         /// <summary>
         /// Инициализация класса
@@ -20,7 +17,7 @@ namespace GRPO.Commands
         /// <param name="keywords">Команда</param>
         /// <param name="drawables">Список удаляемых фигур</param>
         /// <param name="indexes">Список индексов удаляемых фигур</param>
-        public CommandClear(GraphicsEditor graphicsEditor, string keywords, List<IDrawable> drawables, List<int> indexes)
+        public Clear(GraphicsEditor graphicsEditor, string keywords, List<IDrawable> drawables, List<int> indexes)
         {
             GraphicsEditor = graphicsEditor;
             Keywords = keywords;
@@ -29,24 +26,30 @@ namespace GRPO.Commands
             {
                 Drawables.Add(drawable.Clone());
             }
+
             Indexes = indexes;
         }
+
         /// <summary>
         /// Объект хранения реализации команд
         /// </summary>
         private GraphicsEditor GraphicsEditor { get; set; }
+
         /// <summary>
         /// Команда
         /// </summary>
         private string Keywords { get; set; }
+
         /// <summary>
         /// Список удаляемых фигур
         /// </summary>
-        private List<IDrawable> Drawables  { get; set; }
+        private List<IDrawable> Drawables { get; set; }
+
         /// <summary>
         /// Список индексов удаляемых фигур
         /// </summary>
         private List<int> Indexes { get; set; }
+
         /// <summary>
         /// Исполнить комнаду
         /// </summary>
@@ -54,6 +57,7 @@ namespace GRPO.Commands
         {
             GraphicsEditor.DrawablesCleaer(Keywords, Drawables, Indexes);
         }
+
         /// <summary>
         /// Исполнить команду наоборот
         /// </summary>
@@ -70,9 +74,12 @@ namespace GRPO.Commands
         {
             switch (Keywords)
             {
-                case "Удалить весь список": return "Восстановить весь список";
-                case "Удалить элемент(ы)": return "Восстановить элемент(ы) списка";
+                case "Удалить весь список":
+                    return "Восстановить весь список";
+                case "Удалить элемент(ы)":
+                    return "Восстановить элемент(ы) списка";
             }
+
             return null;
         }
     }

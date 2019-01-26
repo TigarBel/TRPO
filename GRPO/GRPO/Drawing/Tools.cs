@@ -1,37 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.Drawing
 {
-    /// <summary>
-    /// Набор инструментов для рисования
-    /// </summary>
-    public enum DrawingTools
-    {
-        //Инструменты для выделения фигур
-        CursorSelect = 0,
-        MassSelect,
-        //Инструменты для отрисовки простых фигур
-        DrawFigureLine,
-        DrawFigureRectangle,
-        DrawFigureCircle,
-        DrawFigureEllipse,
-        //Инструменты для полифигур
-        DrawFigurePolyline,
-        DrawFigurePolygon,
-    }
-    /// <summary>
-    /// Типы инструментов
-    /// </summary>
-     public enum TypeTools
-    {
-        SelectFigure = 0,
-        SimpleFigure,
-        PolyFigure,
-    }
     /// <summary>
     /// Класс инструмента(выбор инструмента и его тип)
     /// </summary>
@@ -42,10 +12,12 @@ namespace GRPO.Drawing
         /// Инструмент для рисования
         /// </summary>
         DrawingTools _drawingTools;
+
         /// <summary>
         /// Тип инструмента
         /// </summary>
         TypeTools _typeTools;
+
         /// <summary>
         /// Пустой класс инструмента
         /// </summary>
@@ -53,6 +25,7 @@ namespace GRPO.Drawing
         {
             DrawingTools = DrawingTools.DrawFigureLine;
         }
+
         /// <summary>
         /// Класс инструмента для рисования
         /// </summary>
@@ -61,70 +34,72 @@ namespace GRPO.Drawing
         {
             DrawingTools = drawingTools;
         }
+
         /// <summary>
         /// Инструмент для рисования
         /// </summary>
         public DrawingTools DrawingTools
         {
-            get
-            {
-                return _drawingTools;
-            }
+            get { return _drawingTools; }
             set
             {
                 _drawingTools = value;
-                switch(value)
+                switch (value)
                 {
                     case DrawingTools.CursorSelect:
-                        {
-                            _typeTools = TypeTools.SelectFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SelectFigure;
+                        break;
+                    }
                     case DrawingTools.MassSelect:
-                        {
-                            _typeTools = TypeTools.SelectFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SelectFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigureLine:
-                        {
-                            _typeTools = TypeTools.SimpleFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SimpleFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigureRectangle:
-                        {
-                            _typeTools = TypeTools.SimpleFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SimpleFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigureCircle:
-                        {
-                            _typeTools = TypeTools.SimpleFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SimpleFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigureEllipse:
-                        {
-                            _typeTools = TypeTools.SimpleFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.SimpleFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigurePolyline:
-                        {
-                            _typeTools = TypeTools.PolyFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.PolyFigure;
+                        break;
+                    }
                     case DrawingTools.DrawFigurePolygon:
-                        {
-                            _typeTools = TypeTools.PolyFigure;
-                            break;
-                        }
+                    {
+                        _typeTools = TypeTools.PolyFigure;
+                        break;
+                    }
                     default:
-                        {
-                            throw new ArgumentException("Данный инструмент отсутсвует!");
-                        }
+                    {
+                        throw new ArgumentException("Данный инструмент отсутсвует!");
+                    }
                 }
             }
         }
+
         /// <summary>
         /// Тип инструмента
         /// </summary>
-        public TypeTools TypeTools { get { return _typeTools; } }
+        public TypeTools TypeTools
+        {
+            get { return _typeTools; }
+        }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace GRPO.Figure
@@ -17,13 +14,14 @@ namespace GRPO.Figure
         /// Радиус фигуры Окружность
         /// </summary>
         private int _radius;
+
         /// <summary>
         ///  Пустой класс фигуры Окружность
         /// </summary>
         public FigureCircle()
         {
-
         }
+
         /// <summary>
         /// Класс фигуры Окружность
         /// </summary>
@@ -34,8 +32,9 @@ namespace GRPO.Figure
             Position = new Point(0, 0);
             PointA = pointA;
             PointB = pointB;
-            Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((PointB.X - PointA.X), 2) + Math.Pow((PointB.Y - PointA.Y), 2))));
+            Radius = Pifagor(pointA, pointB);
         }
+
         /// <summary>
         /// Радиус фигуры Окружность
         /// </summary>
@@ -49,38 +48,39 @@ namespace GRPO.Figure
                 _radius = value;
             }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public new int Width
         {
             get { return Radius * 2; }
-            set
-            {
-                if (value > 5)
-                {
-                    PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
-                    PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
-                    Radius = value / 2;
-                }
-            }
+            set { StandUpSize(value); }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public new int Height
         {
             get { return Radius * 2; }
-            set
+            set { StandUpSize(value); }
+        }
+
+        /// <summary>
+        /// Установить значения размера круга
+        /// </summary>
+        /// <param name="value">Подаваемое значение</param>
+        private void StandUpSize(int value)
+        {
+            if (value > 5)
             {
-                if (value > 5)
-                {
-                    PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
-                    PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
-                    Radius = value / 2;
-                }
+                PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+                PointB = new Point(PointA.X + Radius * 2, PointA.Y + Radius * 2);
+                Radius = value / 2;
             }
         }
+
         /// <summary>
         /// Список точек описывающих окружность
         /// </summary>
@@ -104,21 +104,42 @@ namespace GRPO.Figure
                     }
                     else if (PointA != value[0])
                     {
-                        PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
-                        PointB = new Point(value[0].X, value[0].Y);
+                        StandPoint(value[0]);
                     }
                     else if (PointB != value[1])
                     {
-                        PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
-                        PointB = new Point(value[1].X, value[1].Y);
+                        StandPoint(value[1]);
                     }
-                    Radius = Convert.ToInt32(Math.Sqrt(Convert.ToDouble(Math.Pow((PointB.X - PointA.X), 2) + Math.Pow((PointB.Y - PointA.Y), 2))));
+
+                    Radius = Pifagor(PointA, PointB);
                 }
                 else
                 {
                     throw new ArgumentException("Окружность описывает строго 2 точки!");
                 }
             }
+        }
+
+        /// <summary>
+        /// Установить положение точек при изменение точки
+        /// </summary>
+        /// <param name="point">Измененная точка</param>
+        private void StandPoint(Point point)
+        {
+            PointA = new Point(PointA.X + Radius, PointA.Y + Radius);
+            PointB = new Point(point.X, point.Y);
+        }
+
+        /// <summary>
+        /// Нахождение гипатенузы
+        /// </summary>
+        /// <param name="PointA">Начальная точка</param>
+        /// <param name="PointB">Конечная точка</param>
+        /// <returns>Длина гипатенузы</returns>
+        private int Pifagor(Point PointA, Point PointB)
+        {
+            return Convert.ToInt32(
+                Math.Sqrt(Convert.ToDouble(Math.Pow((PointB.X - PointA.X), 2) + Math.Pow((PointB.Y - PointA.Y), 2))));
         }
     }
 }

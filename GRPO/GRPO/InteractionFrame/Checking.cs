@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GRPO.Drawing.Interface;
 
 namespace GRPO.InteractionFrame
@@ -11,7 +7,7 @@ namespace GRPO.InteractionFrame
     /// <summary>
     /// Класс проверяющего
     /// </summary>
-    class Checking
+    public class Checking
     {
         /// <summary>
         /// Получить номер выбранной габаритной точки фигуры
@@ -20,7 +16,7 @@ namespace GRPO.InteractionFrame
         /// <param name="drawable">Проверяемая фигура</param>
         /// <param name="radiusPoint">Радиус точки / Погрешность</param>
         /// <returns>Номер габаритной точки фигуры / (-1) точка не найдена</returns>
-        public int GetNumberPoint(Point point,IDrawable drawable,int radiusPoint)
+        public int GetNumberPoint(Point point, IDrawable drawable, int radiusPoint)
         {
             int number = 0;
             foreach (Point sizePoint in drawable.Points)

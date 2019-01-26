@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using GRPO.Drawing;
 using GRPO.Drawing.Property;
@@ -21,22 +14,27 @@ namespace GRPO
         /// Делегат для события изменения элемента
         /// </summary>
         public delegate void FigurePropertyEventHandler();
+
         /// <summary>
         /// Событие при изменении любого элемента
         /// </summary>
         public event FigurePropertyEventHandler FigurePropertyChanged;
+
         /// <summary>
         /// Событие при изменении инструмента
         /// </summary>
         public event FigurePropertyEventHandler ToolsChanged;
+
         /// <summary>
         /// Событие при изменении свойства линии
         /// </summary>
         public event FigurePropertyEventHandler LinePropertyChanged;
+
         /// <summary>
         /// Событие при изменении заливки
         /// </summary>
         public event FigurePropertyEventHandler FillPropertyChanged;
+
         /// <summary>
         /// Инициализация класса
         /// </summary>
@@ -55,6 +53,7 @@ namespace GRPO
             _toolsControl.ButtonClick += HidingUserControl;
             HidingUserControl();
         }
+
         /// <summary>
         /// Процедура исчезновения элемента при изменении инструмента
         /// </summary>
@@ -116,29 +115,22 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Инструмент для рисования
         /// </summary>
         public Tools SelectTool
         {
-            get
-            {
-                return _toolsControl.SelectTool;
-            }
-            set
-            {
-                _toolsControl.SelectTool = value;
-            }
+            get { return _toolsControl.SelectTool; }
+            set { _toolsControl.SelectTool = value; }
         }
+
         /// <summary>
         /// Свойство линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _propertyLineControl.LineProperty;
-            }
+            get { return _propertyLineControl.LineProperty; }
             set
             {
                 if (value == null)
@@ -152,15 +144,13 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Свойство заливки
         /// </summary>
         public FillProperty FillProperty
         {
-            get
-            {
-                return _fillFigureControl.FillProperty;
-            }
+            get { return _fillFigureControl.FillProperty; }
             set
             {
                 if (value == null)
@@ -174,6 +164,7 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Событие при изменении любого свойства
         /// </summary>
@@ -181,6 +172,7 @@ namespace GRPO
         {
             if (FigurePropertyChanged != null) FigurePropertyChanged();
         }
+
         /// <summary>
         /// Событие при смене инструмента
         /// </summary>
@@ -188,6 +180,7 @@ namespace GRPO
         {
             if (ToolsChanged != null) ToolsChanged();
         }
+
         /// <summary>
         /// Событие при изменении свойства линии
         /// </summary>
@@ -195,6 +188,7 @@ namespace GRPO
         {
             if (LinePropertyChanged != null) LinePropertyChanged();
         }
+
         /// <summary>
         /// Событие при изменении свойства заливки
         /// </summary>

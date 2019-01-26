@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace GRPO.Figure
@@ -11,12 +9,13 @@ namespace GRPO.Figure
     /// Класс фигуры полилиния
     /// </summary>
     [Serializable]
-    class FigurePolyline : Figure
+    public class FigurePolyline : BaseFigure
     {
         /// <summary>
         /// Список точек полилинии
         /// </summary>
         private List<Point> _points;
+
         /// <summary>
         /// Обновить значения для класса Фигура
         /// </summary>
@@ -27,6 +26,7 @@ namespace GRPO.Figure
             Width = Points.Max(point => point.X) - Points.Min(point => point.X);
             Height = Points.Max(point => point.Y) - Points.Min(point => point.Y);
         }
+
         /// <summary>
         /// Пустой класс фигуры Плилиния
         /// </summary>
@@ -38,6 +38,7 @@ namespace GRPO.Figure
             Height = 0;
             Points = new List<Point>();
         }
+
         /// <summary>
         /// Класс фигуры Полилиния
         /// </summary>
@@ -46,6 +47,7 @@ namespace GRPO.Figure
         {
             Points = points;
         }
+
         /// <summary>
         /// Список точек полилинии
         /// </summary>
@@ -68,6 +70,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
@@ -80,10 +83,12 @@ namespace GRPO.Figure
                 {
                     Points[i] = new Point(Points[i].X - (X - value.X), Points[i].Y - (Y - value.Y));
                 }
+
                 X = value.X;
                 Y = value.Y;
             }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
@@ -98,10 +103,9 @@ namespace GRPO.Figure
                     {
                         for (int i = 0; i < Points.Count; i++)
                         {
-                            Points[i] = new Point(X +
-                                Convert.ToInt32((float)(Points[i].X - X) / (float)Width * (float)value),
-                                Points[i].Y);
+                            Points[i] = new Point(StandPoint(X, Points[i].X, Width, value), Points[i].Y);
                         }
+
                         Width = value;
                     }
                     else
@@ -111,6 +115,7 @@ namespace GRPO.Figure
                 }
             }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
@@ -125,9 +130,9 @@ namespace GRPO.Figure
                     {
                         for (int i = 0; i < Points.Count; i++)
                         {
-                            Points[i] = new Point(Points[i].X,
-                                Y + Convert.ToInt32((float)(Points[i].Y - Y) / (float)Height * (float)value));
+                            Points[i] = new Point(Points[i].X, StandPoint(Y, Points[i].Y, Height, value));
                         }
+
                         Height = value;
                     }
                     else
@@ -136,6 +141,20 @@ namespace GRPO.Figure
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Установление точки в соответствии с изменение размера
+        /// </summary>
+        /// <param name="positionValue">Позация фигуры</param>
+        /// <param name="pointValue">Позиция точки</param>
+        /// <param name="sizeValue">Размер фигуры</param>
+        /// <param name="value">Измененный размер фигуры</param>
+        /// <returns></returns>
+        private int StandPoint(int positionValue, int pointValue, int sizeValue, int value)
+        {
+            return positionValue +
+                   Convert.ToInt32(((float) (pointValue - positionValue)) / ((float) sizeValue) * ((float) value));
         }
     }
 }

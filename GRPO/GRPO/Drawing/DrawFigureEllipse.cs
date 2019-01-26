@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using GRPO.Figure;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
@@ -16,20 +12,23 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - эллипс
     /// </summary>
     [Serializable]
-    class DrawFigureEllipse : IDrawable, ILinePropertyble, IFillPropertyble
+    public class DrawFigureEllipse : IDrawable, ILineProperty, IFillProperty
     {
         /// <summary>
         /// Объект эллипса
         /// </summary>
         private FigureEllipse _figureEllipse;
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         private FillProperty _fillProperty;
+
         /// <summary>
         /// Пустой класс Отрисовки эллипса
         /// </summary>
@@ -39,6 +38,7 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
+
         /// <summary>
         /// Класс Отрисовки эллипса
         /// </summary>
@@ -52,48 +52,34 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
             FillProperty = new FillProperty(fillProperty.FillColor);
         }
+
         /// <summary>
         /// Векторный объект эллипса
         /// </summary>
         public FigureEllipse Ellipse
         {
-            get
-            {
-                return _figureEllipse;
-            }
-            set
-            {
-                _figureEllipse = value;
-            }
+            get { return _figureEllipse; }
+            set { _figureEllipse = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
+            get { return _lineProperty; }
+            set { _lineProperty = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         public FillProperty FillProperty
         {
-            get
-            {
-                return _fillProperty;
-            }
-            set
-            {
-                _fillProperty = value;
-            }
+            get { return _fillProperty; }
+            set { _fillProperty = value; }
         }
+
         /// <summary>
         /// Отрисовка последнюю часть многоугольника
         /// </summary>
@@ -105,9 +91,10 @@ namespace GRPO.Drawing
                 Graphics graphics = Graphics.FromImage(pictureBox.Image);
                 Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                 pen.DashStyle = LineProperty.LineType;
-                graphics.FillEllipse(new SolidBrush(FillProperty.FillColor), 
-                    Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
-                graphics.DrawEllipse(pen, Ellipse.Position.X, Ellipse.Position.Y, Ellipse.WidthEllipse, Ellipse.HeightEllipse);
+                graphics.FillEllipse(new SolidBrush(FillProperty.FillColor),
+                    Ellipse.Position.X, Ellipse.Position.Y, Ellipse.Width, Ellipse.Height);
+                graphics.DrawEllipse(pen, Ellipse.Position.X, Ellipse.Position.Y, Ellipse.Width,
+                    Ellipse.Height);
                 graphics.Dispose();
                 pictureBox.Invalidate();
             }
@@ -116,6 +103,7 @@ namespace GRPO.Drawing
                 throw new Exception("Не выбран холст!");
             }
         }
+
         /// <summary>
         /// Cписок точек
         /// </summary>
@@ -124,48 +112,34 @@ namespace GRPO.Drawing
             get { return Ellipse.Points; }
             set { Ellipse.Points = value; }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return Ellipse.Position;
-            }
-            set
-            {
-                Ellipse.Position = value;
-            }
+            get { return Ellipse.Position; }
+            set { Ellipse.Position = value; }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Ellipse.WidthEllipse;
-            }
-            set
-            {
-                Ellipse.WidthEllipse = value;
-            }
+            get { return Ellipse.Width; }
+            set { Ellipse.Width = value; }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Ellipse.HeightEllipse;
-            }
-            set
-            {
-                Ellipse.HeightEllipse = value;
-            }
+            get { return Ellipse.Height; }
+            set { Ellipse.Height = value; }
         }
+
         /// <summary>
         /// Клонировать объект
         /// </summary>
@@ -173,7 +147,7 @@ namespace GRPO.Drawing
         public IDrawable Clone()
         {
             return new DrawFigureEllipse(new Point(Ellipse.Position.X, Ellipse.Position.Y),
-                new Point(Ellipse.Position.X + Ellipse.WidthEllipse, Ellipse.Position.Y + Ellipse.HeightEllipse),
+                new Point(Ellipse.Position.X + Ellipse.Width, Ellipse.Position.Y + Ellipse.Height),
                 new LineProperty(LineProperty.LineThickness, LineProperty.LineColor, LineProperty.LineType),
                 new FillProperty(FillProperty.FillColor));
         }

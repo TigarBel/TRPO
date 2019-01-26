@@ -1,18 +1,10 @@
 ﻿using GRPO.Commands;
 using GRPO.Drawing;
 using GRPO.Drawing.Interface;
-using GRPO.Drawing.Property;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GRPO
@@ -26,10 +18,12 @@ namespace GRPO
         /// Количество команд при загрузки проекта
         /// </summary>
         private int _currentBeginControlUnit = 0;
+
         /// <summary>
         /// Имя проекта
         /// </summary>
         private string _fileNameOpenProject;
+
         /// <summary>
         /// Инициализация формы
         /// </summary>
@@ -48,21 +42,23 @@ namespace GRPO
             {
                 typeof(Control).InvokeMember("DoubleBuffered",
                     BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                    null, control, new object[] { true });
+                    null, control, new object[] {true});
             }
+
             _canvasControl.SetSizeCanvas(640, 480);
 
             _canvasControl.ControlUnit = new ControlUnit();
-            
+
             _toolsWithPropertyControl.ToolsChanged += _toolsWithPropertyControl_ToolsChanged;
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
             _canvasControl.DragProperty += _canvasControl_SetProperty;
-            this.Size = new Size(1000,600);
+            this.Size = new Size(1000, 600);
             this.FormClosing += MainForm_FormClosing;
             textBox1.TextChanged += textBox_TextChanged;
             textBox2.TextChanged += textBox_TextChanged;
         }
+
         /// <summary>
         /// Событие вызываемое при закрытии формы
         /// </summary>
@@ -77,10 +73,11 @@ namespace GRPO
                 bool checkedSave = false;
                 switch (dialogResult)
                 {
-                    case DialogResult.Yes: SaveProject();
+                    case DialogResult.Yes:
+                        SaveProject();
                         checkedSave = false;
                         // еще раз проверка, а то вдруг юзер закрыл окно сохранения
-                        if(_currentBeginControlUnit != _canvasControl.ControlUnit.Current) checkedSave = true;
+                        if (_currentBeginControlUnit != _canvasControl.ControlUnit.Current) checkedSave = true;
                         break;
                     case DialogResult.Cancel:
                         checkedSave = true;
@@ -93,6 +90,7 @@ namespace GRPO
                 e.Cancel = checkedSave;
             }
         }
+
         /// <summary>
         /// Событие при очистке холста
         /// </summary>
@@ -102,6 +100,7 @@ namespace GRPO
         {
             _canvasControl.ClearCanvas();
         }
+
         /// <summary>
         /// Событие при сохрании проекта/картинки
         /// </summary>
@@ -111,6 +110,7 @@ namespace GRPO
         {
             ShowSaveFileDialog();
         }
+
         /// <summary>
         /// Функция автоматического сохранения проекта
         /// </summary>
@@ -132,6 +132,7 @@ namespace GRPO
                 ShowSaveFileDialog();
             }
         }
+
         /// <summary>
         /// Функция открытия окна сохранения проекта/картинки
         /// </summary>
@@ -178,6 +179,7 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Событие при открытии проекта
         /// </summary>
@@ -195,7 +197,7 @@ namespace GRPO
                 using (var stream = openFileDialog.OpenFile())
                 {
                     BinaryFormatter binaryFormatter = new BinaryFormatter();
-                    _canvasControl.ControlUnit = (ControlUnit)binaryFormatter.Deserialize(stream);
+                    _canvasControl.ControlUnit = (ControlUnit) binaryFormatter.Deserialize(stream);
                     _currentBeginControlUnit = _canvasControl.ControlUnit.Current;
                     _canvasControl.RefreshCanvas();
                 }
@@ -209,7 +211,7 @@ namespace GRPO
         /// <param name="e">Объект события</param>
         private void buttonAcceptSizePictureBox_Click(object sender, EventArgs e)
         {
-            if(!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
+            if (!_canvasControl.FlagMouseDown && !_canvasControl.FlagPolyFigure)
             {
                 if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1920 &&
                     Convert.ToInt32(textBox2.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1000)
@@ -221,11 +223,11 @@ namespace GRPO
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            
-            if (System.Text.RegularExpressions.Regex.IsMatch(((TextBox)sender).Text, "[^0-9]"))
+
+            if (System.Text.RegularExpressions.Regex.IsMatch(((TextBox) sender).Text, "[^0-9]"))
             {
                 MessageBox.Show("Ввод только числа!");
-                ((TextBox)sender).Text = ((TextBox)sender).Text.Remove(((TextBox)sender).Text.Length - 1);
+                ((TextBox) sender).Text = ((TextBox) sender).Text.Remove(((TextBox) sender).Text.Length - 1);
             }
         }
 
@@ -306,6 +308,7 @@ namespace GRPO
                 _toolsWithPropertyControl.SelectTool.DrawingTools = _canvasControl.SelectTool.DrawingTools;
             }
         }
+
         /// <summary>
         /// Функция по отлову изменения свойства линии фигуры
         /// </summary>
@@ -315,7 +318,7 @@ namespace GRPO
             if (_canvasControl.Interaction != null)
             {
                 if (_canvasControl.ControlUnit.GraphicsEditor.Drawables[_canvasControl.Interaction.Indexes[0]] is
-                    ILinePropertyble figureWithLineProperty)
+                    ILineProperty figureWithLineProperty)
                 {
                     _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[2],
                         _canvasControl.Interaction.Indexes[0], figureWithLineProperty.LineProperty,
@@ -325,6 +328,7 @@ namespace GRPO
                 _canvasControl.RefreshCanvas();
             }
         }
+
         /// <summary>
         /// Функция по отлову изменения свойства заливки фигуры
         /// </summary>
@@ -334,7 +338,7 @@ namespace GRPO
             if (_canvasControl.Interaction != null)
             {
                 if (_canvasControl.ControlUnit.GraphicsEditor.Drawables[_canvasControl.Interaction.Indexes[0]] is
-                    IFillPropertyble figureWithFillProperty)
+                    IFillProperty figureWithFillProperty)
                 {
                     _canvasControl.ControlUnit.ChangeProperty(_canvasControl.ControlUnit.GraphicsEditor.Keywords[3],
                         _canvasControl.Interaction.Indexes[0], null,
@@ -359,12 +363,12 @@ namespace GRPO
                 return;
             }
 
-            if (drawable is ILinePropertyble figureWithLineProperty)
+            if (drawable is ILineProperty figureWithLineProperty)
             {
                 _toolsWithPropertyControl.LineProperty = figureWithLineProperty.LineProperty;
             }
 
-            if (drawable is IFillPropertyble figureWithFillProperty)
+            if (drawable is IFillProperty figureWithFillProperty)
             {
                 _toolsWithPropertyControl.FillProperty = figureWithFillProperty.FillProperty;
             }

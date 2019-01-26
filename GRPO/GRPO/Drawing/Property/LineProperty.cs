@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -19,8 +14,9 @@ namespace GRPO.Drawing.Property
         /// Толщина линии
         /// </summary>
         private float _lineThickness;
+
         /// <summary>
-        /// Пустой класс Расширения
+        /// Пустой класс свойство линии фигуры
         /// </summary>
         public LineProperty()
         {
@@ -28,12 +24,12 @@ namespace GRPO.Drawing.Property
             LineColor = Color.Black;
             LineType = DashStyle.Solid;
         }
+        
         /// <summary>
-        /// Класс Расширения
+        /// Конструктор класс свойство линии фигуры
         /// </summary>
         /// <param name="lineThickness">Толщина линии</param>
         /// <param name="lineColor">Цвет линии</param>
-        /// <param name="fillColor">Цвет заливки</param>
         /// <param name="lineType">Тип линии</param>
         public LineProperty(float lineThickness, Color lineColor, DashStyle lineType)
         {
@@ -41,6 +37,7 @@ namespace GRPO.Drawing.Property
             LineColor = lineColor;
             LineType = lineType;
         }
+
         /// <summary>
         /// Толщина линии
         /// </summary>
@@ -59,10 +56,12 @@ namespace GRPO.Drawing.Property
                 }
             }
         }
+
         /// <summary>
         /// Цвет линии
         /// </summary>
         public Color LineColor { get; set; }
+
         /// <summary>
         /// Тип линии
         /// </summary>

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using GRPO.Figure;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
@@ -16,16 +12,18 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - линия
     /// </summary>
     [Serializable]
-    class DrawFigureLine : IDrawable, ILinePropertyble
+    public class DrawFigureLine : IDrawable, ILineProperty
     {
         /// <summary>
         /// Объект класса линии
         /// </summary>
         private FigureLine _figureLine;
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
+
         /// <summary>
         /// Псутой класс Отрисовки линии
         /// </summary>
@@ -34,6 +32,7 @@ namespace GRPO.Drawing
             Line = new FigureLine();
             LineProperty = new LineProperty();
         }
+
         /// <summary>
         /// Класс Отрисовки линии
         /// </summary>
@@ -45,34 +44,25 @@ namespace GRPO.Drawing
             Line = new FigureLine(a, b);
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
         }
+
         /// <summary>
         /// Векторный объект линии
         /// </summary>
         public FigureLine Line
         {
-            get
-            {
-                return _figureLine;
-            }
-            set
-            {
-                _figureLine = value;
-            }
+            get { return _figureLine; }
+            set { _figureLine = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
+            get { return _lineProperty; }
+            set { _lineProperty = value; }
         }
+
         /// <summary>
         /// Нарисовать линию
         /// </summary>
@@ -93,6 +83,7 @@ namespace GRPO.Drawing
                 throw new Exception("Не выбран холст!");
             }
         }
+
         /// <summary>
         /// Cписок точек
         /// </summary>
@@ -101,48 +92,34 @@ namespace GRPO.Drawing
             get { return Line.Points; }
             set { Line.Points = value; }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return Line.Position;
-            }
-            set
-            {
-                Line.Position = value;
-            }
+            get { return Line.Position; }
+            set { Line.Position = value; }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Line.Width;
-            }
-            set
-            {
-                Line.Width = value;
-            }
+            get { return Line.Width; }
+            set { Line.Width = value; }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Line.Height;
-            }
-            set
-            {
-                Line.Height = value;
-            }
+            get { return Line.Height; }
+            set { Line.Height = value; }
         }
+
         /// <summary>
         /// Клонировать объект
         /// </summary>

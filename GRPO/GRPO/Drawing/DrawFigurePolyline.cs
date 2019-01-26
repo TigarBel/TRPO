@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using GRPO.Figure;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
@@ -16,16 +12,18 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - полилинии
     /// </summary>
     [Serializable]
-    class DrawFigurePolyline : IDrawable, ILinePropertyble
+    public class DrawFigurePolyline : IDrawable, ILineProperty
     {
         /// <summary>
         /// Объект полилинии
         /// </summary>
         private FigurePolyline _figurePolyline;
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
+
         /// <summary>
         /// Псутой класс Отрисовки полилинии
         /// </summary>
@@ -34,6 +32,7 @@ namespace GRPO.Drawing
             Polyline = new FigurePolyline();
             LineProperty = new LineProperty();
         }
+
         /// <summary>
         /// Класс Отрисовки полилинии
         /// </summary>
@@ -44,34 +43,25 @@ namespace GRPO.Drawing
             Polyline = new FigurePolyline(points);
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
         }
+
         /// <summary>
         /// Векторный объект полилинии
         /// </summary>
         public FigurePolyline Polyline
         {
-            get
-            {
-                return _figurePolyline;
-            }
-            set
-            {
-                _figurePolyline = value;
-            }
+            get { return _figurePolyline; }
+            set { _figurePolyline = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
+            get { return _lineProperty; }
+            set { _lineProperty = value; }
         }
+
         /// <summary>
         /// Отрисовка последнюю часть полилинии
         /// </summary>
@@ -87,7 +77,8 @@ namespace GRPO.Drawing
                         Graphics graphics = Graphics.FromImage(pictureBox.Image);
                         Pen pen = new Pen(LineProperty.LineColor, LineProperty.LineThickness);
                         pen.DashStyle = LineProperty.LineType;
-                        graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X, Polyline.Points[i + 1].Y);
+                        graphics.DrawLine(pen, Polyline.Points[i].X, Polyline.Points[i].Y, Polyline.Points[i + 1].X,
+                            Polyline.Points[i + 1].Y);
                         graphics.Dispose();
                         pictureBox.Invalidate();
                     }
@@ -102,6 +93,7 @@ namespace GRPO.Drawing
                 throw new Exception("Не выбран холст!");
             }
         }
+
         /// <summary>
         /// Cписок точек
         /// </summary>
@@ -110,48 +102,34 @@ namespace GRPO.Drawing
             get { return Polyline.Points; }
             set { Polyline.Points = value; }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return Polyline.Position;
-            }
-            set
-            {
-                Polyline.Position = value;
-            }
+            get { return Polyline.Position; }
+            set { Polyline.Position = value; }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Polyline.WidthPolyline;
-            }
-            set
-            {
-                Polyline.WidthPolyline = value;
-            }
+            get { return Polyline.WidthPolyline; }
+            set { Polyline.WidthPolyline = value; }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Polyline.HeightPolyline;
-            }
-            set
-            {
-                Polyline.HeightPolyline = value;
-            }
+            get { return Polyline.HeightPolyline; }
+            set { Polyline.HeightPolyline = value; }
         }
+
         /// <summary>
         /// Клонировать объект
         /// </summary>

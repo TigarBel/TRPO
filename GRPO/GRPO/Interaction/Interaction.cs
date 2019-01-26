@@ -1,16 +1,9 @@
-﻿using GRPO.Drawing;
-using GRPO.Drawing.Interface;
-using GRPO.Drawing.Property;
+﻿using GRPO.Drawing.Interface;
 using GRPO.InteractionFrame;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO
 {
@@ -18,7 +11,7 @@ namespace GRPO
     /// Класс взаимодействия с нарисованными фигурами
     /// </summary>
     [Serializable]
-    public class Interaction : FrameForInteraction
+    public class Interaction : BaseInteraction
     {
 
         /// <summary>
@@ -26,6 +19,9 @@ namespace GRPO
         /// </summary>
         private int _indexSelectPoint;
 
+        /// <summary>
+        /// Список индексов взятых фигур
+        /// </summary>
         private List<int> _indexes = new List<int>();
 
         /// <summary>
@@ -35,12 +31,12 @@ namespace GRPO
         {
             EnablePoints = false;
         }
-
+        
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
         /// <param name="drawables">Весь список фигур</param>
-        /// <param name="point">Точка нахождения фигуры</param>
+        /// <param name="pointMouse">Точка нахождения фигуры</param>
         /// <param name="enablePoints">Разрашение изменять опорные точки(только для одной фигуры)</param>
         public Interaction(List<IDrawable> drawables, Point pointMouse, bool enablePoints)
         {
@@ -48,7 +44,7 @@ namespace GRPO
             {
                 if (pointMouse.X >= drawables[i].Points.Min(point => point.X) - 5 &&
                     pointMouse.X <= drawables[i].Points.Max(point => point.X) + 5 &&
-                    pointMouse.Y >= drawables[i].Points.Min(point => point.Y) - 5 && 
+                    pointMouse.Y >= drawables[i].Points.Min(point => point.Y) - 5 &&
                     pointMouse.Y <= drawables[i].Points.Max(point => point.Y) + 5)
                 {
                     Indexes.Add(drawables.IndexOf(drawables[i]));
@@ -62,6 +58,7 @@ namespace GRPO
                     MinX = MaxX = MinY = MaxY = 0;
                 }
             }
+
             /*InteractionPoints = new InteractionPoints(drawables, _radiusDrawPoint);*/
         }
 
@@ -131,22 +128,27 @@ namespace GRPO
             get { return Drawables; }
             set { Drawables = value; }
         }
+
         /// <summary>
         /// Минимальное значение по X
         /// </summary>
         public int MinX { get; set; }
+
         /// <summary>
         /// Максимальное значение по X
         /// </summary>
         public int MaxX { get; set; }
+
         /// <summary>
         /// Минимальное значение по Y
         /// </summary>
         public int MinY { get; set; }
+
         /// <summary>
         /// Максимальное значение по Y
         /// </summary>
         public int MaxY { get; set; }
+
         /// <summary>
         /// Обновить габариты интерактива
         /// </summary>
@@ -166,6 +168,7 @@ namespace GRPO
             MinY = points.Min(point => point.Y) - 5;
             MaxY = points.Max(point => point.Y) + 5;
         }
+
         /// <summary>
         /// Список индексов взятых фигур
         /// </summary>
@@ -174,6 +177,7 @@ namespace GRPO
             get { return _indexes; }
             set { _indexes = value; }
         }
+
         /// <summary>
         /// Индекс выбранной опорной точки
         /// </summary>

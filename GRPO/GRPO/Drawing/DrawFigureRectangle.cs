@@ -4,9 +4,6 @@ using GRPO.Figure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GRPO.Drawing
@@ -15,20 +12,23 @@ namespace GRPO.Drawing
     /// Класс отрисовки фигуры - прямоугольник
     /// </summary>
     [Serializable]
-    class DrawFigureRectangle : IDrawable, ILinePropertyble, IFillPropertyble
+    public class DrawFigureRectangle : IDrawable, ILineProperty, IFillProperty
     {
         /// <summary>
         /// Объект прямоугольника
         /// </summary>
         private FigureRectangle _figureRectangle;
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         private LineProperty _lineProperty;
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         private FillProperty _fillProperty;
+
         /// <summary>
         /// Пустой класс Отрисовки прямоугольника
         /// </summary>
@@ -38,6 +38,7 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
         }
+
         /// <summary>
         /// Класс Отрисовки прямоугольника
         /// </summary>
@@ -51,90 +52,61 @@ namespace GRPO.Drawing
             LineProperty = new LineProperty(lineProperty.LineThickness, lineProperty.LineColor, lineProperty.LineType);
             FillProperty = new FillProperty(fillProperty.FillColor);
         }
+
         /// <summary>
         /// Векторный объект прямоугольника
         /// </summary>
         public FigureRectangle Rectangle
         {
-            get
-            {
-                return _figureRectangle;
-            }
-            set
-            {
-                _figureRectangle = value;
-            }
+            get { return _figureRectangle; }
+            set { _figureRectangle = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки линии
         /// </summary>
         public LineProperty LineProperty
         {
-            get
-            {
-                return _lineProperty;
-            }
-            set
-            {
-                _lineProperty = value;
-            }
+            get { return _lineProperty; }
+            set { _lineProperty = value; }
         }
+
         /// <summary>
         /// Расширение для отрисовки фигуры
         /// </summary>
         public FillProperty FillProperty
         {
-            get
-            {
-                return _fillProperty;
-            }
-            set
-            {
-                _fillProperty = value;
-            }
+            get { return _fillProperty; }
+            set { _fillProperty = value; }
         }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
         public Point Position
         {
-            get
-            {
-                return Rectangle.Position;
-            }
-            set
-            {
-                Rectangle.Position = value;
-            }
+            get { return Rectangle.Position; }
+            set { Rectangle.Position = value; }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
         public int Width
         {
-            get
-            {
-                return Rectangle.WidthPolygon;
-            }
-            set
-            {
-                Rectangle.WidthPolygon = value;
-            }
+            get { return Rectangle.WidthPolygon; }
+            set { Rectangle.WidthPolygon = value; }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
         public int Height
         {
-            get
-            {
-                return Rectangle.HeightPolygon;
-            }
-            set
-            {
-                Rectangle.HeightPolygon = value;
-            }
+            get { return Rectangle.HeightPolygon; }
+            set { Rectangle.HeightPolygon = value; }
         }
+
         /// <summary>
         /// Нарисовать объект
         /// </summary>
@@ -161,6 +133,7 @@ namespace GRPO.Drawing
                 throw new Exception("Не выбран холст!");
             }
         }
+
         /// <summary>
         /// Cписок точек
         /// </summary>
@@ -169,6 +142,7 @@ namespace GRPO.Drawing
             get { return Rectangle.Points; }
             set { Rectangle.Points = value; }
         }
+
         /// <summary>
         /// Клонировать объект
         /// </summary>

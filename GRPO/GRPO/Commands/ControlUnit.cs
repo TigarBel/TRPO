@@ -3,9 +3,6 @@ using GRPO.Drawing.Property;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GRPO.Drawing;
 
 namespace GRPO.Commands
@@ -20,18 +17,22 @@ namespace GRPO.Commands
         /// Объект хранения реализации команд
         /// </summary>
         private GraphicsEditor _graphicsEditor = new GraphicsEditor();
+
         /// <summary>
         /// Список объектов команд
         /// </summary>
-        private List<Command> _commands = new List<Command>();
+        private List<BaseCommand> _commands = new List<BaseCommand>();
+
         /// <summary>
         /// Имя пользователя
         /// </summary>
         private string _fileName = "Безымянный";
+
         /// <summary>
         /// Номер операции
         /// </summary>
         private int _current = 0;
+
         /// <summary>
         /// Объект хранения реализации команд
         /// </summary>
@@ -39,6 +40,7 @@ namespace GRPO.Commands
         {
             get { return _graphicsEditor; }
         }
+
         /// <summary>
         /// Имя пользователя
         /// </summary>
@@ -47,6 +49,7 @@ namespace GRPO.Commands
             get { return _fileName; }
             set { _fileName = value; }
         }
+
         /// <summary>
         /// Номер операции
         /// </summary>
@@ -54,13 +57,16 @@ namespace GRPO.Commands
         {
             get { return _current; }
         }
+
         /// <summary>
         /// Уменьшить общее количество команд на еденицу(опасная ф-ция)
         /// </summary>
         public void CommandsCountDecrement()
-        {//Опасная функция
+        {
+            //Опасная функция
             _commands.RemoveAt(_commands.Count - 1);
         }
+
         /// <summary>
         /// Вернуть команду
         /// </summary>
@@ -78,6 +84,7 @@ namespace GRPO.Commands
                 }
             }
         }
+
         /// <summary>
         /// Убрать команду
         /// </summary>
@@ -96,6 +103,7 @@ namespace GRPO.Commands
             }
 
         }
+
         /// <summary>
         /// Команды создания фигуры
         /// </summary>
@@ -107,7 +115,7 @@ namespace GRPO.Commands
         public void Drawing(string keywords, Tools tools, List<Point> points, LineProperty lineProperty,
             FillProperty fillProperty)
         {
-            Command command = new CommandDrawing(_graphicsEditor, keywords, tools, points, lineProperty, fillProperty);
+            BaseCommand command = new Drawing(_graphicsEditor, keywords, tools, points, lineProperty, fillProperty);
             command.Execute();
             if (_current < _commands.Count)
             {
@@ -117,6 +125,7 @@ namespace GRPO.Commands
             _commands.Add(command);
             _current++;
         }
+
         /// <summary>
         /// Команда измения свойства фигуры
         /// </summary>
@@ -129,7 +138,7 @@ namespace GRPO.Commands
         public void ChangeProperty(string keywords, int index, LineProperty oldLineProperty,
             LineProperty newLineProperty, FillProperty oldFillProperty, FillProperty newFillProperty)
         {
-            Command command = new CommandPropertyChanger(_graphicsEditor, keywords, index, oldLineProperty,
+            BaseCommand command = new PropertyChanger(_graphicsEditor, keywords, index, oldLineProperty,
                 newLineProperty, oldFillProperty, newFillProperty);
             command.Execute();
             if (_current < _commands.Count)
@@ -140,6 +149,7 @@ namespace GRPO.Commands
             _commands.Add(command);
             _current++;
         }
+
         /// <summary>
         /// Команд очистка холста
         /// </summary>
@@ -148,7 +158,7 @@ namespace GRPO.Commands
         /// <param name="indexes">Список индексов удаляемых фигур</param>
         public void Clear(string keywords, List<IDrawable> drawables, List<int> indexes)
         {
-            Command command = new CommandClear(_graphicsEditor, keywords, drawables, indexes);
+            BaseCommand command = new Clear(_graphicsEditor, keywords, drawables, indexes);
             command.Execute();
             if (_current < _commands.Count)
             {
@@ -158,6 +168,7 @@ namespace GRPO.Commands
             _commands.Add(command);
             _current++;
         }
+
         /// <summary>
         /// Команда реконструирования фигуры
         /// </summary>
@@ -170,8 +181,8 @@ namespace GRPO.Commands
         public void Reconstruction(string keywords, List<IDrawable> drawables, List<int> indexes, int pointIndex,
             Point selectPoint, Point newPoint)
         {
-            Command command =
-                new CommandReconstruction(_graphicsEditor, keywords, drawables, indexes, pointIndex, selectPoint,
+            BaseCommand command =
+                new Reconstruction(_graphicsEditor, keywords, drawables, indexes, pointIndex, selectPoint,
                     newPoint);
             command.Execute();
             if (_current < _commands.Count)

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace GRPO.Figure
@@ -11,12 +9,13 @@ namespace GRPO.Figure
     /// Класс фигуры - многоугольник
     /// </summary>
     [Serializable]
-    class FigurePolygon : Figure
+    public class FigurePolygon : BaseFigure
     {
-        /// <summary>
+        /*/// <summary>
         /// Количество углов многоугольника
         /// </summary>
-        private int _countAngle;
+        private int _countAngle;*/
+
         /// <summary>
         /// Пустой класс фигуры Многогранник
         /// </summary>
@@ -28,7 +27,8 @@ namespace GRPO.Figure
             Height = 0;
             Points = new List<Point>();
         }
-        /// <summary>
+
+        /*/// <summary>
         /// Класс фигуры Многогранник
         /// </summary>
         /// <param name="position">Точка расположения многоугольника</param>
@@ -46,14 +46,16 @@ namespace GRPO.Figure
 
             for (int i = 0; i < countAngle; i++)
             {
-                double cos = Math.Cos((i * (360 / countAngle) + phase) * (Math.PI / 180.0));
-                double sin = Math.Sin((i * (360 / countAngle) + phase) * (Math.PI / 180.0));
+                double result = (i * (360 / countAngle) + phase) * (Math.PI / 180.0);
+                double cos = Math.Cos(result);
+                double sin = Math.Sin(result);
                 double x = X + Width / 2 + Width * cos / 2 * Math.Sqrt(2);
                 double y = Y + Height / 2 + Height * sin / 2 * Math.Sqrt(2);
                 Point point = new Point(Convert.ToInt32(x), Convert.ToInt32(y));
                 Points.Add(point);
             }
-        }
+        }*/
+
         /// <summary>
         /// Класс фигуры Многогранник
         /// </summary>
@@ -66,10 +68,12 @@ namespace GRPO.Figure
             Width = Points.Max(point => point.X) - Points.Min(point => point.X);
             Height = Points.Max(point => point.Y) - Points.Min(point => point.Y);
         }
+
         /// <summary>
         /// Список точек многоугольника
         /// </summary>
         public List<Point> Points { get; set; }
+
         /// <summary>
         /// Позиция фигуры
         /// </summary>
@@ -82,10 +86,12 @@ namespace GRPO.Figure
                 {
                     Points[i] = new Point(Points[i].X - (X - value.X), Points[i].Y - (Y - value.Y));
                 }
+
                 X = value.X;
                 Y = value.Y;
             }
         }
+
         /// <summary>
         /// Ширина фигуры
         /// </summary>
@@ -98,14 +104,14 @@ namespace GRPO.Figure
                 {
                     for (int i = 0; i < Points.Count; i++)
                     {
-                        Points[i] = new Point(X +
-                            Convert.ToInt32((float)(Points[i].X - X) / (float)Width * (float)value),
-                            Points[i].Y);
+                        Points[i] = new Point(StandPoint(X, Points[i].X, Width, value), Points[i].Y);
                     }
+
                     Width = value;
                 }
             }
         }
+
         /// <summary>
         /// Высота фигуры
         /// </summary>
@@ -118,12 +124,26 @@ namespace GRPO.Figure
                 {
                     for (int i = 0; i < Points.Count; i++)
                     {
-                        Points[i] = new Point(Points[i].X,
-                            Y + Convert.ToInt32((float)(Points[i].Y - Y) / (float)Height * (float)value));
+                        Points[i] = new Point(Points[i].X, StandPoint(Y, Points[i].Y, Height, value));
                     }
+
                     Height = value;
                 }
             }
+        }
+
+        /// <summary>
+        /// Установление точки в соответствии с изменение размера
+        /// </summary>
+        /// <param name="positionValue">Позация фигуры</param>
+        /// <param name="pointValue">Позиция точки</param>
+        /// <param name="sizeValue">Размер фигуры</param>
+        /// <param name="value">Измененный размер фигуры</param>
+        /// <returns></returns>
+        private int StandPoint(int positionValue, int pointValue, int sizeValue, int value)
+        {
+            return positionValue +
+                   Convert.ToInt32(((float) (pointValue - positionValue)) / ((float) sizeValue) * ((float) value));
         }
     }
 }
