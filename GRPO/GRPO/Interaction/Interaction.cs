@@ -1,5 +1,6 @@
 ﻿using GRPO.Drawing.Interface;
 using GRPO.InteractionFrame;
+using GRPO.InteractionFrame.PointInteractions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,6 +19,14 @@ namespace GRPO
         /// Индекс выбранной габоритной точки
         /// </summary>
         private int _indexSelectPoint;
+
+        private bool _upPoint = false;
+
+        private bool _rightPoint = false;
+
+        private bool _downPoint = false;
+
+        private bool _leftPoint = false;
 
         /// <summary>
         /// Список индексов взятых фигур
@@ -59,7 +68,7 @@ namespace GRPO
                 }
             }
 
-            /*InteractionPoints = new InteractionPoints(drawables, _radiusDrawPoint);*/
+            InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
         }
 
         /// <summary>
@@ -78,17 +87,17 @@ namespace GRPO
             foreach (IDrawable drawable in drawables)
             {
 
-                int X = drawable.Points.Max(point => point.X) -
+                int x = drawable.Points.Max(point => point.X) -
                         (drawable.Points.Max(point => point.X) -
                          drawable.Points.Min(point => point.X)) / 2;
-                int Y = drawable.Points.Max(point => point.Y) -
+                int y = drawable.Points.Max(point => point.Y) -
                         (drawable.Points.Max(point => point.Y) -
                          drawable.Points.Min(point => point.Y)) / 2;
 
-                if (X >= points.Min(point => point.X) &&
-                    X <= points.Max(point => point.X) &&
-                    Y >= points.Min(point => point.Y) &&
-                    Y <= points.Max(point => point.Y))
+                if (x >= points.Min(point => point.X) &&
+                    x <= points.Max(point => point.X) &&
+                    y >= points.Min(point => point.Y) &&
+                    y <= points.Max(point => point.Y))
                 {
                     Indexes.Add(drawables.IndexOf(drawable));
                     localDrawables.Add(drawable.Clone());
@@ -117,7 +126,7 @@ namespace GRPO
             }
 
             EnablePoints = false;
-            /*InteractionPoints = new InteractionPoints(drawables, _radiusDrawPoint);*/
+            InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
         }
 
         /// <summary>
@@ -208,6 +217,13 @@ namespace GRPO
                     _indexSelectPoint =
                         _checking.GetNumberPoint(new Point(value.X, value.Y), DrawableFigures[0], _radiusDrawPoint);
                 }
+                else
+                {
+                    _upPoint = InteractionPoints.UpPointInteraction.PointInteraction.GetInto(value);
+                    _rightPoint = InteractionPoints.RightPointInteraction.PointInteraction.GetInto(value);
+                    _downPoint = InteractionPoints.DownPointInteraction.PointInteraction.GetInto(value);
+                    _leftPoint = InteractionPoints.LeftPointInteraction.PointInteraction.GetInto(value);
+                }
             }
         }
 
@@ -224,6 +240,29 @@ namespace GRPO
                     List<Point> points = DrawableFigures[0].Points;
                     points[_indexSelectPoint] = pointDeviation;
                     DrawableFigures[0].Points = points;
+                }
+            }
+        }
+
+        public void ChangeSize(Point resolutionPoint)
+        {
+            if (!EnablePoints)
+            {
+                if (_upPoint)
+                {
+                    InteractionPoints.UpPointInteraction.ChangeUpSize(MinY,resolutionPoint.Y);
+                }
+                else if (_rightPoint)
+                {
+                    InteractionPoints.RightPointInteraction.ChangeUpSize(MaxX, resolutionPoint.X);
+                }
+                else if (_downPoint)
+                {
+                    InteractionPoints.DownPointInteraction.ChangeUpSize(MaxY, resolutionPoint.Y);
+                }
+                else if (_leftPoint)
+                {
+                    InteractionPoints.UpPointInteraction.ChangeUpSize(MinX, resolutionPoint.X);
                 }
             }
         }

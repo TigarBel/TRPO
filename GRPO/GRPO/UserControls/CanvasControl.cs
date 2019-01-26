@@ -154,17 +154,11 @@ namespace GRPO
         public FillProperty FillProperty { get; set; }
 
         /// <summary>
-        /// Хранилище для фона
-        /// </summary>
-        private Image _image = new Bitmap(640, 480);
-
-        /// <summary>
         /// Картинка с холста
         /// </summary>
         public Image Image
         {
             get { return new Bitmap(canvas.Image); }
-            set { _image = new Bitmap(value); }
         }
 
         /// <summary>
@@ -230,7 +224,7 @@ namespace GRPO
         /// </summary>
         public void RefreshCanvas()
         {
-            canvas.Image = new Bitmap(_image);
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
 
             foreach (IDrawable drawable in ControlUnit.GraphicsEditor.Drawables)
             {
@@ -353,6 +347,7 @@ namespace GRPO
                         {
                             if (!Interaction.EnablePoints)
                             {
+                                Interaction.SelectPoint = _pointA;
                                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                     ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointA);
                                 _pointC = new Point(e.X, e.Y);

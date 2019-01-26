@@ -14,8 +14,11 @@ namespace GRPO.InteractionFrame.PointInteractions
         }
 
         public UpPointInteraction UpPointInteraction { get; set; }
+
         public RightPointInteraction RightPointInteraction { get; set; }
+
         public DownPointInteraction DownPointInteraction { get; set; }
+
         public LeftPointInteraction LeftPointInteraction { get; set; }
     }
 }

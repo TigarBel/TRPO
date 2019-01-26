@@ -24,7 +24,8 @@ namespace GRPO.InteractionFrame.PointInteractions
             MinX = points.Min(localPoint => localPoint.X);
             MaxX = points.Max(localPoint => localPoint.X);
             Point point = new Point(points.Max(localPoint => localPoint.X),
-                points.Min(localPoint => localPoint.Y) + points.Max(localPoint => localPoint.Y) / 2);
+                points.Min(localPoint => localPoint.Y) +
+                (points.Max(localPoint => localPoint.Y) - points.Min(localPoint => localPoint.Y)) / 2);
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
@@ -37,11 +38,11 @@ namespace GRPO.InteractionFrame.PointInteractions
 
         public int MaxX { get; private set; }
 
-        public void ChangeUpSize(Point pointA, Point pointB)
+        public void ChangeUpSize(int initialX, int finalX)
         {
-            if (pointB.X - pointA.X - MinX > 10)
+            if (finalX - initialX - MinX > 10)
             {
-                int resultMaxX = pointB.X - pointA.X;
+                int resultMaxX = finalX - initialX;
                 int result = MaxX - MinX;
                 foreach (IDrawable drawable in Drawdrawable)
                 {

@@ -47,7 +47,8 @@ namespace GRPO.InteractionFrame.PointInteractions
         public bool GetInto(Point point)
         {
             if (DrawCircle.Position.X <= point.X && DrawCircle.Position.X + DrawCircle.Width >= point.X &&
-                DrawCircle.Position.Y <= point.X && DrawCircle.Position.Y + DrawCircle.Height >= point.Y) return true;
+                DrawCircle.Position.Y <= point.Y && DrawCircle.Position.Y + DrawCircle.Height >= point.Y)
+                return true;
             return false;
         }
     }
