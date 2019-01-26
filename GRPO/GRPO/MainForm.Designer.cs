@@ -152,7 +152,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             MainForm mainForm = this;
             mainForm.Controls.Add(this._canvasControl);
-            this.ClientSize = new System.Drawing.Size(1904, 961);
+            this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
@@ -161,6 +161,7 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.KeyPreview = true;
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MainForm";
             this.Text = "GRPO";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
