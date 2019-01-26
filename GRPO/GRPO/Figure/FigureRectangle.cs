@@ -280,5 +280,21 @@ namespace GRPO.Figure
                 Y = value.Y;
             }
         }
+        /// <summary>
+        /// Ширина прямоугольника
+        /// </summary>
+        public new int Width
+        {
+            get { return PointLeftUp.X - PointRightUp.X; }
+            set { PointRightUp = new Point(PointLeftUp.X + value, PointRightUp.Y); }
+        }
+        /// <summary>
+        /// Высота прямоугольника
+        /// </summary>
+        public new int Height
+        {
+            get { return PointLeftDown.Y - PointLeftUp.Y; }
+            set { PointLeftDown = new Point(PointLeftDown.X, PointLeftUp.Y + value); }
+        }
     }
 }

@@ -39,9 +39,9 @@ namespace GRPO.InteractionFrame.PointInteractions
 
         public int MaxY { get; private set; }
 
-        public void ChangeUpSize(int initialY, int finalY)
+        public void ChangeDownSize(int initialY, int finalY)
         {
-            if (finalY - initialY - MinY > 10)
+            if ((finalY - initialY) - MinY > 10)
             {
                 int resultMaxY = finalY - initialY;
                 int result = MaxY - MinY;

@@ -40,7 +40,7 @@ namespace GRPO
         {
             EnablePoints = false;
         }
-        
+
         /// <summary>
         /// Класс взаимодействия
         /// </summary>
@@ -58,6 +58,7 @@ namespace GRPO
                 {
                     Indexes.Add(drawables.IndexOf(drawables[i]));
                     DrawableFigures.Add(drawables[i].Clone());
+                    InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
                     GetMaxMinXY();
                     EnablePoints = enablePoints;
                     break;
@@ -68,7 +69,6 @@ namespace GRPO
                 }
             }
 
-            InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
         }
 
         /// <summary>
@@ -122,11 +122,24 @@ namespace GRPO
             if (localDrawables.Count != 0)
             {
                 DrawableFigures = localDrawables;
+                InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
                 GetMaxMinXY();
             }
 
             EnablePoints = false;
-            InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
+        }
+
+        public Point Position
+        {
+            set
+            {
+                foreach (IDrawable drawable in DrawableFigures)
+                {
+                    drawable.Position = new Point(drawable.Position.X + value.X, drawable.Position.Y + value.Y);
+                }
+
+                InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
+            }
         }
 
         /// <summary>
@@ -244,25 +257,35 @@ namespace GRPO
             }
         }
 
+        public bool CheckedSelectSizePoint()
+        {
+            if (_upPoint || _rightPoint || _downPoint || _leftPoint)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void ChangeSize(Point resolutionPoint)
         {
             if (!EnablePoints)
             {
                 if (_upPoint)
                 {
-                    InteractionPoints.UpPointInteraction.ChangeUpSize(MinY,resolutionPoint.Y);
+                    InteractionPoints.UpPointInteraction.ChangeUpSize(InteractionPoints.UpPointInteraction.MinY, resolutionPoint.Y);
                 }
                 else if (_rightPoint)
                 {
-                    InteractionPoints.RightPointInteraction.ChangeUpSize(MaxX, resolutionPoint.X);
+                    InteractionPoints.RightPointInteraction.ChangeRightSize(MaxX, resolutionPoint.X);
                 }
                 else if (_downPoint)
                 {
-                    InteractionPoints.DownPointInteraction.ChangeUpSize(MaxY, resolutionPoint.Y);
+                    InteractionPoints.DownPointInteraction.ChangeDownSize(MaxY, resolutionPoint.Y);
                 }
                 else if (_leftPoint)
                 {
-                    InteractionPoints.UpPointInteraction.ChangeUpSize(MinX, resolutionPoint.X);
+                    InteractionPoints.LeftPointInteraction.ChangeLeftSize(MinX, resolutionPoint.X);
                 }
             }
         }

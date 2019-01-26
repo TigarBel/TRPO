@@ -94,8 +94,8 @@ namespace GRPO.Drawing
         /// </summary>
         public int Width
         {
-            get { return Rectangle.WidthPolygon; }
-            set { Rectangle.WidthPolygon = value; }
+            get { return Rectangle.Width; }
+            set { Rectangle.Width = value; }
         }
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace GRPO.Drawing
         /// </summary>
         public int Height
         {
-            get { return Rectangle.HeightPolygon; }
-            set { Rectangle.HeightPolygon = value; }
+            get { return Rectangle.Height; }
+            set { Rectangle.Height = value; }
         }
 
         /// <summary>

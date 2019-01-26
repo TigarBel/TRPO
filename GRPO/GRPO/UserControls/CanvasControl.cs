@@ -230,7 +230,15 @@ namespace GRPO
             {
                 drawable.Draw(canvas);
             }
-
+            /**/
+            if (Interaction != null)
+            {
+                foreach (IDrawable drawable in Interaction.DrawableFigures)
+                {
+                    drawable.Draw(canvas);
+                }
+            }
+            /**/
             foreach (IDrawable drawable in Drawables)
             {
                 drawable.Draw(canvas);
@@ -344,7 +352,7 @@ namespace GRPO
                             Interaction = null;
                         }
                         else
-                        {
+                        {/**/
                             if (!Interaction.EnablePoints)
                             {
                                 Interaction.SelectPoint = _pointA;
@@ -357,7 +365,7 @@ namespace GRPO
                                 Interaction.SelectPoint = _pointA;
                                 ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
                                     ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointA);
-                            }
+                            }/**/
                         }
                     }
                 }
@@ -418,14 +426,23 @@ namespace GRPO
                         {
                             if (!Interaction.EnablePoints)
                             {
-                                Interaction.DrawableFigures[0].Position = new Point(
-                                    Interaction.DrawableFigures[0].Position.X + _pointB.X - _pointC.X,
-                                    Interaction.DrawableFigures[0].Position.Y + _pointB.Y - _pointC.Y);
-                                ControlUnit.Undo(1);
-                                ControlUnit.CommandsCountDecrement();
-                                ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
-                                    ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
-                                _pointC = new Point(e.X, e.Y);
+                                if (Interaction.CheckedSelectSizePoint())
+                                {
+                                    Interaction.ChangeSize(_pointB);
+                                    ControlUnit.Undo(1);
+                                    ControlUnit.CommandsCountDecrement();
+                                    ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
+                                        ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointA);
+                                }
+                                else
+                                {
+                                    Interaction.Position = new Point(_pointB.X - _pointC.X, _pointB.Y - _pointC.Y);
+                                    ControlUnit.Undo(1);
+                                    ControlUnit.CommandsCountDecrement();
+                                    ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
+                                        ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
+                                    _pointC = new Point(e.X, e.Y);
+                                }
                             }
                             else if (Interaction.IndexSelectPoint != -1)
                             {
@@ -557,10 +574,17 @@ namespace GRPO
                             {
                                 if (!Interaction.EnablePoints)
                                 {
-                                    ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
-                                        ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
-                                    Interaction.GetMaxMinXY();
-
+                                    if (Interaction.CheckedSelectSizePoint())
+                                    {
+                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
+                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointA);
+                                    }
+                                    else
+                                    {
+                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
+                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA, _pointB);
+                                        Interaction.GetMaxMinXY();
+                                    }
                                 }
                                 else if (Interaction.IndexSelectPoint != -1)
                                 {

@@ -42,10 +42,10 @@ namespace GRPO.InteractionFrame.PointInteractions
 
         public void ChangeUpSize(int initialY, int finalY)
         {
-            if (MaxY - finalY - initialY > 10)
+            if (MaxY - (finalY - initialY) > 10)
             {
                 int resultMinY = finalY - initialY;
-                int result = MaxY - MinY;
+                /*int result = MaxY - MinY;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
                     if (MaxY - drawable.Position.Y == 0) throw new ArgumentException("Обалдеть, 0!");
@@ -57,8 +57,12 @@ namespace GRPO.InteractionFrame.PointInteractions
                                       Convert.ToInt32(Convert.ToDouble(resultMinY) *
                                                       (Convert.ToDouble(result) /
                                                        Convert.ToDouble((MaxY - drawable.Position.Y))));
+                }*/
+                foreach (IDrawable drawable in Drawdrawable)
+                {
+                    drawable.Position = new Point(drawable.Position.X, drawable.Position.Y + resultMinY);
+                    drawable.Height = drawable.Height + resultMinY;
                 }
-
                 MinY = resultMinY;
             }
         }
