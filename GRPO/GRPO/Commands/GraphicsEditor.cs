@@ -4,6 +4,7 @@ using GRPO.Drawing.Property;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using GRPO.InteractionFrame;
 
 namespace GRPO.Commands
 {
@@ -23,7 +24,7 @@ namespace GRPO.Commands
             "Изменить свойство заливки" /*3*/,
             "Удалить весь список" /*4*/, "Удалить элемент(ы)" /*5*/, "Изменить положение фигур(ы)" /*6*/,
             "Изменить опорную точку" /*7*/,
-            "Добавить фигуру(ы)" /*8*/
+            "Добавить фигуру(ы)" /*8*/,"Изменить размер фигур(ы)"/*9*/
         };
 
         /// <summary>
@@ -202,6 +203,11 @@ namespace GRPO.Commands
 
                     break;
                 }
+                case "Изменить размер фигур(ы)":
+                {
+                    ChangeSize(indexes, selectPoint, newPoint);
+                    break;
+                }
                 case "Вернуть положение фигур(ы)":
                 {
                     ChangePosition(indexes, newPoint, selectPoint);
@@ -221,6 +227,11 @@ namespace GRPO.Commands
                     }
 
                     indexes.Reverse();
+                    break;
+                }
+                case "Вернуть прежний размер":
+                {
+                    ChangeSize(indexes, newPoint, selectPoint);
                     break;
                 }
             }
@@ -255,6 +266,57 @@ namespace GRPO.Commands
             List<Point> points = _drawablesList[indexes].Points;
             points[pointIndex] = newPoint;
             _drawablesList[indexes].Points = points;
+        }
+        /// <summary>
+        /// Изменить размер фигур(ы)
+        /// </summary>
+        /// <param name="indexes">Индекс фигур</param>
+        /// <param name="selectPoint">Выбранная точка</param>
+        /// <param name="newPoint">Новая точка</param>
+        private void ChangeSize(List<int> indexes, Point selectPoint, Point newPoint)
+        {
+            Checking checking = new Checking();
+            List<IDrawable> localDrawables = new List<IDrawable>();
+
+            foreach (int index in indexes)
+            {
+                localDrawables.Add(_drawablesList[index]);
+            }
+
+            if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 0)
+            {
+                int resultMinY = newPoint.Y - selectPoint.Y;
+                foreach (IDrawable drawable in localDrawables)
+                {
+                    drawable.Position = new Point(drawable.Position.X, drawable.Position.Y + resultMinY);
+                    drawable.Height = drawable.Height - resultMinY;
+                }
+            }
+            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 1)
+            {
+                int resultMaxX = newPoint.X - selectPoint.X;
+                foreach (IDrawable drawable in localDrawables)
+                {
+                    drawable.Width = drawable.Width + resultMaxX;
+                }
+            }
+            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 2)
+            {
+                int resultMaxY = newPoint.Y - selectPoint.Y;
+                foreach (IDrawable drawable in localDrawables)
+                {
+                    drawable.Height = drawable.Height + resultMaxY;
+                }
+            }
+            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 3)
+            {
+                int resultMinX = newPoint.X - selectPoint.X;
+                foreach (IDrawable drawable in localDrawables)
+                {
+                    drawable.Position = new Point(drawable.Position.X + resultMinX, drawable.Position.Y);
+                    drawable.Width = drawable.Width - resultMinX;
+                }
+            }
         }
 
         /// <summary>

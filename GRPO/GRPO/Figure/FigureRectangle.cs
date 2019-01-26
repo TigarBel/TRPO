@@ -285,7 +285,7 @@ namespace GRPO.Figure
         /// </summary>
         public new int Width
         {
-            get { return PointLeftUp.X - PointRightUp.X; }
+            get { return PointRightUp.X - PointLeftUp.X; }
             set { PointRightUp = new Point(PointLeftUp.X + value, PointRightUp.Y); }
         }
         /// <summary>

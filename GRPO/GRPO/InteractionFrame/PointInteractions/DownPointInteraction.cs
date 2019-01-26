@@ -1,15 +1,20 @@
 ﻿using GRPO.Drawing.Interface;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.InteractionFrame.PointInteractions
 {
+    /// <summary>
+    /// Класс нижней точки размера фигур
+    /// </summary>
     public class DownPointInteraction
     {
+        /// <summary>
+        /// Конструктор класс нижней точки размера фигур
+        /// </summary>
+        /// <param name="drawables">Список фигур</param>
+        /// <param name="pointRadius">Радиус точки</param>
         public DownPointInteraction(List<IDrawable> drawables, int pointRadius)
         {
             List<Point> points = new List<Point>();
@@ -30,30 +35,37 @@ namespace GRPO.InteractionFrame.PointInteractions
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
-
+        /// <summary>
+        /// Объект интерактивной точки
+        /// </summary>
         public PointInteraction PointInteraction { get; set; }
-
+        /// <summary>
+        /// Список фигур
+        /// </summary>
         public List<IDrawable> Drawdrawable { get; set; }
-
+        /// <summary>
+        /// Минимальное значение точки по Y
+        /// </summary>
         public int MinY { get; private set; }
-
+        /// <summary>
+        /// Максимальное значение точки по Y
+        /// </summary>
         public int MaxY { get; private set; }
-
+        /// <summary>
+        /// Изменить размер
+        /// </summary>
+        /// <param name="initialY">Начальный параметр</param>
+        /// <param name="finalY">Конечный параметр</param>
         public void ChangeDownSize(int initialY, int finalY)
         {
-            if ((finalY - initialY) - MinY > 10)
+            if (finalY - MinY > 10)
             {
                 int resultMaxY = finalY - initialY;
-                int result = MaxY - MinY;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
-                    if (result - drawable.Height == 0) throw new ArgumentException("Обалдеть, 0!");
-                    drawable.Height = drawable.Height +
-                                      Convert.ToInt32(Convert.ToDouble(resultMaxY) *
-                                                      (Convert.ToDouble(result) / Convert.ToDouble(drawable.Height)));
+                    drawable.Height = drawable.Height + resultMaxY;
                 }
-
-                MaxY = resultMaxY;
+                MaxY = MaxY + resultMaxY;
             }
         }
     }

@@ -1,16 +1,20 @@
 ﻿using GRPO.Drawing.Interface;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.InteractionFrame.PointInteractions
 {
+    /// <summary>
+    /// Класс левой точки размера фигур
+    /// </summary>
     public class LeftPointInteraction
     {
-
+        /// <summary>
+        /// Конструктор класс левой точки размера фигур
+        /// </summary>
+        /// <param name="drawables">Список фигур</param>
+        /// <param name="pointRadius">Радиус точки</param>
         public LeftPointInteraction(List<IDrawable> drawables, int pointRadius)
         {
             List<Point> points = new List<Point>();
@@ -30,36 +34,39 @@ namespace GRPO.InteractionFrame.PointInteractions
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
-
+        /// <summary>
+        /// Объект интерактивной точки
+        /// </summary>
         public PointInteraction PointInteraction { get; set; }
-
+        /// <summary>
+        /// Список фигур
+        /// </summary>
         public List<IDrawable> Drawdrawable { get; set; }
-
+        /// <summary>
+        /// Минимальное значение точки по X 
+        /// </summary>
         public int MinX { get; private set; }
-
+        /// <summary>
+        /// Максимальное значение точки по X 
+        /// </summary>
         public int MaxX { get; private set; }
-
+        /// <summary>
+        /// Изменить размер
+        /// </summary>
+        /// <param name="initialY">Начальный параметр</param>
+        /// <param name="finalY">Конечный параметр</param>
         public void ChangeLeftSize(int initialX, int finalX)
         {
-            if (MaxX - (finalX - initialX) > 10)
+            if (MaxX - finalX > 10)
             {
                 int resultMinX = finalX - initialX;
-                int result = MaxX - MinX;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
-                    if (MaxX - drawable.Position.X == 0) throw new ArgumentException("Обалдеть, 0!");
-                    drawable.Position = new Point(drawable.Position.X +
-                                                  Convert.ToInt32(Convert.ToDouble(resultMinX) *
-                                                                  (Convert.ToDouble(result) /
-                                                                   Convert.ToDouble((MaxX - drawable.Position.X)))),
-                        drawable.Position.Y);
-                    drawable.Width = drawable.Width -
-                                      Convert.ToInt32(Convert.ToDouble(resultMinX) *
-                                                      (Convert.ToDouble(result) /
-                                                       Convert.ToDouble((MaxX - drawable.Position.X))));
+                    drawable.Position = new Point(drawable.Position.X + resultMinX, drawable.Position.Y);
+                    drawable.Width = drawable.Width - resultMinX;
                 }
 
-                MinX = resultMinX;
+                MinX = MinX + resultMinX;
             }
         }
     }

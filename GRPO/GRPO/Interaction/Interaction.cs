@@ -256,7 +256,10 @@ namespace GRPO
                 }
             }
         }
-
+        /// <summary>
+        /// Проверка выбора точки размера
+        /// </summary>
+        /// <returns>Истина или ложь</returns>
         public bool CheckedSelectSizePoint()
         {
             if (_upPoint || _rightPoint || _downPoint || _leftPoint)
@@ -266,27 +269,35 @@ namespace GRPO
 
             return false;
         }
-
+        /// <summary>
+        /// Изменить размер фигур(ы)
+        /// </summary>
+        /// <param name="resolutionPoint">Новая точка размера</param>
         public void ChangeSize(Point resolutionPoint)
         {
             if (!EnablePoints)
             {
                 if (_upPoint)
                 {
-                    InteractionPoints.UpPointInteraction.ChangeUpSize(InteractionPoints.UpPointInteraction.MinY, resolutionPoint.Y);
+                    InteractionPoints.UpPointInteraction.ChangeUpSize(InteractionPoints.UpPointInteraction.MinY,
+                        resolutionPoint.Y);
                 }
                 else if (_rightPoint)
                 {
-                    InteractionPoints.RightPointInteraction.ChangeRightSize(MaxX, resolutionPoint.X);
+                    InteractionPoints.RightPointInteraction.ChangeRightSize(
+                        InteractionPoints.RightPointInteraction.MaxX, resolutionPoint.X);
                 }
                 else if (_downPoint)
                 {
-                    InteractionPoints.DownPointInteraction.ChangeDownSize(MaxY, resolutionPoint.Y);
+                    InteractionPoints.DownPointInteraction.ChangeDownSize(InteractionPoints.DownPointInteraction.MaxY,
+                        resolutionPoint.Y);
                 }
                 else if (_leftPoint)
                 {
-                    InteractionPoints.LeftPointInteraction.ChangeLeftSize(MinX, resolutionPoint.X);
+                    InteractionPoints.LeftPointInteraction.ChangeLeftSize(InteractionPoints.LeftPointInteraction.MinX,
+                        resolutionPoint.X);
                 }
+                InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
             }
         }
 

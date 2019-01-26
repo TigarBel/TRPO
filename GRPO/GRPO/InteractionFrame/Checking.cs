@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using GRPO.Drawing.Interface;
+using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO.InteractionFrame
 {
@@ -32,6 +34,35 @@ namespace GRPO.InteractionFrame
                 number++;
             }
 
+            return -1;
+        }
+
+        /// <summary>
+        /// Взять номер точки размера интерактива
+        /// </summary>
+        /// <param name="point">Точка</param>
+        /// <param name="drawables">Список фигур</param>
+        /// <param name="radiusPoint">Радиус взаимодействия</param>
+        /// <returns></returns>
+        public int GetNumberSizePoint(Point point, List<IDrawable> drawables, int radiusPoint)
+        {
+            InteractionPoints interactionPoints = new InteractionPoints(drawables, radiusPoint);
+            if (interactionPoints.UpPointInteraction.PointInteraction.GetInto(point))
+            {
+                return 0;
+            }
+            else if(interactionPoints.RightPointInteraction.PointInteraction.GetInto(point))
+            {
+                return 1;
+            }
+            else if (interactionPoints.DownPointInteraction.PointInteraction.GetInto(point))
+            {
+                return 2;
+            }
+            else if (interactionPoints.LeftPointInteraction.PointInteraction.GetInto(point))
+            {
+                return 3;
+            }
             return -1;
         }
     }

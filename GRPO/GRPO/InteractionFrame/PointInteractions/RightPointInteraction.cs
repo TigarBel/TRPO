@@ -1,15 +1,20 @@
 ﻿using GRPO.Drawing.Interface;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GRPO.InteractionFrame.PointInteractions
 {
+    /// <summary>
+    /// Класс правой точки размера фигур
+    /// </summary>
     public class RightPointInteraction
     {
+        /// <summary>
+        /// Конструктор класс правой точки размера фигур
+        /// </summary>
+        /// <param name="drawables">Список фигур</param>
+        /// <param name="pointRadius">Радиус точки</param>
         public RightPointInteraction(List<IDrawable> drawables, int pointRadius)
         {
             List<Point> points = new List<Point>();
@@ -29,30 +34,38 @@ namespace GRPO.InteractionFrame.PointInteractions
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
-
+        /// <summary>
+        /// Объект интерактивной точки
+        /// </summary>
         public PointInteraction PointInteraction { get; set; }
-
+        /// <summary>
+        /// Список фигур
+        /// </summary>
         public List<IDrawable> Drawdrawable { get; set; }
-
+        /// <summary>
+        /// Минимальное значение точки по X 
+        /// </summary>
         public int MinX { get; private set; }
-
+        /// <summary>
+        /// Максимальное значение точки по X 
+        /// </summary>
         public int MaxX { get; private set; }
-
+        /// <summary>
+        /// Изменить размер
+        /// </summary>
+        /// <param name="initialY">Начальный параметр</param>
+        /// <param name="finalY">Конечный параметр</param>
         public void ChangeRightSize(int initialX, int finalX)
         {
-            if ((finalX - initialX) - MinX > 10)
+            if (finalX - MinX > 10)
             {
                 int resultMaxX = finalX - initialX;
-                int result = MaxX - MinX;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
-                    if (result - drawable.Width == 0) throw new ArgumentException("Обалдеть, 0!");
-                    drawable.Width = drawable.Width +
-                                     Convert.ToInt32(Convert.ToDouble(resultMaxX) *
-                                                     (Convert.ToDouble(result) / Convert.ToDouble(drawable.Width)));
+                    drawable.Width = drawable.Width + resultMaxX;
                 }
 
-                MaxX = resultMaxX;
+                MaxX = MaxX + resultMaxX;
             }
         }
     }
