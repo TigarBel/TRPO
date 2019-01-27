@@ -85,6 +85,11 @@
     <Compile Include="Drawing\Interface\ILineProperty.cs" />
     <Compile Include="Interaction\Interaction.cs" />
     <Compile Include="Drawing\Tools.cs" />
+    <Compile Include="UserControls\CanvasMouseStrategy\BaseMouseStrategy.cs" />
+    <Compile Include="UserControls\CanvasMouseStrategy\ContextMouse.cs" />
+    <Compile Include="UserControls\CanvasMouseStrategy\MouseDown.cs" />
+    <Compile Include="UserControls\CanvasMouseStrategy\MouseMove.cs" />
+    <Compile Include="UserControls\CanvasMouseStrategy\MouseUp.cs" />
     <Compile Include="UserControls\ToolsIncludeButtons\ToolIncludeButton.cs" />
     <Compile Include="UserControls\ToolsWithPropertyControl.cs">
       <SubType>UserControl</SubType>
@@ -185,9 +190,7 @@
   <ItemGroup>
     <None Include="Resources\polygon.bmp" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UserControls\CanvasMouseActions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,6 +8,7 @@ using GRPO.Drawing;
 using GRPO.Drawing.Property;
 using GRPO.Drawing.Interface;
 using GRPO.Commands;
+using GRPO.UserControls.CanvasMouseStrategy;
 
 namespace GRPO
 {
@@ -47,32 +48,12 @@ namespace GRPO
         /// </summary>
         private Point _pointC;
 
+        private bool _flagMouseDown = false;
+
         /// <summary>
         /// Флаг полифигур, для составения полифигур
         /// </summary>
         private bool _flagPolyFigure = false;
-
-        /// <summary>
-        /// Флаг устанавливаемый при зажатии кнопки мыши
-        /// </summary>
-        public bool FlagMouseDown { get; set; }
-
-        /// <summary>
-        /// Флаг при создании полифигур
-        /// </summary>
-        public bool FlagPolyFigure
-        {
-            get { return _flagPolyFigure; }
-            set
-            {
-                if (!value)
-                {
-                    Drawables.Clear();
-                }
-
-                _flagPolyFigure = value;
-            }
-        }
 
         /// <summary>
         /// Список фигур хронящихся в памяти
@@ -105,10 +86,36 @@ namespace GRPO
         public CanvasControl()
         {
             InitializeComponent();
-            SetSizeCanvas(100, 100);
+            SizeCanvas = new Point(100, 100);
             SelectTool = new Tools(DrawingTools.DrawFigureLine);
             LineProperty = new LineProperty();
             FillProperty = new FillProperty();
+        }
+
+        /// <summary>
+        /// Флаг устанавливаемый при зажатии кнопки мыши
+        /// </summary>
+        public bool FlagMouseDown
+        {
+            get { return _flagMouseDown; }
+            set { _flagMouseDown = value; }
+        }
+
+        /// <summary>
+        /// Флаг при создании полифигур
+        /// </summary>
+        public bool FlagPolyFigure
+        {
+            get { return _flagPolyFigure; }
+            set
+            {
+                if (!value)
+                {
+                    Drawables.Clear();
+                }
+
+                _flagPolyFigure = value;
+            }
         }
 
         /// <summary>
@@ -180,43 +187,27 @@ namespace GRPO
         }
 
         /// <summary>
-        /// Задать размер полотна
+        /// Размер полотна, задается точкой
         /// </summary>
-        /// <param name="width">Ширина полотна</param>
-        /// <param name="height">Высота полотна</param>
-        public void SetSizeCanvas(int width, int height)
+        public Point SizeCanvas
         {
-            if (width <= 0)
+            get { return new Point(canvas.Width, canvas.Height); }
+            set
             {
-                throw new ArgumentException("Ширина полотна не может быть меньше 1!");
+                if (value.X <= 0)
+                {
+                    throw new ArgumentException("Ширина полотна не может быть меньше 1!");
+                }
+
+                if (value.Y <= 0)
+                {
+                    throw new ArgumentException("Высота полотна не может быть меньше 1!");
+                }
+
+                canvas.Size = new Size(value.X, value.Y);
+                canvas.Image = new Bitmap(value.X, value.Y);
+                RefreshCanvas();
             }
-
-            if (height <= 0)
-            {
-                throw new ArgumentException("Высота полотна не может быть меньше 1!");
-            }
-
-            canvas.Size = new Size(width, height);
-            canvas.Image = new Bitmap(width, height);
-            RefreshCanvas();
-        }
-
-        /// <summary>
-        /// Получить ширину холста
-        /// </summary>
-        /// <returns>Ширину холста</returns>
-        public int GetWidthCanvas()
-        {
-            return canvas.Width;
-        }
-
-        /// <summary>
-        /// Получить высоту холста
-        /// </summary>
-        /// <returns>Высоту холста</returns>
-        public int GetHeightCanvas()
-        {
-            return canvas.Height;
         }
 
         /// <summary>
@@ -270,86 +261,9 @@ namespace GRPO
             FlagMouseDown = true;
             _pointA = new Point(e.X, e.Y);
 
-            if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-            {
-                List<Point> localPoints = new List<Point>() {_pointA, _pointB};
-                Drawables.Add(_factoryDrawFigure.DrawFigure(localPoints, LineProperty, FillProperty,
-                    SelectTool.DrawingTools));
-            }
-
-            if (SelectTool.TypeTools == TypeTools.PolyFigure)
-            {
-                if (FlagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointA);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    if (e.Button == MouseButtons.Right)
-                    {
-                        ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                            points, LineProperty, FillProperty);
-                        Drawables.Clear();
-
-                        FlagPolyFigure = false;
-                    }
-                    else
-                    {
-                        Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
-                            SelectTool.DrawingTools));
-                    }
-                }
-
-                if (!FlagPolyFigure && e.Button == MouseButtons.Left)
-                {
-                    List<Point> points = new List<Point>()
-                        {new Point(_pointA.X, _pointA.Y), new Point(_pointA.X, _pointA.Y)};
-                    Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-
-                    FlagPolyFigure = true;
-                }
-            }
-
-            if (SelectTool.TypeTools == TypeTools.SelectFigure)
-            {
-                if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                {
-                    if (Interaction != null)
-                    {
-                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X ||
-                            Interaction.MinY > _pointA.Y ||
-                            Interaction.MaxY < _pointA.Y)
-                        {
-                            Interaction = null;
-                        }
-                        else
-                        { 
-                            Interaction.SelectPoint = _pointA;
-                            _pointC = new Point(e.X, e.Y);
-                        }
-                    }
-                }
-
-                if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                {
-                    if (Interaction != null)
-                    {
-                        if (Interaction.MinX > _pointA.X || Interaction.MaxX < _pointA.X ||
-                            Interaction.MinY > _pointA.Y ||
-                            Interaction.MaxY < _pointA.Y)
-                        {
-                            Interaction = null;
-                        }
-                        else
-                        {
-                            Interaction.SelectPoint = _pointA;
-                            _pointC = new Point(e.X, e.Y);
-                        }
-                    }
-                }
-            }
+            ContextMouse contextMouse = new ContextMouse(new MouseDown());
+            contextMouse.MouseAction(ref _flagMouseDown, ref _flagPolyFigure, SelectTool, LineProperty, FillProperty, canvas,
+                ref _drawables, ref _controlUnit, _pointA, _pointB, ref _pointC, ref _interaction, e);
         }
 
         /// <summary>
@@ -362,84 +276,9 @@ namespace GRPO
             _pointB = new Point(e.X, e.Y);
             RefreshCanvas();
 
-            if (FlagMouseDown)
-            {
-                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-                {
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    List<Point> localPoints = new List<Point>() { _pointA, _pointB };
-                    Drawables.Add(_factoryDrawFigure.DrawFigure(localPoints, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-                }
-
-                if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
-                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                    {
-                        if (Interaction != null)
-                        {
-                            if (Interaction.CheckedSelectSizePoint())
-                            {
-                                Interaction.ChangeSize(_pointB);
-                                Interaction.Draw(canvas);
-                            }
-                            else
-                            {
-                                Interaction.Position = new Point(_pointB.X - _pointC.X, _pointB.Y - _pointC.Y);
-                                Interaction.Draw(canvas);
-                                _pointC = new Point(e.X, e.Y);
-                            }
-                        }
-                        else
-                        {
-                            DrawFigureRectangle rectangle = new DrawFigureRectangle(_pointA, _pointB,
-                                new LineProperty(1, Color.Gray, DashStyle.Dash),
-                                new FillProperty(Color.Transparent));
-                            rectangle.Draw(canvas);
-                        }
-                    }
-
-                    if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                    {
-                        if (Interaction != null)
-                        {
-                            if (!Interaction.EnablePoints)
-                            {
-                                if (Interaction.CheckedSelectSizePoint())
-                                {
-                                    Interaction.ChangeSize(_pointB);
-                                    Interaction.Draw(canvas);
-                                }
-                                else
-                                {
-                                    Interaction.Position = new Point(_pointB.X - _pointC.X, _pointB.Y - _pointC.Y);
-                                    Interaction.Draw(canvas);
-                                    _pointC = new Point(e.X, e.Y);
-                                }
-                            }
-                            else if (Interaction.IndexSelectPoint != -1)
-                            {
-                                Interaction.ChangePoint(_pointB);
-                                Interaction.Draw(canvas);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (SelectTool.TypeTools == TypeTools.PolyFigure)
-            {
-                if (FlagPolyFigure)
-                {
-                    List<Point> points = Drawables[Drawables.Count - 1].Points;
-                    points.RemoveAt(points.Count - 1);
-                    points.Add(_pointB);
-
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
-                        SelectTool.DrawingTools));
-                }
-            }
+            ContextMouse contextMouse = new ContextMouse(new MouseMove());
+            contextMouse.MouseAction(ref _flagMouseDown, ref _flagPolyFigure, SelectTool, LineProperty, FillProperty, canvas,
+                ref _drawables, ref _controlUnit, _pointA, _pointB, ref _pointC, ref _interaction, e);
         }
 
         /// <summary>
@@ -450,138 +289,21 @@ namespace GRPO
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
             _pointB = new Point(e.X, e.Y);
+
+            ContextMouse contextMouse = new ContextMouse(new MouseUp(SetProperty));
+            contextMouse.MouseAction(ref _flagMouseDown, ref _flagPolyFigure, SelectTool, LineProperty, FillProperty, canvas,
+                ref _drawables, ref _controlUnit, _pointA, _pointB, ref _pointC, ref _interaction, e);
+
             RefreshCanvas();
-            if (FlagMouseDown)
-            {
-                if (SelectTool.TypeTools == TypeTools.SimpleFigure)
-                {
-                    Drawables.RemoveAt(Drawables.Count - 1);
-                    List<Point> points = new List<Point>() {_pointA, _pointB};
-                    ControlUnit.Drawing(ControlUnit.GraphicsEditor.Keywords[0], new Tools(SelectTool.DrawingTools),
-                        points, LineProperty, FillProperty);
-                    Drawables.Clear();
-                }
+        }
 
-                if (SelectTool.TypeTools == TypeTools.PolyFigure)
-                {
-                    if (e.Button == MouseButtons.Left && Drawables.Count != 0)
-                    {
-                        List<Point> points = Drawables[Drawables.Count - 1].Points;
-                        points.Add(_pointB);
-                        Drawables.RemoveAt(Drawables.Count - 1);
-                        Drawables.Add(_factoryDrawFigure.DrawFigure(points, LineProperty, FillProperty,
-                            SelectTool.DrawingTools));
-                    }
-                }
-
-                if (SelectTool.TypeTools == TypeTools.SelectFigure)
-                {
-                    if (SelectTool.DrawingTools == DrawingTools.MassSelect)
-                    {
-                        if (Interaction == null)
-                        {
-                            Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointA, _pointB);
-                            if (Interaction.DrawableFigures.Count == 1)
-                            {
-                                if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
-                            }
-
-                            if (Interaction.DrawableFigures.Count == 0)
-                            {
-                                Interaction = null;
-                                if (DragProperty != null) DragProperty(null);
-                            }
-                        }
-                        else
-                        {
-                            if (_pointA.X != _pointB.X && _pointA.Y != _pointB.Y)
-                            {
-                                if (!Interaction.EnablePoints)
-                                {
-                                    if (Interaction.CheckedSelectSizePoint())
-                                    {
-                                        Interaction.ChangeSize(_pointB);
-                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[9],
-                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA,
-                                            _pointB);
-                                        Interaction.GetMaxMinXY();
-                                    }
-                                    else
-                                    {
-                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
-                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA,
-                                            _pointB);
-                                        Interaction.GetMaxMinXY();
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (SelectTool.DrawingTools == DrawingTools.CursorSelect)
-                    {
-                        if (Interaction == null)
-                        {
-                            if (e.Button == MouseButtons.Left)
-                            {
-                                Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointB, false);
-                                if (Interaction.DrawableFigures.Count == 0)
-                                {
-                                    Interaction = null;
-                                    if (DragProperty != null) DragProperty(null);
-                                }
-                                else if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
-                            }
-
-                            if (e.Button == MouseButtons.Right)
-                            {
-                                Interaction = new Interaction(ControlUnit.GraphicsEditor.Drawables, _pointB, true);
-                                if (Interaction.DrawableFigures.Count == 0)
-                                {
-                                    Interaction = null;
-                                    if (DragProperty != null) DragProperty(null);
-                                }
-                                else if (DragProperty != null) DragProperty(Interaction.DrawableFigures[0]);
-                            }
-                        }
-                        else
-                        {
-                            if (_pointA.X != _pointB.X && _pointA.Y != _pointB.Y)
-                            {
-                                if (!Interaction.EnablePoints)
-                                {
-                                    if (Interaction.CheckedSelectSizePoint())
-                                    {
-                                        Interaction.ChangeSize(_pointB);
-                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[9],
-                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA,
-                                            _pointB);
-                                        Interaction.GetMaxMinXY();
-                                    }
-                                    else
-                                    {
-                                        ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[6],
-                                            ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes, 0, _pointA,
-                                            _pointB);
-                                        Interaction.GetMaxMinXY();
-                                    }
-                                }
-                                else if (Interaction.IndexSelectPoint != -1)
-                                {
-                                    ControlUnit.Reconstruction(ControlUnit.GraphicsEditor.Keywords[7],
-                                        ControlUnit.GraphicsEditor.Drawables, Interaction.Indexes,
-                                        Interaction.IndexSelectPoint, _pointA, _pointB);
-                                    Interaction.GetMaxMinXY();
-
-                                }
-                            }
-                        }
-                    }
-                }
-
-                FlagMouseDown = false;
-                RefreshCanvas();
-            }
+        /// <summary>
+        /// Костыль
+        /// </summary>
+        /// <param name="drawable"></param>
+        private void SetProperty(IDrawable drawable)
+        {
+            if (DragProperty != null) DragProperty(drawable);
         }
 
         /// <summary>
@@ -621,7 +343,7 @@ namespace GRPO
                 List<IDrawable> drawables = new List<IDrawable>();
                 foreach (IDrawable drawable in BuferDraw)
                 {
-                    if (_pointB.X > 0 && _pointB.X < GetWidthCanvas() && _pointB.Y > 0 && _pointB.Y < GetHeightCanvas())
+                    if (_pointB.X > 0 && _pointB.X < SizeCanvas.X && _pointB.Y > 0 && _pointB.Y < SizeCanvas.Y)
                     {
                         int Width = drawable.Position.X - localPoints.Min(point => point.X);
                         int Height = drawable.Position.Y - localPoints.Min(point => point.Y);

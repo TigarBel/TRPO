@@ -1,4 +1,4 @@
-﻿using GRPO.Drawing.Interface;
+﻿ using GRPO.Drawing.Interface;
 using GRPO.InteractionFrame;
 using GRPO.InteractionFrame.PointInteractions;
 using System;
@@ -20,26 +20,6 @@ namespace GRPO
         /// Индекс выбранной габоритной точки
         /// </summary>
         private int _indexSelectPoint;
-
-        /// <summary>
-        /// Выбор верхней точки размера
-        /// </summary>
-        private bool _upPoint = false;
-
-        /// <summary>
-        /// Выбор правой точки размера
-        /// </summary>
-        private bool _rightPoint = false;
-
-        /// <summary>
-        /// Выбор нижней точки размера
-        /// </summary>
-        private bool _downPoint = false;
-
-        /// <summary>
-        /// Выбор левой точки размера
-        /// </summary>
-        private bool _leftPoint = false;
 
         /// <summary>
         /// Список индексов взятых фигур
@@ -261,10 +241,7 @@ namespace GRPO
                 }
                 else
                 {
-                    _upPoint = InteractionPoints.UpPointInteraction.GetInto(value);
-                    _rightPoint = InteractionPoints.RightPointInteraction.GetInto(value);
-                    _downPoint = InteractionPoints.DownPointInteraction.GetInto(value);
-                    _leftPoint = InteractionPoints.LeftPointInteraction.GetInto(value);
+                    _indexSelectPoint = InteractionPoints.CheckedPoint(value);
                 }
             }
         }
@@ -287,20 +264,6 @@ namespace GRPO
         }
 
         /// <summary>
-        /// Проверка выбора точки размера
-        /// </summary>
-        /// <returns>Истина или ложь</returns>
-        public bool CheckedSelectSizePoint()
-        {
-            if (_upPoint || _rightPoint || _downPoint || _leftPoint)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Изменить размер фигур(ы)
         /// </summary>
         /// <param name="resolutionPoint">Новая точка размера</param>
@@ -308,25 +271,24 @@ namespace GRPO
         {
             if (!EnablePoints)
             {
-                if (_upPoint)
+                switch (_indexSelectPoint)
                 {
-                    InteractionPoints.UpPointInteraction.ChangeUpSize(InteractionPoints.UpPointInteraction.MinY,
-                        resolutionPoint.Y);
-                }
-                else if (_rightPoint)
-                {
-                    InteractionPoints.RightPointInteraction.ChangeRightSize(
-                        InteractionPoints.RightPointInteraction.MaxX, resolutionPoint.X);
-                }
-                else if (_downPoint)
-                {
-                    InteractionPoints.DownPointInteraction.ChangeDownSize(InteractionPoints.DownPointInteraction.MaxY,
-                        resolutionPoint.Y);
-                }
-                else if (_leftPoint)
-                {
-                    InteractionPoints.LeftPointInteraction.ChangeLeftSize(InteractionPoints.LeftPointInteraction.MinX,
-                        resolutionPoint.X);
+                    case 0:
+                        InteractionPoints.UpPointInteraction.ChangeUpSize(InteractionPoints.UpPointInteraction.MinY,
+                            resolutionPoint.Y);
+                        break;
+                    case 1:
+                        InteractionPoints.RightPointInteraction.ChangeRightSize(
+                            InteractionPoints.RightPointInteraction.MaxX, resolutionPoint.X);
+                        break;
+                    case 2:
+                        InteractionPoints.DownPointInteraction.ChangeDownSize(InteractionPoints.DownPointInteraction.MaxY,
+                            resolutionPoint.Y);
+                        break;
+                    case 3:
+                        InteractionPoints.LeftPointInteraction.ChangeLeftSize(InteractionPoints.LeftPointInteraction.MinX,
+                            resolutionPoint.X);
+                        break;
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using GRPO.Drawing.Interface;
 
 namespace GRPO.InteractionFrame.PointInteractions
@@ -40,5 +41,32 @@ namespace GRPO.InteractionFrame.PointInteractions
         /// Левая интерактивная точка
         /// </summary>
         public LeftPointInteraction LeftPointInteraction { get; set; }
+
+        /// <summary>
+        /// Определить на какую точку нажали
+        /// </summary>
+        /// <param name="point">Точка нажатия</param>
+        /// <returns>Индекс точки</returns>
+        public int CheckedPoint(Point point)
+        {
+            if (UpPointInteraction.GetInto(point))
+            {
+                return 0;
+            }
+            else if (RightPointInteraction.GetInto(point))
+            {
+                return 1;
+            }
+            else if(DownPointInteraction.GetInto(point))
+            {
+                return 2;
+            }
+            else if(LeftPointInteraction.GetInto(point))
+            {
+                return 3;
+            }
+
+            return -1;
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace GRPO
                     null, control, new object[] {true});
             }
 
-            _canvasControl.SetSizeCanvas(640, 480);
+            _canvasControl.SizeCanvas = new Point(640, 480);
 
             _canvasControl.ControlUnit = new ControlUnit();
 
@@ -216,7 +216,7 @@ namespace GRPO
                 if (Convert.ToInt32(textBox1.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1920 &&
                     Convert.ToInt32(textBox2.Text) >= 0 && Convert.ToInt32(textBox1.Text) <= 1000)
                 {
-                    _canvasControl.SetSizeCanvas(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
+                    _canvasControl.SizeCanvas = new Point(Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text));
                 }
             }
         }
