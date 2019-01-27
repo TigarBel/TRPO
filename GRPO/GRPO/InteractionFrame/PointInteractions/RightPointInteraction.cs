@@ -1,4 +1,5 @@
-﻿using GRPO.Drawing.Interface;
+﻿using System;
+using GRPO.Drawing.Interface;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -34,39 +35,65 @@ namespace GRPO.InteractionFrame.PointInteractions
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
+
         /// <summary>
         /// Объект интерактивной точки
         /// </summary>
         public PointInteraction PointInteraction { get; set; }
+
         /// <summary>
         /// Список фигур
         /// </summary>
         public List<IDrawable> Drawdrawable { get; set; }
+
         /// <summary>
         /// Минимальное значение точки по X 
         /// </summary>
         public int MinX { get; private set; }
+
         /// <summary>
         /// Максимальное значение точки по X 
         /// </summary>
         public int MaxX { get; private set; }
+
         /// <summary>
         /// Изменить размер
         /// </summary>
-        /// <param name="initialY">Начальный параметр</param>
-        /// <param name="finalY">Конечный параметр</param>
+        /// <param name="initialX">Начальный параметр</param>
+        /// <param name="finalX">Конечный параметр</param>
         public void ChangeRightSize(int initialX, int finalX)
         {
             if (finalX - MinX > 10)
             {
                 int resultMaxX = finalX - initialX;
+                int width = MaxX - MinX;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
-                    drawable.Width = drawable.Width + resultMaxX;
+                    drawable.Position = new Point(
+                        drawable.Position.X +
+                        Convert.ToInt32(Convert.ToDouble(resultMaxX * (drawable.Position.X - MinX)) /
+                                        Convert.ToDouble(width)),
+                        drawable.Position.Y);
+                    drawable.Width = drawable.Width +
+                                     Convert.ToInt32(Convert.ToDouble((resultMaxX * drawable.Width)) /
+                                                     Convert.ToDouble(width));
                 }
 
                 MaxX = MaxX + resultMaxX;
             }
+        }
+
+        /// <summary>
+        /// Проверить на нахождении точки в области интерактивной точки
+        /// </summary>
+        /// <param name="point">Проверяемая точка</param>
+        /// <returns>Истина или ложь</returns>
+        public bool GetInto(Point point)
+        {
+            if (PointInteraction.DrawCircle.Position.X <= point.X &&
+                PointInteraction.DrawCircle.Position.X + PointInteraction.DrawCircle.Width >= point.X)
+                return true;
+            return false;
         }
     }
 }

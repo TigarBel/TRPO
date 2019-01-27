@@ -21,10 +21,12 @@ namespace GRPO.InteractionFrame.PointInteractions
                 new Point(position.X + radius, position.Y),
                 new LineProperty(), new FillProperty());
         }
+
         /// <summary>
         /// Рисуемый объект круга
         /// </summary>
         public DrawFigureCircle DrawCircle { get; set; }
+
         /// <summary>
         /// Позиция рисуемого круга
         /// </summary>
@@ -33,6 +35,7 @@ namespace GRPO.InteractionFrame.PointInteractions
             get { return DrawCircle.Position; }
             set { DrawCircle.Position = value; }
         }
+
         /// <summary>
         /// Радиус рисуемого круга
         /// </summary>
@@ -41,6 +44,7 @@ namespace GRPO.InteractionFrame.PointInteractions
             get { return DrawCircle.Circle.Radius; }
             set { DrawCircle.Circle.Radius = value; }
         }
+
         /// <summary>
         /// Нарисовать круг
         /// </summary>
@@ -48,18 +52,6 @@ namespace GRPO.InteractionFrame.PointInteractions
         public void Draw(PictureBox canvas)
         {
             DrawCircle.Draw(canvas);
-        }
-        /// <summary>
-        /// Проверить на нахождении точки в области интерактивной точки
-        /// </summary>
-        /// <param name="point">Проверяемая точка</param>
-        /// <returns>Истина или ложь</returns>
-        public bool GetInto(Point point)
-        {
-            if (DrawCircle.Position.X <= point.X && DrawCircle.Position.X + DrawCircle.Width >= point.X &&
-                DrawCircle.Position.Y <= point.Y && DrawCircle.Position.Y + DrawCircle.Height >= point.Y)
-                return true;
-            return false;
         }
     }
 }

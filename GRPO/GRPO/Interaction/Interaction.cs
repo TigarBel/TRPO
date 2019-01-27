@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace GRPO
 {
@@ -20,12 +21,24 @@ namespace GRPO
         /// </summary>
         private int _indexSelectPoint;
 
+        /// <summary>
+        /// Выбор верхней точки размера
+        /// </summary>
         private bool _upPoint = false;
 
+        /// <summary>
+        /// Выбор правой точки размера
+        /// </summary>
         private bool _rightPoint = false;
 
+        /// <summary>
+        /// Выбор нижней точки размера
+        /// </summary>
         private bool _downPoint = false;
 
+        /// <summary>
+        /// Выбор левой точки размера
+        /// </summary>
         private bool _leftPoint = false;
 
         /// <summary>
@@ -129,6 +142,9 @@ namespace GRPO
             EnablePoints = false;
         }
 
+        /// <summary>
+        /// Позиция интерактива
+        /// </summary>
         public Point Position
         {
             set
@@ -172,6 +188,18 @@ namespace GRPO
         public int MaxY { get; set; }
 
         /// <summary>
+        /// Отрисовка фигур интерактива
+        /// </summary>
+        /// <param name="canvas">Холст на котором рисуем</param>
+        public void Draw(PictureBox canvas)
+        {
+            foreach (IDrawable drawable in DrawableFigures)
+            {
+                drawable.Draw(canvas);
+            }
+        }
+
+        /// <summary>
         /// Обновить габариты интерактива
         /// </summary>
         public void GetMaxMinXY()
@@ -189,6 +217,7 @@ namespace GRPO
             MaxX = points.Max(point => point.X) + 5;
             MinY = points.Min(point => point.Y) - 5;
             MaxY = points.Max(point => point.Y) + 5;
+            InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
         }
 
         /// <summary>
@@ -232,10 +261,10 @@ namespace GRPO
                 }
                 else
                 {
-                    _upPoint = InteractionPoints.UpPointInteraction.PointInteraction.GetInto(value);
-                    _rightPoint = InteractionPoints.RightPointInteraction.PointInteraction.GetInto(value);
-                    _downPoint = InteractionPoints.DownPointInteraction.PointInteraction.GetInto(value);
-                    _leftPoint = InteractionPoints.LeftPointInteraction.PointInteraction.GetInto(value);
+                    _upPoint = InteractionPoints.UpPointInteraction.GetInto(value);
+                    _rightPoint = InteractionPoints.RightPointInteraction.GetInto(value);
+                    _downPoint = InteractionPoints.DownPointInteraction.GetInto(value);
+                    _leftPoint = InteractionPoints.LeftPointInteraction.GetInto(value);
                 }
             }
         }
@@ -256,6 +285,7 @@ namespace GRPO
                 }
             }
         }
+
         /// <summary>
         /// Проверка выбора точки размера
         /// </summary>
@@ -269,6 +299,7 @@ namespace GRPO
 
             return false;
         }
+
         /// <summary>
         /// Изменить размер фигур(ы)
         /// </summary>
@@ -297,7 +328,6 @@ namespace GRPO
                     InteractionPoints.LeftPointInteraction.ChangeLeftSize(InteractionPoints.LeftPointInteraction.MinX,
                         resolutionPoint.X);
                 }
-                InteractionPoints = new InteractionPoints(DrawableFigures, _radiusDrawPoint);
             }
         }
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using GRPO.InteractionFrame;
+using GRPO.InteractionFrame.PointInteractions;
 
 namespace GRPO.Commands
 {
@@ -24,7 +25,7 @@ namespace GRPO.Commands
             "Изменить свойство заливки" /*3*/,
             "Удалить весь список" /*4*/, "Удалить элемент(ы)" /*5*/, "Изменить положение фигур(ы)" /*6*/,
             "Изменить опорную точку" /*7*/,
-            "Добавить фигуру(ы)" /*8*/,"Изменить размер фигур(ы)"/*9*/
+            "Добавить фигуру(ы)" /*8*/, "Изменить размер фигур(ы)" /*9*/
         };
 
         /// <summary>
@@ -267,6 +268,7 @@ namespace GRPO.Commands
             points[pointIndex] = newPoint;
             _drawablesList[indexes].Points = points;
         }
+
         /// <summary>
         /// Изменить размер фигур(ы)
         /// </summary>
@@ -275,7 +277,6 @@ namespace GRPO.Commands
         /// <param name="newPoint">Новая точка</param>
         private void ChangeSize(List<int> indexes, Point selectPoint, Point newPoint)
         {
-            Checking checking = new Checking();
             List<IDrawable> localDrawables = new List<IDrawable>();
 
             foreach (int index in indexes)
@@ -283,39 +284,27 @@ namespace GRPO.Commands
                 localDrawables.Add(_drawablesList[index]);
             }
 
-            if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 0)
+            InteractionPoints interactionPoints = new InteractionPoints(localDrawables, 4);
+
+            if (interactionPoints.UpPointInteraction.GetInto(selectPoint))
             {
-                int resultMinY = newPoint.Y - selectPoint.Y;
-                foreach (IDrawable drawable in localDrawables)
-                {
-                    drawable.Position = new Point(drawable.Position.X, drawable.Position.Y + resultMinY);
-                    drawable.Height = drawable.Height - resultMinY;
-                }
+                interactionPoints.UpPointInteraction.ChangeUpSize(interactionPoints.UpPointInteraction.MinY,
+                    newPoint.Y);
             }
-            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 1)
+            else if (interactionPoints.RightPointInteraction.GetInto(selectPoint))
             {
-                int resultMaxX = newPoint.X - selectPoint.X;
-                foreach (IDrawable drawable in localDrawables)
-                {
-                    drawable.Width = drawable.Width + resultMaxX;
-                }
+                interactionPoints.RightPointInteraction.ChangeRightSize(interactionPoints.RightPointInteraction.MaxX,
+                    newPoint.X);
             }
-            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 2)
+            else if (interactionPoints.DownPointInteraction.GetInto(selectPoint))
             {
-                int resultMaxY = newPoint.Y - selectPoint.Y;
-                foreach (IDrawable drawable in localDrawables)
-                {
-                    drawable.Height = drawable.Height + resultMaxY;
-                }
+                interactionPoints.DownPointInteraction.ChangeDownSize(interactionPoints.DownPointInteraction.MaxY,
+                    newPoint.Y);
             }
-            else if (checking.GetNumberSizePoint(selectPoint, localDrawables, 4) == 3)
+            else if (interactionPoints.LeftPointInteraction.GetInto(selectPoint))
             {
-                int resultMinX = newPoint.X - selectPoint.X;
-                foreach (IDrawable drawable in localDrawables)
-                {
-                    drawable.Position = new Point(drawable.Position.X + resultMinX, drawable.Position.Y);
-                    drawable.Width = drawable.Width - resultMinX;
-                }
+                interactionPoints.LeftPointInteraction.ChangeLeftSize(interactionPoints.LeftPointInteraction.MinX,
+                    newPoint.X);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using GRPO.Drawing.Interface;
@@ -35,22 +36,27 @@ namespace GRPO.InteractionFrame.PointInteractions
             PointInteraction = new PointInteraction(point, pointRadius);
             Drawdrawable = drawables;
         }
+
         /// <summary>
         /// Объект интерактивной точки
         /// </summary>
         public PointInteraction PointInteraction { get; set; }
+
         /// <summary>
         /// Список фигур
         /// </summary>
         public List<IDrawable> Drawdrawable { get; set; }
+
         /// <summary>
         /// Минимальное значение точки по Y
         /// </summary>
         public int MinY { get; private set; }
+
         /// <summary>
         /// Максимальное значение точки по Y
         /// </summary>
         public int MaxY { get; private set; }
+
         /// <summary>
         /// Изменить размер
         /// </summary>
@@ -61,13 +67,33 @@ namespace GRPO.InteractionFrame.PointInteractions
             if (MaxY - finalY > 10)
             {
                 int resultMinY = finalY - initialY;
+                int height = MaxY - MinY;
                 foreach (IDrawable drawable in Drawdrawable)
                 {
-                    drawable.Position = new Point(drawable.Position.X, drawable.Position.Y + resultMinY);
-                    drawable.Height = drawable.Height - resultMinY;
+                    drawable.Position = new Point(drawable.Position.X,
+                        drawable.Position.Y +
+                        Convert.ToInt32(Convert.ToDouble(resultMinY * (MaxY - drawable.Position.Y)) /
+                                        Convert.ToDouble(height)));
+                    drawable.Height = drawable.Height -
+                                      Convert.ToInt32(Convert.ToDouble(resultMinY * drawable.Height) /
+                                                      Convert.ToDouble(height));
                 }
+
                 MinY = MinY + resultMinY;
             }
+        }
+
+        /// <summary>
+        /// Проверить на нахождении точки в области интерактивной точки
+        /// </summary>
+        /// <param name="point">Проверяемая точка</param>
+        /// <returns>Истина или ложь</returns>
+        public bool GetInto(Point point)
+        {
+            if (PointInteraction.DrawCircle.Position.Y <= point.Y &&
+                PointInteraction.DrawCircle.Position.Y + PointInteraction.DrawCircle.Height >= point.Y)
+                return true;
+            return false;
         }
     }
 }

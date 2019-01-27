@@ -20,18 +20,22 @@ namespace GRPO.InteractionFrame.PointInteractions
             DownPointInteraction = new DownPointInteraction(drawables, radiusPoints);
             LeftPointInteraction = new LeftPointInteraction(drawables, radiusPoints);
         }
+
         /// <summary>
         /// Верхняя интерактивная точка
         /// </summary>
         public UpPointInteraction UpPointInteraction { get; set; }
+
         /// <summary>
         /// Правая интерактивная точка
         /// </summary>
         public RightPointInteraction RightPointInteraction { get; set; }
+
         /// <summary>
         /// Нижняя интерактивная точка
         /// </summary>
         public DownPointInteraction DownPointInteraction { get; set; }
+
         /// <summary>
         /// Левая интерактивная точка
         /// </summary>
