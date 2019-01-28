@@ -59,15 +59,6 @@ namespace GRPO.Commands
         }
 
         /// <summary>
-        /// Уменьшить общее количество команд на еденицу(опасная ф-ция)
-        /// </summary>
-        public void CommandsCountDecrement()
-        {
-            //Опасная функция
-            _commands.RemoveAt(_commands.Count - 1);
-        }
-
-        /// <summary>
         /// Вернуть команду
         /// </summary>
         /// <param name="levels">На сколько</param>

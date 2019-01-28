@@ -6,6 +6,7 @@ using GRPO.Drawing.Interface;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using GRPO.Commands;
+using static GRPO.CanvasControl;
 
 namespace GRPO.UserControls.CanvasMouseStrategy
 {
@@ -14,22 +15,17 @@ namespace GRPO.UserControls.CanvasMouseStrategy
     /// </summary>
     public class MouseUp : BaseMouseStrategy
     {
-        /// <summary>
-        /// Делегат для события
-        /// </summary>
-        /// <param name="drawable">Рисуемая фигура</param>
-        public delegate void Drag(IDrawable drawable);
 
         /// <summary>
         /// Событие при выборе рисуемой фигуры
         /// </summary>
-        public event Drag DragProperty;
+        public event CanvasControl.DragEventHandler DragProperty;
 
         /// <summary>
         /// Конструктор класса стратегии мыши при отжатии
         /// </summary>
         /// <param name="dragProperty"></param>
-        public MouseUp(Drag dragProperty)
+        public MouseUp(CanvasControl.DragEventHandler dragProperty)
         {
             DragProperty += dragProperty;
         }

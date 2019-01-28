@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using GRPO.Drawing.Property;
+using static GRPO.ToolsWithPropertyControl;
 
 namespace GRPO
 {
@@ -11,14 +12,9 @@ namespace GRPO
     public partial class PropertyLineControl : UserControl
     {
         /// <summary>
-        /// Делегат для события по изменению свойств
-        /// </summary>
-        public delegate void LinePropertyEventHandler();
-
-        /// <summary>
         /// Событие при изменении свойств
         /// </summary>
-        public event LinePropertyEventHandler LinePropertyChanged;
+        public event FigurePropertyEventHandler LinePropertyChanged;
 
         /// <summary>
         /// Список выбранных цветов

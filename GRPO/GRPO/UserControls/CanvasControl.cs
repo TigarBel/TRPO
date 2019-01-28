@@ -21,12 +21,12 @@ namespace GRPO
         /// Делегат для события собрать
         /// </summary>
         /// <param name="drawable">Собираемая фигура</param>
-        public delegate void Drag(IDrawable drawable);
+        public delegate void DragEventHandler(IDrawable drawable);
 
         /// <summary>
         /// Событие собрать свойства
         /// </summary>
-        public event Drag DragProperty;
+        public event DragEventHandler DragProperty;
 
         /// <summary>
         /// Фабрика фигур
@@ -290,20 +290,11 @@ namespace GRPO
         {
             _pointB = new Point(e.X, e.Y);
 
-            ContextMouse contextMouse = new ContextMouse(new MouseUp(SetProperty));
+            ContextMouse contextMouse = new ContextMouse(new MouseUp(DragProperty));
             contextMouse.MouseAction(ref _flagMouseDown, ref _flagPolyFigure, SelectTool, LineProperty, FillProperty, canvas,
                 ref _drawables, ref _controlUnit, _pointA, _pointB, ref _pointC, ref _interaction, e);
 
             RefreshCanvas();
-        }
-
-        /// <summary>
-        /// Костыль
-        /// </summary>
-        /// <param name="drawable"></param>
-        private void SetProperty(IDrawable drawable)
-        {
-            if (DragProperty != null) DragProperty(drawable);
         }
 
         /// <summary>

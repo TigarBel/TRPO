@@ -15,7 +15,6 @@ namespace GRPO.Commands
     [Serializable]
     public class GraphicsEditor
     {
-
         /// <summary>
         /// Список ключевых слов
         /// </summary>

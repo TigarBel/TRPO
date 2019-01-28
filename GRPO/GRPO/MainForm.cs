@@ -52,7 +52,9 @@ namespace GRPO
             _toolsWithPropertyControl.ToolsChanged += _toolsWithPropertyControl_ToolsChanged;
             _toolsWithPropertyControl.LinePropertyChanged += _toolsWithPropertyControl_LinePropertyChanged;
             _toolsWithPropertyControl.FillPropertyChanged += _toolsWithPropertyControl_FillPropertyChanged;
+
             _canvasControl.DragProperty += _canvasControl_SetProperty;
+
             this.Size = new Size(1000, 600);
             this.FormClosing += MainForm_FormClosing;
             textBox1.TextChanged += textBox_TextChanged;

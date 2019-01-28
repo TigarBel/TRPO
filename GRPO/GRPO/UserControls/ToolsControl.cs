@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using GRPO.Drawing;
 using GRPO.UserControls.ToolsIncludeButtons;
+using static GRPO.ToolsWithPropertyControl;
 
 namespace GRPO
 {
@@ -26,14 +27,9 @@ namespace GRPO
         private List<Button> _buttons = new List<Button>();
 
         /// <summary>
-        /// Делегат для события изменения состояния кнопка
-        /// </summary>
-        public delegate void ButtonStateHandler();
-
-        /// <summary>
         /// Событие при изменении состояния кнопки
         /// </summary>
-        public event ButtonStateHandler ButtonClick;
+        public event FigurePropertyEventHandler ButtonClick;
 
         /// <summary>
         /// Конструктор класса пользовательский интерфейс для выбора инструмента

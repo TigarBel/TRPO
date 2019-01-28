@@ -16,11 +16,6 @@ namespace GRPO
         public delegate void FigurePropertyEventHandler();
 
         /// <summary>
-        /// Событие при изменении любого элемента
-        /// </summary>
-        public event FigurePropertyEventHandler FigurePropertyChanged;
-
-        /// <summary>
         /// Событие при изменении инструмента
         /// </summary>
         public event FigurePropertyEventHandler ToolsChanged;
@@ -43,12 +38,9 @@ namespace GRPO
             InitializeComponent();
 
             _toolsControl.ButtonClick += ChangeTools;
+            //_toolsControl.ButtonClick += ToolsChanged;
             _propertyLineControl.LinePropertyChanged += ChangeLineProperty;
             _fillFigureControl.FillPropertyChanged += ChangeFillProperty;
-
-            _toolsControl.ButtonClick += ChangeProperty;
-            _propertyLineControl.LinePropertyChanged += ChangeProperty;
-            _fillFigureControl.FillPropertyChanged += ChangeProperty;
 
             _toolsControl.ButtonClick += HidingUserControl;
             HidingUserControl();
@@ -163,14 +155,6 @@ namespace GRPO
                     _fillFigureControl.Visible = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Событие при изменении любого свойства
-        /// </summary>
-        private void ChangeProperty()
-        {
-            if (FigurePropertyChanged != null) FigurePropertyChanged();
         }
 
         /// <summary>

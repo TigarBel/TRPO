@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GRPO.Drawing.Property;
+using static GRPO.ToolsWithPropertyControl;
 
 namespace GRPO
 {
@@ -10,14 +11,9 @@ namespace GRPO
     public partial class FillFigureControl : UserControl
     {
         /// <summary>
-        /// Делегат для события изменения свойства
-        /// </summary>
-        public delegate void FillPropertyEventHandler();
-
-        /// <summary>
         /// События для изменения свойства заливки
         /// </summary>
-        public event FillPropertyEventHandler FillPropertyChanged;
+        public event FigurePropertyEventHandler FillPropertyChanged;
 
         /// <summary>
         /// Список выбранных цветов
